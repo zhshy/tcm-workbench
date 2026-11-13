@@ -2,3 +2,7 @@
 skills/
 .DS_Store
 *.tar.gz
+
+# 本地验证截图与临时 JS 语法检查产物
+shots/
+build/_check.js
