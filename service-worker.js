@@ -1,4 +1,4 @@
-const CACHE_NAME = "tcm-workbench-static-v1";
+const CACHE_NAME = "tcm-workbench-static-v2";
 const PRECACHE_URLS = ["./","./index.html","./manifest.json","./assets/icon-192.png","./assets/icon-512.png","./assets/apple-touch-icon.png"];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS)).then(() => self.skipWaiting()));
@@ -12,7 +12,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
   if (request.mode === "navigate") {
-    event.respondWith(fetch(request).then((response) => {
+    event.respondWith(fetch(request, { cache: "no-store" }).then((response) => {
       const copy = response.clone();
       caches.open(CACHE_NAME).then((cache) => cache.put("./index.html", copy));
       return response;
