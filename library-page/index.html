@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<!-- 资料库在线版存档：依赖 __SMART_PAGE__ 数据环境，脱离资料库打开仅显示静态壳。
+     在线体验：https://workbuddy.link/p/alkYf196OwOYNtXaTQoV9E -->
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">
+<title>中医学习 · 任务轴工作台</title>
+<style>
+:root{
+  --bg1:#f4f3fc; --bg2:#eef0f6; --card:#ffffff;
+  --purple:#5b5bd6; --purple2:#7b4fd8; --purple3:#9a4fd8;
+  --gold1:#f6a201; --gold2:#e8890c;
+  --ink:#2d2a3f; --ink2:#6b6880; --ink3:#9b98ad;
+  --line:#e8e6f2; --line2:#f0eef8; --green:#12b886; --red:#e03131;
+  --shadow:0 6px 24px rgba(91,91,214,.08);
+  --r:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  color:var(--ink);
+  background:linear-gradient(160deg,var(--bg1),var(--bg2));
+  background-attachment:fixed;
+  -webkit-text-size-adjust:100%;
+  min-height:100vh;
+}
+button{font-family:inherit;font-size:14px;cursor:pointer;border:0;background:none;color:inherit}
+h1,h2,h3,h4{margin:0;font-weight:600}
+p{margin:0}
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);gap:20px;max-width:1440px;margin:0 auto;padding:20px;min-height:100vh}
+
+/* ---------- sidebar ---------- */
+.side{
+  position:sticky;top:20px;align-self:start;
+  background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:20px 16px;display:flex;flex-direction:column;gap:18px;
+  max-height:calc(100vh - 40px);overflow:auto;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:0 4px}
+.logo{
+  width:38px;height:38px;flex:none;border-radius:12px;
+  background:linear-gradient(135deg,var(--purple),var(--purple3));
+  color:#fff;font-size:18px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(123,79,216,.28);
+}
+.brand b{display:block;font-size:15px;letter-spacing:.5px}
+.brand span{display:block;font-size:11px;color:var(--ink3);letter-spacing:.5px}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;color:var(--ink2);
+  font-size:13.5px;text-align:left;transition:.16s;min-height:42px;
+}
+.nav-item:hover{background:var(--line2);color:var(--ink)}
+.nav-item.active{
+  background:linear-gradient(135deg,rgba(91,91,214,.12),rgba(154,79,216,.12));
+  color:var(--purple);font-weight:600;
+}
+.nav-item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.55;flex:none}
+.lvl{background:linear-gradient(160deg,#fbfaff,#f4f2fd);border:1px solid var(--line);border-radius:12px;padding:12px}
+.lvl-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--ink2)}
+.lvl-top b{font-size:17px;color:var(--purple);margin:0 2px}
+.lvl-bar{height:7px;border-radius:7px;background:#e7e4f5;overflow:hidden;margin:8px 0 10px}
+.lvl-bar i{display:block;height:100%;border-radius:7px;background:linear-gradient(90deg,var(--purple),var(--purple3));transition:width .4s}
+.lvl-medals{display:flex;gap:5px;flex-wrap:wrap}
+.medal{
+  width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;color:#b9b6c9;background:#eeecf7;border:1px solid #e3e0f0;
+}
+.medal.on{color:#fff;background:linear-gradient(135deg,var(--gold1),var(--gold2));border-color:transparent;box-shadow:0 3px 8px rgba(246,162,1,.32)}
+.side-foot{font-size:11px;color:var(--ink3);padding:0 4px;line-height:1.7}
+
+/* ---------- main ---------- */
+.main{min-width:0;display:flex;flex-direction:column;gap:16px}
+.head{
+  border-radius:var(--r);padding:24px 26px;color:#fff;
+  background:linear-gradient(135deg,var(--purple) 0%,var(--purple2) 55%,var(--purple3) 100%);
+  box-shadow:0 10px 30px rgba(91,91,214,.24);
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.head::after{
+  content:"";position:absolute;right:-40px;top:-60px;width:220px;height:220px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+.head h1{font-size:23px;letter-spacing:1px}
+.head p{font-size:12.5px;opacity:.82;margin-top:4px}
+.head-r{display:flex;gap:24px;position:relative;z-index:1}
+.hs{text-align:right}
+.hs b{display:block;font-size:22px;line-height:1.2;font-weight:600}
+.hs span{font-size:11px;opacity:.8}
+.content{display:flex;flex-direction:column;gap:16px}
+.view{display:none}
+.view.active{display:block}
+.panel{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:22px}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.panel-head h2{font-size:17px}
+.panel-head p{font-size:12.5px;color:var(--ink3);margin-top:3px}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{
+  border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;
+  font-size:13px;color:var(--ink2);transition:.16s;min-height:38px;
+}
+.btn:hover{border-color:var(--purple);color:var(--purple)}
+.btn.primary{background:linear-gradient(135deg,var(--purple),var(--purple3));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(123,79,216,.28)}
+.btn.gold{background:linear-gradient(135deg,var(--gold1),var(--gold2));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(246,162,1,.3)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sm{padding:5px 10px;font-size:12px;min-height:30px;border-radius:7px}
+.switch{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);cursor:pointer}
+.switch input{width:16px;height:16px;accent-color:var(--purple)}
+
+/* ---------- timeline ---------- */
+.week-group{margin-bottom:6px}
+.week-title{
+  display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink3);
+  margin:18px 0 10px;padding-left:2px;
+}
+.week-title b{color:var(--ink);font-size:13.5px}
+.week-title .line{flex:1;height:1px;background:var(--line)}
+.week-title .pct{color:var(--purple);font-weight:600}
+.tl{position:relative;padding-left:26px}
+.tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,#ddd9f2,#eae7f8)}
+.node{position:relative;margin-bottom:10px}
+.node::before{
+  content:"";position:absolute;left:-22px;top:20px;width:10px;height:10px;border-radius:50%;
+  background:#fff;border:2px solid #d5d1ea;
+}
+.node.done::before{background:var(--green);border-color:var(--green);box-shadow:0 0 0 4px rgba(18,184,134,.12)}
+.node.now::before{background:var(--purple);border-color:var(--purple);box-shadow:0 0 0 4px rgba(91,91,214,.14)}
+.node-card{
+  border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;
+  display:flex;gap:14px;align-items:flex-start;transition:.16s;
+}
+.node-card:hover{border-color:#d8d3f0;box-shadow:0 4px 14px rgba(91,91,214,.07)}
+.node.done .node-card{background:#fbfdfc;border-color:#d9f0e6}
+.node-day{
+  flex:none;width:46px;text-align:center;border-radius:9px;padding:5px 0;
+  background:var(--line2);color:var(--purple);font-size:11px;line-height:1.3;
+}
+.node-day b{display:block;font-size:16px}
+.node-body{flex:1;min-width:0}
+.node-body h4{font-size:14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.node-body .focus{font-size:12px;color:var(--ink3);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;line-height:18px;border:1px solid transparent}
+.t-1{background:#eef0fd;color:#5b5bd6;border-color:#dfe2fb}
+.t-2{background:#eaf6f1;color:#0f8a68;border-color:#d6ece3}
+.t-3{background:#fdf4e8;color:#a9701a;border-color:#f3e3cc}
+.t-4{background:#fdeef4;color:#b04a74;border-color:#f4dae5}
+.t-5{background:#eef4fb;color:#3f6fa8;border-color:#dbe7f5}
+.t-6{background:#f3eefb;color:#7b4fd8;border-color:#e6dcf7}
+.tag.review{background:linear-gradient(135deg,#fdf6e6,#fbf0d8);color:#9a6a12;border-color:#f0dfb8}
+.node-act{flex:none;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.st{font-size:11px;color:var(--ink3)}
+.st.done{color:var(--green)}
+.empty{text-align:center;padding:40px 10px;color:var(--ink3);font-size:13px}
+
+/* ---------- week ---------- */
+.week-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px}
+.day-row{
+  display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);
+}
+.day-row:last-child{border-bottom:0}
+.day-d{width:52px;flex:none;font-size:12px;color:var(--ink3)}
+.day-d b{display:block;color:var(--ink);font-size:13px}
+.day-t{flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.day-s{flex:none}
+.ring-wrap{text-align:center;padding:6px 0 14px}
+.ring{transform:rotate(-90deg)}
+.ring-txt{font-size:26px;font-weight:600;color:var(--purple);margin-top:-6px}
+.ring-sub{font-size:12px;color:var(--ink3)}
+.mini-title{font-size:12.5px;color:var(--ink3);margin:14px 0 6px;letter-spacing:.5px}
+.badge-line{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pill{background:var(--line2);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--ink2)}
+.pill b{color:var(--purple)}
+
+/* ---------- pomodoro ---------- */
+.pomo-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:24px;align-items:start}
+.pomo{text-align:center;padding:6px 0}
+.pomo-tabs{display:inline-flex;background:var(--line2);border-radius:12px;padding:4px;gap:2px;margin-bottom:16px}
+.pomo-tab{padding:7px 16px;border-radius:9px;font-size:13px;color:var(--ink2)}
+.pomo-tab.on{background:#fff;color:var(--purple);font-weight:600;box-shadow:0 2px 8px rgba(91,91,214,.12)}
+.clock-wrap{position:relative;width:220px;height:220px;margin:0 auto}
+.clock{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.clock b{font-size:clamp(30px,7vw,40px);font-weight:600;letter-spacing:1px;color:var(--ink);font-variant-numeric:tabular-nums}
+.clock span{font-size:12px;color:var(--ink3);margin-top:2px}
+.pomo-btns{display:flex;gap:10px;justify-content:center;margin-top:18px}
+.tag-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  border:1px solid var(--line);border-radius:20px;padding:6px 14px;font-size:12.5px;color:var(--ink2);background:#fff;
+}
+.chip.on{background:linear-gradient(135deg,rgba(91,91,214,.12),rgba(154,79,216,.12));color:var(--purple);border-color:#d7d1f5;font-weight:600}
+.focus-today{display:flex;gap:12px;margin-top:6px}
+.ft{flex:1;background:var(--line2);border-radius:12px;padding:12px;text-align:center}
+.ft b{display:block;font-size:20px;color:var(--purple)}
+.ft span{font-size:11px;color:var(--ink3)}
+.log{margin-top:14px;font-size:12.5px;color:var(--ink2);max-height:170px;overflow:auto}
+.log div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)}
+
+/* ---------- chapters / stats ---------- */
+.chap{margin-bottom:16px}
+.chap-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.chap-top b{font-weight:600}
+.chap-top span{color:var(--ink3);font-size:12px}
+.chap-bar{height:9px;border-radius:9px;background:var(--line2);overflow:hidden}
+.chap-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--purple),var(--purple3));transition:width .4s}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:linear-gradient(160deg,#fbfaff,#f5f3fd);border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat b{display:block;font-size:22px;color:var(--purple)}
+.stat span{font-size:11.5px;color:var(--ink3)}
+.chart{width:100%;height:180px}
+.medal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.medal-card{border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;background:#fbfaff}
+.medal-card.on{background:linear-gradient(160deg,#fffaf0,#fdf3e0);border-color:#f2dfb8}
+.medal-card .m{font-size:20px;margin-bottom:4px;color:#c9c5d8}
+.medal-card.on .m{color:var(--gold1)}
+.medal-card b{display:block;font-size:12.5px}
+.medal-card span{font-size:11px;color:var(--ink3)}
+.hint{background:linear-gradient(135deg,#fdf8ec,#fbf3e2);border:1px solid #f0e2c4;border-radius:10px;padding:11px 14px;font-size:12.5px;color:#8a6a2f;margin-bottom:14px}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;
+  opacity:0;pointer-events:none;transition:.24s;z-index:99;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:1080px){
+  .app{grid-template-columns:1fr;padding:14px;gap:14px}
+  .side{position:static;max-height:none;flex-direction:row;align-items:center;gap:14px;padding:12px 14px;overflow-x:auto}
+  .brand{flex:none}
+  .brand span{display:none}
+  .nav{flex-direction:row;gap:2px;flex:1;overflow-x:auto}
+  .nav-item{white-space:nowrap;padding:8px 10px;min-height:36px;font-size:12.5px}
+  .lvl{display:none}
+  .side-foot{display:none}
+  .week-grid,.pomo-wrap{grid-template-columns:1fr}
+  .head{padding:20px}
+  .head h1{font-size:19px}
+  .head-r{gap:18px}
+  .hs b{font-size:19px}
+}
+@media(max-width:640px){
+  .app{padding:10px;gap:12px}
+  .panel{padding:16px;border-radius:14px}
+  .head{border-radius:14px;padding:18px}
+  .head-r{width:100%;justify-content:space-between;gap:10px}
+  .hs{text-align:left}
+  .hs b{font-size:18px}
+  .node-card{padding:12px;gap:10px}
+  .node-day{width:40px}
+  .node-body .focus{white-space:normal}
+  .node-act{flex-direction:row}
+  .clock-wrap{width:190px;height:190px}
+  .clock b{font-size:34px}
+  .pomo-tab{padding:7px 12px}
+}
+
+.today{background:linear-gradient(160deg,#fbfaff,#f2eefc);border:1px solid #e3dcf8;border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.today-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.today-badge{background:linear-gradient(135deg,var(--purple),var(--purple3));color:#fff;border-radius:20px;padding:2px 12px;font-size:12px;font-weight:600}
+.today-date{font-size:11px;color:var(--ink3)}
+.today-title{font-size:18px;margin:0 0 6px}
+.today-act{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.dsec{margin-top:12px}
+.dsec h5{margin:0 0 4px;font-size:11.5px;color:var(--ink3);letter-spacing:1px;font-weight:600}
+.dsec p{margin:0;font-size:13.5px;line-height:1.7}
+.dsec ul{margin:0;padding-left:18px;font-size:13.5px}
+.dsec li{margin:3px 0}
+.dnote{margin:0 0 6px;font-size:12px;color:var(--ink3)}
+.detail{display:none;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.node.open .detail{display:block}
+.node-card{cursor:pointer}
+.node-more{font-size:11px;color:var(--purple);margin-top:4px}
+.q{margin:10px 0 12px}
+.q-t{margin:0 0 6px;font-size:13px;line-height:1.6}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;font-size:12.5px;color:var(--ink2);min-height:34px;text-align:left}
+.opt:hover{border-color:var(--purple)}
+.opt.sel{border-color:var(--purple);background:#f3f0fd;color:var(--purple)}
+.opt.ok{border-color:#bfe6d6;background:#eefaf4;color:#0f8a68}
+.opt.bad{border-color:#f2cdc9;background:#fdf0ee;color:#c0392b}
+.fb{margin-top:7px;font-size:12.5px;padding:7px 10px;border-radius:7px;line-height:1.6}
+.fb.good{background:#eefaf4;color:#0f8a68}
+.fb.bad2{background:#fdf0ee;color:#c0392b}
+.mini{display:inline-block;background:#eef0fd;color:#5b5bd6;border-radius:20px;padding:0 8px;font-size:11px}
+@media(max-width:640px){
+  .today{padding:14px}
+  .today-title{font-size:16px}
+  .opt{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo"><!--pnid:FD1kRWfmaPr036at8TH5yH-->中</div>
+      <div><b><!--pnid:cBmrBdzQfO3t9jgQeQ8AmU-->中医学习</b><span><!--pnid:wFNBs958tAcIHL20FiwRvT-->任务轴工作台</span></div>
+    </div>
+    <nav class="nav" id="nav">
+      <button class="nav-item active" data-view="timeline"><i class="dot"></i><!--pnid:XuFGxMQhz72YsIq9M4g8qg-->任务时间轴</button>
+      <button class="nav-item" data-view="week"><i class="dot"></i><!--pnid:1KMfjrfJLUGSDxDBDeOHxL-->本周计划</button>
+      <button class="nav-item" data-view="focus"><i class="dot"></i><!--pnid:TLE9Oxw6V5WESGKRKn1gKn-->番茄专注</button>
+      <button class="nav-item" data-view="chapter"><i class="dot"></i><!--pnid:tTUpNwVIR2xN6XR7PoSzMC-->章节进度</button>
+      <button class="nav-item" data-view="stats"><i class="dot"></i><!--pnid:35NnSnpdTSnxf8fs002vlH-->学习统计</button>
+    </nav>
+    <div class="lvl">
+      <div class="lvl-top"><span><!--pnid:CMOtE1rzQrC9XZWacLZnM7-->Lv.<b id="lvNum"><!--pnid:SYoPS2Yh8jjNdhIvEpDFnv-->1</b></span><span id="expTxt"><!--pnid:XSKO8TIrn8QUVWBEezqXj5-->0 / 150</span></div>
+      <div class="lvl-bar"><i id="expBar" style="width:0%"></i></div>
+      <div class="lvl-medals" id="miniBadges"></div>
+    </div>
+    <div class="side-foot" id="syncState"><!--pnid:P0ZdZH4N9HbRvxGvnk4ylj-->正在连接数据表…</div>
+  </aside>
+
+  <main class="main">
+    <header class="head">
+      <div>
+        <h1><!--pnid:1ejoXPGUNv84h2ZPEwiW4e-->中医学习 · 任务轴</h1>
+        <p><!--pnid:cvEwdKXXulhfZfkdyXeN1U-->96 天 · 14 周 · 每 3 天学、第 4 天检查</p>
+      </div>
+      <div class="head-r">
+        <div class="hs"><b id="hStreak"><!--pnid:hr9dNx1hR4zg0lcYEyVERa-->0</b><span><!--pnid:kWZRPm5jOuQg6UnpUlxHYG-->连续打卡</span></div>
+        <div class="hs"><b id="hFocus"><!--pnid:4VCbBg4rzsXxomjV5iCeo1-->0</b><span><!--pnid:iNfJ2Vxu5z9xcznIseYIDk-->今日专注 / 分</span></div>
+        <div class="hs"><b id="hRate"><!--pnid:OpBrpilKfhFU9p1JrnkfKc-->0%</b><span><!--pnid:TfuyNm5ZCgIvtrA0EVbTKr-->总完成率</span></div>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="view active" id="v-timeline">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2><!--pnid:trc0VewKiT0eBkqhLBGckn-->任务时间轴</h2><p><!--pnid:MveO7AxiwGI42XZ4MuxKvn-->按学习天数排列，完成一个点亮一个</p></div>
+            <div class="tools">
+              <button class="btn primary" id="initBtn"><!--pnid:lTWnXpadOKX0cDibDJJem4-->同步 96 天课程</button>
+              <label class="switch"><input id="onlyTodo" type="checkbox"><!--pnid:KmMcGuua9htFUrMTJ5iJAj-->只看未完成</label>
+            </div>
+          </div>
+          <div id="todayPanel"><div class="empty"><!--pnid:IGUhVOIpcFqg3ZIa8i6m3U-->正在加载今日内容…</div></div>
+          <div id="timeline"><div class="empty"><!--pnid:EtjfZCB7z1OAKL0xuotMgM-->正在加载…</div></div>
+        </div>
+      </section>
+
+      <section class="view" id="v-week">
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2><!--pnid:M8NsRsZI3uGW9RF2iuscv2-->本周计划</h2><p id="weekLabel"><!--pnid:PCicZ1oOcdH9IRpIKLl24C-->按学习天数自动定位</p></div>
+            <div class="tools"><button class="btn" id="checkinBtn"><!--pnid:6uY0RUFctihIuSsaUFQR31-->今日打卡</button></div>
+          </div>
+          <div class="week-grid">
+            <div><div id="weekList"><div class="empty"><!--pnid:6JFmEltXUFC6cYXsnLJtYu-->正在加载…</div></div></div>
+            <aside>
+              <div class="ring-wrap">
+                <svg aria-hidden="true" class="ring" height="132" viewBox="0 0 132 132" width="132">
+                  <circle cx="66" cy="66" fill="none" r="58" stroke="#eeecf7" stroke-width="10"></circle>
+                  <circle cx="66" cy="66" fill="none" id="weekRing" r="58" stroke="#7b4fd8" stroke-dasharray="364.4" stroke-dashoffset="364.4" stroke-linecap="round" stroke-width="10"></circle>
+                </svg>
+                <div class="ring-txt" id="weekRate"><!--pnid:CtAT8ddGUWo6AObQo5wNUS-->0%</div>
+                <div class="ring-sub"><!--pnid:4KuzJ0gIs1D6jLX197xpXI-->本周完成率</div>
+              </div>
+              <div class="mini-title"><!--pnid:dzbgsDqcPTX2WmVJES2VhW-->本周重点</div>
+              <div class="pill" id="weekFocusTxt"><!--pnid:xhZhETMDK8sk4UMrwK4ecR-->—</div>
+              <div class="mini-title"><!--pnid:MXppPO0Le1DgZHXv1wIfXt-->连续打卡</div>
+              <div class="badge-line"><span class="pill"><!--pnid:NHsZDnk8T5LpD7QACNeksa-->已连续 <b id="weekStreak"><!--pnid:OTdlsRlsHuQ7skbYmygxpW-->0</b><!--pnid:R4Vj2cB4TxLgHuteIL5Exe--> 天</span></div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="v-focus">
+        <div class="panel">
+          <div class="panel-head"><div><h2><!--pnid:1ODAPc7bzuLNwncdWzv3k7-->番茄专注</h2><p><!--pnid:BWS3I2HXro1sl08vCJz8c9-->25 分钟专注 / 5 分钟短休 / 15 分钟长休</p></div></div>
+          <div class="pomo-wrap">
+            <div class="pomo">
+              <div class="pomo-tabs" id="pomoTabs">
+                <button class="pomo-tab on" data-min="25"><!--pnid:u9fsS4S1te1qfXycwSgFQU-->专注 25</button>
+                <button class="pomo-tab" data-min="5"><!--pnid:9Iaz5EkEdYmOd9O2lCiOE9-->短休 5</button>
+                <button class="pomo-tab" data-min="15"><!--pnid:2A6Ix24im9Uo9qWCJS2YnY-->长休 15</button>
+              </div>
+              <div class="clock-wrap">
+                <svg aria-hidden="true" height="220" viewBox="0 0 220 220" width="220">
+                  <circle cx="110" cy="110" fill="none" r="96" stroke="#efedf8" stroke-width="12"></circle>
+                  <circle cx="110" cy="110" fill="none" id="pomoRing" r="96" stroke="#7b4fd8" stroke-dasharray="603.2" stroke-dashoffset="0" stroke-linecap="round" stroke-width="12" transform="rotate(-90 110 110)"></circle>
+                </svg>
+                <div class="clock"><b id="clock"><!--pnid:3tFSDajePJFFvruQYJ9bTs-->25:00</b><span id="clockSub"><!--pnid:QC4LxgrYPgeLxI660BkanU-->准备开始</span></div>
+              </div>
+              <div class="pomo-btns">
+                <button class="btn primary" id="pomoStart"><!--pnid:fgn2mPRncgbEQYF8uStCWB-->开始专注</button>
+                <button class="btn" id="pomoReset"><!--pnid:2MCnSEGz7m7xO44fKDcOdW-->重置</button>
+              </div>
+            </div>
+            <div>
+              <div class="mini-title"><!--pnid:0Jpmokrv7LC7zrKw4KHW2p-->这次在学什么</div>
+              <div class="tag-chips" id="tagChips"></div>
+              <div class="mini-title"><!--pnid:8z3JRvXVhkL6tnrVFCTMoM-->今日专注</div>
+              <div class="focus-today">
+                <div class="ft"><b id="ftMin"><!--pnid:QGWn1kt7LyqNyl18xk3bMh-->0</b><span><!--pnid:ShVySzmFfnJQF3dcbHh6wP-->分钟</span></div>
+                <div class="ft"><b id="ftCnt"><!--pnid:JE0A8cvv2ScqOdW9hyfYBp-->0</b><span><!--pnid:w716gVJpAnfdAw1HnfUolx-->番茄数</span></div>
+              </div>
+              <div class="mini-title"><!--pnid:XrVPVa6lGzKkfuyfpTrPyc-->今日记录</div>
+              <div class="log" id="focusLog"><div style="color:var(--ink3)"><!--pnid:KXfwVKvM9J8FqVDPl8tXNM-->还没有记录</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="v-chapter">
+        <div class="panel">
+          <div class="panel-head"><div><h2><!--pnid:Yvws7fNenfssjXqMLPWAjJ-->章节进度</h2><p><!--pnid:R57KkHvTfzRjOIKm5dI7Sv-->按六个阶段汇总任务节点的完成情况</p></div></div>
+          <div id="chapters"><div class="empty"><!--pnid:tcMvwYQBxMwPGLWRJt4GwS-->正在加载…</div></div>
+        </div>
+      </section>
+
+      <section class="view" id="v-stats">
+        <div class="panel">
+          <div class="panel-head"><div><h2><!--pnid:Y8GZKdtL6meAARnwUKLcci-->学习统计</h2><p><!--pnid:v5vBCUhOo4UXJrhI4oBbfX-->经验、专注、连续打卡与徽章</p></div></div>
+          <div class="stat-grid" id="statGrid"></div>
+          <div class="mini-title"><!--pnid:fMVAXxBfMdm1APISNzOfHL-->近 7 天专注分钟</div>
+          <svg aria-hidden="true" class="chart" id="chart7" preserveAspectRatio="none" viewBox="0 0 640 180"></svg>
+          <div class="mini-title" style="margin-top:18px"><!--pnid:eDIi7FFmyiysD3d60wA8gD-->成就徽章</div>
+          <div class="medal-grid" id="medalGrid"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(function () {
+  var db = (window.__SMART_PAGE__ && window.__SMART_PAGE__.database) || null;
+  var DB_NODES = 'pDppWl4lSNIcMXwtpAWzPG';
+  var DB_CHECK = 'hE7ydQDnKG3oN1QJBclYcy';
+  var DB_FOCUS = '5upQOAVHBcMND1mLJkGXCs';
+  var STAGE = ['', '筑基', '诊断', '本草', '方剂', '经典', '临证'];
+  var TAGS = ['精读', '泛读', '卡片', '自测', '复习'];
+  var PLAN = [{"d":1,"t":"阴阳学说入门","s":1,"w":1,"m":"《素问·阴阳应象大论》开篇「阴阳者，天地之道也，万物之纲纪，变化之父母，生杀之本始，神明之府也」","a":"《中医基础理论》阴阳学说章：对立制约、互根互用、消长平衡、相互转化四组关系","f":["「万物之纲纪」的「纲纪」在原句里是名词还是动词？它约束的对象是什么？","四组关系里，哪一组最容易被日常语言混淆？举一个会被说反的例子。"],"w2":[["概念卡","分别用一句话定义对立、互根、消长、转化，每句配一个生活例子"],["对比卡","阴阳与五行是两套模型：各自解释什么问题，交界在哪"]],"q":[["「阴阳者，天地之道也」之后，原文紧接着的是",["万物之纲纪","生杀之本始","神明之府也","变化之父母"],0,"原文顺序为：天地之道也，万物之纲纪，变化之父母，生杀之本始，神明之府也。","《素问·阴阳应象大论》"],["下列哪一项不属于阴阳「对立制约」的表现",["寒者热之","热者寒之","阴盛则阳病","阴损及阳"],3,"「阴损及阳」讲的是阴一方亏虚累及阳，属互根互用；前三项都是以一方制约另一方。","《中医基础理论》阴阳学说章"]]},{"d":2,"t":"五行归类","s":1,"w":1,"m":"《素问·阴阳应象大论》五行配属段落：木火土金水与五脏、五志、五味的对应","a":"《素问·五运行大论》五气更立一段；教材五行学说章的生克乘侮","f":["五行归类是把事物「分到五个抽屉」，还是描述五类运动趋势？依据在哪？","「相乘」与「相侮」都属病理性克制，方向差在哪一步？"],"w2":[["概念卡","画出五行生克图，标出母与子，并写出「虚则补其母」的推导路径"],["对比卡","五行之「木」与藏象之「肝」：什么时候可以互换，什么时候不能"]],"q":[["五行中「木」对应的五味是",["酸","苦","甘","辛"],0,"酸属木、苦属火、甘属土、辛属金、咸属水。","《素问·阴阳应象大论》五行配属"],["「相乘」指的是",["克制太过，沿相克方向过度制约","反向克制，以下犯上","母病及子","子病犯母"],0,"相乘是相克太过；相侮才是反向克制。二者都属病理，方向不同。","《中医基础理论》五行学说章"]]},{"d":3,"t":"藏象 · 心","s":1,"w":1,"m":"《素问·灵兰秘典论》「心者，君主之官也，神明出焉」","a":"教材藏象章：心主血脉、主神明、开窍于舌、其华在面","f":["「君主之官」是比喻还是功能定位？它解释了心的哪一项特权？","「神明」若只理解为意识思维，会漏掉什么？"],"w2":[["概念卡","用「输出—载体—外候」三层结构描述心主血脉"],["对比卡","中医「心主神明」与西医「脑主思维」：两套体系各自的证据链"]],"q":[["下列哪项不属于中医「心」的生理功能",["主血脉","主神明","开窍于舌","主统血"],3,"主统血是脾的功能，指脾气统摄血液在脉内运行。","《中医基础理论》藏象章"],["「心者，君主之官也」后接",["神明出焉","谋虑出焉","决断出焉","喜乐出焉"],0,"心为君主之官，神明出焉；肝为将军之官，谋虑出焉；胆为中正之官，决断出焉。","《素问·灵兰秘典论》"]]},{"d":4,"t":"学情检查 · 第 1 次","s":1,"w":1,"r":1,"qs":[["「阴阳者，天地之道也」之后，原文紧接着的是",["万物之纲纪","生杀之本始","神明之府也","变化之父母"],0,"原文顺序为：天地之道也，万物之纲纪，变化之父母，生杀之本始，神明之府也。","《素问·阴阳应象大论》"],["五行中「木」对应的五味是",["酸","苦","甘","辛"],0,"酸属木、苦属火、甘属土、辛属金、咸属水。","《素问·阴阳应象大论》五行配属"],["「相乘」指的是",["克制太过，沿相克方向过度制约","反向克制，以下犯上","母病及子","子病犯母"],0,"相乘是相克太过；相侮才是反向克制。二者都属病理，方向不同。","《中医基础理论》五行学说章"],["下列哪项不属于中医「心」的生理功能",["主血脉","主神明","开窍于舌","主统血"],3,"主统血是脾的功能，指脾气统摄血液在脉内运行。","《中医基础理论》藏象章"],["「心者，君主之官也」后接",["神明出焉","谋虑出焉","决断出焉","喜乐出焉"],0,"心为君主之官，神明出焉；肝为将军之官，谋虑出焉；胆为中正之官，决断出焉。","《素问·灵兰秘典论》"]]},{"d":5,"t":"藏象 · 肝","s":1,"w":1,"m":"《素问·灵兰秘典论》「肝者，将军之官，谋虑出焉」","a":"教材肝的生理功能：主疏泄、主藏血；肝主筋、其华在爪、开窍于目","f":["「将军之官」强调肝的什么特性？与「疏泄」是同一件事吗？","肝藏血与心主血，在「血」的链条上各管哪一段？"],"w2":[["概念卡","把肝主疏泄拆成三条具体功能，各配一个失调时的表现"],["对比卡","肝气郁结与肝火上炎：病性、病势、舌脉各差在哪"]],"q":[["肝主疏泄不包括下列哪一项",["调畅气机","促进消化","调畅情志","统摄血液"],3,"统摄血液是脾主统血；肝主疏泄主要调畅气机、情志，并与脾胃运化、胆汁分泌相关。","《中医基础理论》藏象章"],["「肝者，将军之官」后接",["谋虑出焉","决断出焉","伎巧出焉","治节出焉"],0,"肝为将军之官，谋虑出焉；肾为作强之官，伎巧出焉；肺为相傅之官，治节出焉。","《素问·灵兰秘典论》"]]},{"d":6,"t":"藏象 · 脾胃","s":1,"w":1,"m":"《素问·经脉别论》「饮入于胃，游溢精气，上输于脾，脾气散精，上归于肺」一段","a":"教材脾胃章：脾主运化、主升清、主统血；胃主受纳腐熟、以降为和","f":["「游溢精气」与「脾气散精」是两个动作还是同一个过程的两段？","脾升胃降若是同一枢纽的两面，哪一面先坏更常见？为什么？"],"w2":[["概念卡","把「饮入于胃 → 上输于脾 → 上归于肺」画成流程，标出两处可能卡住的位置"],["对比卡","脾主运化与胃主受纳：一升一降，各自失败的症状方向"]],"q":[["脾主运化包括",["运化水谷与运化水液","运化水谷与统摄血液","升清与降浊","主肌肉与主四肢"],0,"脾主运化包含运化水谷精微与运化水液两方面；统血、升清是另外的功能表述。","《中医基础理论》藏象章"],["「饮入于胃，游溢精气，上输于脾」出自",["《素问·经脉别论》","《素问·灵兰秘典论》","《灵枢·决气》","《金匮要略》"],0,"该段论述饮食入胃后的输布过程，出自《素问·经脉别论》。","《素问·经脉别论》"]]},{"d":7,"t":"藏象 · 肺与肾","s":1,"w":1,"m":"《素问·灵兰秘典论》「肺者，相傅之官，治节出焉」「肾者，作强之官，伎巧出焉」","a":"教材肺肾章：肺主气司呼吸、主宣发肃降、通调水道；肾藏精、主水、主纳气","f":["「治节」二字，落在肺的哪一项具体功能上？","「肺为水之上源」与「肾主水」在一条水液链上如何衔接？"],"w2":[["概念卡","画出「肺通调水道—肾主水—膀胱气化」的水液链路，标出上下游关系"],["对比卡","肺主呼气与肾主纳气：同为呼吸异常，病位如何区分"]],"q":[["「肺者，相傅之官」所对应的功能概括是",["治节","谋虑","决断","作强"],0,"肺为相傅之官，治节出焉，指肺主治理调节全身气机与脏腑功能。","《素问·灵兰秘典论》"],["下列哪项不属于肾的生理功能",["藏精","主水","主纳气","主疏泄"],3,"主疏泄是肝的功能；肾的功能包括藏精、主水、主纳气。","《中医基础理论》藏象章"]]},{"d":8,"t":"学情检查 · 第 2 次","s":1,"w":2,"r":1,"qs":[["肝主疏泄不包括下列哪一项",["调畅气机","促进消化","调畅情志","统摄血液"],3,"统摄血液是脾主统血；肝主疏泄主要调畅气机、情志，并与脾胃运化、胆汁分泌相关。","《中医基础理论》藏象章"],["脾主运化包括",["运化水谷与运化水液","运化水谷与统摄血液","升清与降浊","主肌肉与主四肢"],0,"脾主运化包含运化水谷精微与运化水液两方面；统血、升清是另外的功能表述。","《中医基础理论》藏象章"],["「饮入于胃，游溢精气，上输于脾」出自",["《素问·经脉别论》","《素问·灵兰秘典论》","《灵枢·决气》","《金匮要略》"],0,"该段论述饮食入胃后的输布过程，出自《素问·经脉别论》。","《素问·经脉别论》"],["「肺者，相傅之官」所对应的功能概括是",["治节","谋虑","决断","作强"],0,"肺为相傅之官，治节出焉，指肺主治理调节全身气机与脏腑功能。","《素问·灵兰秘典论》"],["下列哪项不属于肾的生理功能",["藏精","主水","主纳气","主疏泄"],3,"主疏泄是肝的功能；肾的功能包括藏精、主水、主纳气。","《中医基础理论》藏象章"]]},{"d":9,"t":"气血津液","s":1,"w":2,"m":"《灵枢·决气》「上焦开发，宣五谷味，熏肤充身泽毛，若雾露之溉，是谓气」","a":"《灵枢·决气》论精、气、津、液、血、脉六气；教材气血津液章","f":["「若雾露之溉」描述的是气的什么形态？它与「津」的界限在哪？","气能生血、行血、摄血，三条作用若只记一条，最容易漏掉什么病机？"],"w2":[["概念卡","画出气、血、津液三者相互转化的箭头，每个箭头注明依赖哪一脏"],["对比卡","津与液：稠稀、分布、功能三方面的差别"]],"q":[["「上焦开发，宣五谷味，熏肤充身泽毛，若雾露之溉」所定义的是",["气","血","津","液"],0,"《灵枢·决气》此段定义「气」，以雾露灌溉形容其敷布之态。","《灵枢·决气》"],["「气为血之帅」不包括",["气能生血","气能行血","气能摄血","血能载气"],3,"血能载气是「血为气之母」的内容；前三项才是气对血的作用。","《中医基础理论》气血津液章"]]},{"d":10,"t":"经络总论","s":1,"w":2,"m":"《灵枢·经脉》开篇「经脉者，所以能决死生，处百病，调虚实，不可不通」","a":"教材经络章：十二正经走向交接规律、奇经八脉、经络的生理功能","f":["「决死生」是修辞还是判断？它建立在什么可观察的体征上？","十二正经的走向规律（手三阴从胸走手等），为什么必须记住方向？"],"w2":[["概念卡","默写十二正经走向交接规律，并标出你最容易记反的两条"],["对比卡","经络与血脉：古代医籍里这两个概念何时重合、何时分开"]],"q":[["「经脉者，所以能决死生，处百病，调虚实」出自",["《灵枢·经脉》","《素问·经脉别论》","《难经》","《针灸甲乙经》"],0,"此语出自《灵枢·经脉》开篇，为经络学说总纲。","《灵枢·经脉》"],["手三阴经的走向是",["从胸走手","从手走头","从头走足","从足走腹"],0,"手三阴从胸走手，手三阳从手走头，足三阳从头走足，足三阴从足走腹（胸）。","《中医基础理论》经络章"]]},{"d":11,"t":"病因 · 六淫","s":1,"w":2,"m":"《素问·至真要大论》病机十九条选读（诸风掉眩、诸寒收引、诸湿肿满等）","a":"教材病因章六淫：风、寒、暑、湿、燥、火各自的致病特点","f":["病机十九条把症状归到六气，这种归类是因果推断还是模式匹配？","「诸风掉眩，皆属于肝」里的「皆」字，是全部还是多半？"],"w2":[["概念卡","为风、寒、湿三邪各写一条「致病特点 + 典型症状」"],["对比卡","外风与内风：来源、病位、治法方向"]],"q":[["六淫中「善行而数变」的是",["风","寒","湿","燥"],0,"风性善行而数变，指病位游走、发病急骤、变化快。","《中医基础理论》病因章"],["「诸风掉眩，皆属于肝」出自",["《素问·至真要大论》","《素问·阴阳应象大论》","《灵枢·经脉》","《金匮要略》"],0,"病机十九条出自《素问·至真要大论》。","《素问·至真要大论》"]]},{"d":12,"t":"学情检查 · 第 3 次","s":1,"w":2,"r":1,"qs":[["「上焦开发，宣五谷味，熏肤充身泽毛，若雾露之溉」所定义的是",["气","血","津","液"],0,"《灵枢·决气》此段定义「气」，以雾露灌溉形容其敷布之态。","《灵枢·决气》"],["「经脉者，所以能决死生，处百病，调虚实」出自",["《灵枢·经脉》","《素问·经脉别论》","《难经》","《针灸甲乙经》"],0,"此语出自《灵枢·经脉》开篇，为经络学说总纲。","《灵枢·经脉》"],["手三阴经的走向是",["从胸走手","从手走头","从头走足","从足走腹"],0,"手三阴从胸走手，手三阳从手走头，足三阳从头走足，足三阴从足走腹（胸）。","《中医基础理论》经络章"],["六淫中「善行而数变」的是",["风","寒","湿","燥"],0,"风性善行而数变，指病位游走、发病急骤、变化快。","《中医基础理论》病因章"],["「诸风掉眩，皆属于肝」出自",["《素问·至真要大论》","《素问·阴阳应象大论》","《灵枢·经脉》","《金匮要略》"],0,"病机十九条出自《素问·至真要大论》。","《素问·至真要大论》"]]},{"d":13,"t":"病机 · 正邪","s":1,"w":2,"m":"《素问·评热病论》「邪之所凑，其气必虚」","a":"《素问·遗篇·刺法论》「正气存内，邪不可干」；教材发病学说","f":["两句话一句讲「虚招邪」，一句讲「实拒邪」，是否互为逆否命题？","「其气必虚」的「气」，指全身之气还是某一局部之气？"],"w2":[["概念卡","用正邪相争解释「为什么同一环境有人发病有人不发病」"],["对比卡","正气不足与邪气亢盛：虚实判断里各自的证据"]],"q":[["「邪之所凑，其气必虚」出自",["《素问·评热病论》","《素问·生气通天论》","《灵枢·百病始生》","《金匮要略》"],0,"此语出自《素问·评热病论》，强调正气亏虚是受邪的前提。","《素问·评热病论》"],["「正气存内，邪不可干」强调的是",["正气充足则邪难侵袭","邪气盛则发病","虚实夹杂","因人制宜"],0,"该句从正面讲正气的主导作用，与「邪之所凑，其气必虚」互为表里。","《素问·遗篇·刺法论》"]]},{"d":14,"t":"治则 · 治未病","s":1,"w":2,"m":"《素问·四气调神大论》「是故圣人不治已病治未病，不治已乱治未乱」","a":"《金匮要略·脏腑经络先后病脉证》首条「见肝之病，知肝传脾，当先实脾」","f":["《素问》的治未病偏「未病先防」，《金匮》偏「既病防传」，文本依据各在哪句？","「不治已乱治未乱」用政治比喻医学，这个类比掩盖了什么？"],"w2":[["概念卡","把治未病拆成三级：未病先防、既病防变、瘥后防复，各举一例"],["对比卡","治未病与「早发现早治疗」：目标相同，路径差别在哪"]],"q":[["「圣人不治已病治未病」出自",["《素问·四气调神大论》","《素问·上古天真论》","《金匮要略》","《难经》"],0,"此语出自《素问·四气调神大论》，为治未病思想的经典表述。","《素问·四气调神大论》"],["「见肝之病，知肝传脾，当先实脾」体现的治则是",["治病求本","治未病（既病防传）","调整阴阳","因人制宜"],1,"已知肝病可能传脾，故先实脾以阻断传变，属既病防变。","《金匮要略·脏腑经络先后病脉证》"]]},{"d":15,"t":"体质与养生","s":1,"w":3,"m":"《灵枢·阴阳二十五人》选读：以五行分二十五种体质","a":"教材体质章：体质形成因素、分类、体质与病证的关系","f":["体质分类若不能指导起居饮食与用药宜忌，它还有存在价值吗？","「同病异治」与「异病同治」，各自依赖体质的哪一层判断？"],"w2":[["概念卡","给自己做一个粗判：偏寒偏热、偏燥偏湿，各写一条依据"],["对比卡","体质与证候：一个是底色，一个是当下状态，如何区分"]],"q":[["体质学说在临床上的主要落点是",["判断寿命长短","指导用药宜忌与起居调摄","确定血型匹配","推断性格"],1,"体质辨识用于指导治疗与养生，属可干预层面。","《中医基础理论》体质章"],["「同病异治」的理论依据主要是",["病名不同","证候不同","体质与病程阶段不同","医生流派不同"],2,"同一疾病在不同体质、不同阶段可表现为不同证候，故治法不同。","《中医基础理论》治则章"]]},{"d":16,"t":"学情检查 · 第 4 次","s":1,"w":3,"r":1,"qs":[["「邪之所凑，其气必虚」出自",["《素问·评热病论》","《素问·生气通天论》","《灵枢·百病始生》","《金匮要略》"],0,"此语出自《素问·评热病论》，强调正气亏虚是受邪的前提。","《素问·评热病论》"],["「圣人不治已病治未病」出自",["《素问·四气调神大论》","《素问·上古天真论》","《金匮要略》","《难经》"],0,"此语出自《素问·四气调神大论》，为治未病思想的经典表述。","《素问·四气调神大论》"],["「见肝之病，知肝传脾，当先实脾」体现的治则是",["治病求本","治未病（既病防传）","调整阴阳","因人制宜"],1,"已知肝病可能传脾，故先实脾以阻断传变，属既病防变。","《金匮要略·脏腑经络先后病脉证》"],["体质学说在临床上的主要落点是",["判断寿命长短","指导用药宜忌与起居调摄","确定血型匹配","推断性格"],1,"体质辨识用于指导治疗与养生，属可干预层面。","《中医基础理论》体质章"],["「同病异治」的理论依据主要是",["病名不同","证候不同","体质与病程阶段不同","医生流派不同"],2,"同一疾病在不同体质、不同阶段可表现为不同证候，故治法不同。","《中医基础理论》治则章"]]},{"d":17,"t":"望诊 · 神色形态","s":2,"w":3,"m":"《灵枢·五色》选读；教材望诊章「得神、少神、失神、假神」四类","a":"《素问·移精变气论》「得神者昌，失神者亡」","f":["「假神」为什么比「失神」更危险？它骗过的是哪一步判断？","望色分「常色」与「病色」，常色里的「主色」与「客色」差别在哪？"],"w2":[["辨证卡","用目光、神情、面色、体态四项，给「得神／少神／失神」各写判据"],["对比卡","假神与好转：同样是精神转佳，鉴别点在哪"]],"q":[["望神的重点在于观察",["目光、神情、气色、体态","舌苔厚薄","脉象迟数","问诊十项"],0,"神之外候主要在目，兼看神情、气色、体态；「神藏于心，外候在目」。","《中医诊断学》望诊章"],["「假神」最常见的表现是",["久病重病之人突然精神转佳、言语不休","面色晦暗","反应迟钝","不欲饮食"],0,"假神是脏腑精气将绝、阴阳即将离决的危候，表现为突然「好转」的假象。","《中医诊断学》望诊章"]]},{"d":18,"t":"望舌 · 舌质","s":2,"w":3,"m":"教材舌诊章·舌质：舌色（淡白、红、绛、紫暗）、舌形（胖瘦、齿痕、裂纹）","a":"《伤寒论》相关舌象条文；《辨舌指南》选读","f":["舌色淡白与舌色红绛，分别对应气血的什么状态？","舌体胖大有齿痕，为什么常与「湿」绑定，而不是与「热」绑定？"],"w2":[["辨证卡","做一张舌色对照表：淡白、红、绛、紫暗，各写主病与一个典型证"],["对比卡","舌体胖大与舌体瘦薄：一虚一实，机制相反在哪"]],"q":[["舌质淡白多主",["虚证、寒证","实热证","湿热证","血瘀证"],0,"淡白舌主气血不足或阳气虚衰，属虚、属寒。","《中医诊断学》舌诊章"],["舌体胖大、边有齿痕，最常见于",["脾虚湿盛","阴虚火旺","肝火上炎","心血瘀阻"],0,"脾失健运、水湿内停则舌体胖大，受齿列压迫而现齿痕。","《中医诊断学》舌诊章"]]},{"d":19,"t":"望舌 · 舌苔","s":2,"w":3,"m":"教材舌诊章·舌苔：苔色（白、黄、灰黑）、苔质（厚薄、腻腐、剥落、有根无根）","a":"《伤寒论》阳明病苔象相关条文","f":["苔的「有根／无根」在判断什么？为什么它比苔色更基础？","黄苔一定主热吗？有没有例外需要排除？"],"w2":[["辨证卡","写一张苔质对照表：薄、厚、腻、剥，各自主什么"],["对比卡","白腻苔与黄腻苔：同是湿，热的介入改变了什么"]],"q":[["黄腻苔多主",["湿热或痰热","寒湿","气血两虚","阴虚"],0,"苔黄主热、苔腻主湿浊，黄腻并见多属湿热或痰热内蕴。","《中医诊断学》舌诊章"],["舌苔「有根」指的是",["苔紧贴舌面、刮之不去，为胃气所生","苔厚如积粉","苔色发黑","苔剥落殆尽"],0,"有根之苔紧贴舌面、不易刮去，说明胃气尚存；无根之苔浮而无基，多属胃气衰败。","《中医诊断学》舌诊章"]]},{"d":20,"t":"学情检查 · 第 5 次","s":2,"w":3,"r":1,"qs":[["望神的重点在于观察",["目光、神情、气色、体态","舌苔厚薄","脉象迟数","问诊十项"],0,"神之外候主要在目，兼看神情、气色、体态；「神藏于心，外候在目」。","《中医诊断学》望诊章"],["舌质淡白多主",["虚证、寒证","实热证","湿热证","血瘀证"],0,"淡白舌主气血不足或阳气虚衰，属虚、属寒。","《中医诊断学》舌诊章"],["舌体胖大、边有齿痕，最常见于",["脾虚湿盛","阴虚火旺","肝火上炎","心血瘀阻"],0,"脾失健运、水湿内停则舌体胖大，受齿列压迫而现齿痕。","《中医诊断学》舌诊章"],["黄腻苔多主",["湿热或痰热","寒湿","气血两虚","阴虚"],0,"苔黄主热、苔腻主湿浊，黄腻并见多属湿热或痰热内蕴。","《中医诊断学》舌诊章"],["舌苔「有根」指的是",["苔紧贴舌面、刮之不去，为胃气所生","苔厚如积粉","苔色发黑","苔剥落殆尽"],0,"有根之苔紧贴舌面、不易刮去，说明胃气尚存；无根之苔浮而无基，多属胃气衰败。","《中医诊断学》舌诊章"]]},{"d":21,"t":"闻诊与问诊","s":2,"w":3,"m":"《素问·疏五过论》「凡欲诊病者，必问饮食居处」","a":"教材闻诊章：听声音（语声、呼吸、咳嗽）、嗅气味","f":["为什么问诊要先问饮食居处，而不是先问主症？顺序背后是什么假设？","声音的高低强弱，反映的是气的什么状态？"],"w2":[["辨证卡","列出闻诊四类信息（语声、呼吸、咳嗽、气味）各能提示什么"],["对比卡","问诊的「开放式提问」与「封闭式提问」：各在什么阶段用"]],"q":[["闻诊包括",["听声音与嗅气味","只看舌象","只问症状","只切脉象"],0,"闻诊含听声音与嗅气味两部分。","《中医诊断学》闻诊章"],["「凡欲诊病者，必问饮食居处」出自",["《素问·疏五过论》","《素问·经脉别论》","《灵枢·决气》","《难经》"],0,"此语出自《素问·疏五过论》，强调诊病须究生活起居之因。","《素问·疏五过论》"]]},{"d":22,"t":"十问与问渴","s":2,"w":4,"m":"教材问诊章·十问歌：「一问寒热二问汗，三问头身四问便……」","a":"《景岳全书·传忠录》十问篇","f":["问「渴」为什么要区分欲饮、不欲饮、喜冷喜热？各自排除什么？","十问的顺序不是随意的，它按什么逻辑排列？"],"w2":[["辨证卡","把十问改写成你自己的问诊清单，按重要性重排并注明理由"],["对比卡","口渴喜冷饮与口渴不欲饮：一热一湿，机制差在哪"]],"q":[["十问歌首问是",["寒热","汗","头身","二便"],0,"十问歌：「一问寒热二问汗，三问头身四问便……」寒热居首。","《中医诊断学》问诊章"],["口渴喜冷饮多提示",["热证","寒证","湿证","血瘀"],0,"热盛伤津则口渴喜冷饮；寒证多口不渴或喜热饮；湿证多渴不欲饮。","《中医诊断学》问诊章"]]},{"d":23,"t":"切诊 · 脉位脉率","s":2,"w":4,"m":"《濒湖脉学》浮、沉、迟、数四脉歌诀","a":"教材脉诊章：寸口诊法、浮沉迟数虚实六纲脉","f":["浮脉主表，有没有例外？举一个并说明为什么。","「脉位」与「脉率」是两个独立维度，为什么初学者常混在一起？"],"w2":[["辨证卡","为浮、沉、迟、数各写一条「指下感觉 + 主病 + 一个例外」"],["对比卡","浮脉与虚脉：都可有「无力」，鉴别点在哪"]],"q":[["浮脉一般主",["表证","里证","寒证","血瘀"],0,"浮脉主表，亦可见于虚阳外越等特殊情况；常规主表。","《中医诊断学》脉诊章"],["迟脉的主病是",["寒证","热证","表证","湿证"],0,"迟脉一息不足四至，主寒证；数脉一息五至以上，主热证。","《中医诊断学》脉诊章"]]},{"d":24,"t":"学情检查 · 第 6 次","s":2,"w":4,"r":1,"qs":[["闻诊包括",["听声音与嗅气味","只看舌象","只问症状","只切脉象"],0,"闻诊含听声音与嗅气味两部分。","《中医诊断学》闻诊章"],["十问歌首问是",["寒热","汗","头身","二便"],0,"十问歌：「一问寒热二问汗，三问头身四问便……」寒热居首。","《中医诊断学》问诊章"],["口渴喜冷饮多提示",["热证","寒证","湿证","血瘀"],0,"热盛伤津则口渴喜冷饮；寒证多口不渴或喜热饮；湿证多渴不欲饮。","《中医诊断学》问诊章"],["浮脉一般主",["表证","里证","寒证","血瘀"],0,"浮脉主表，亦可见于虚阳外越等特殊情况；常规主表。","《中医诊断学》脉诊章"],["迟脉的主病是",["寒证","热证","表证","湿证"],0,"迟脉一息不足四至，主寒证；数脉一息五至以上，主热证。","《中医诊断学》脉诊章"]]},{"d":25,"t":"常见脉象","s":2,"w":4,"m":"《脉经》卷一选读；教材常见脉象：虚、实、滑、涩、弦、濡","a":"《濒湖脉学》二十七脉歌诀选读","f":["虚脉与实脉的鉴别，是凭有力无力，还是凭脉位？","弦脉为什么既见于肝胆病，又见于痛证与痰饮？"],"w2":[["辨证卡","做六脉对照表：虚、实、滑、涩、弦、濡，写指感与主病"],["对比卡","滑脉与涩脉：一流利一艰涩，各自主什么"]],"q":[["虚脉与实脉的主要鉴别点是",["脉势有力与无力","脉位浮与沉","脉率快与慢","脉体长与短"],0,"虚实以脉势强弱为纲：虚脉举按无力，实脉举按皆有力。","《中医诊断学》脉诊章"],["弦脉常见于",["肝胆病、痛证、痰饮","气血两虚","湿热","表证初起"],0,"弦脉端直以长、如按琴弦，主肝胆病、诸痛、痰饮。","《中医诊断学》脉诊章"]]},{"d":26,"t":"八纲 · 表里","s":2,"w":4,"m":"《伤寒论》太阳病提纲（第 1 条）与阳明病提纲（第 180 条）对照","a":"教材八纲辨证章·表里辨证","f":["表证与里证的分界，你用哪一条最不容易误判？","「半表半里」是第三类，还是表里之间的过渡带？"],"w2":[["辨证卡","写一张表证／里证鉴别表：起病、症状重心、舌脉、治法方向"],["对比卡","表证发热与里证发热：恶寒与否说明了什么"]],"q":[["表证与里证鉴别的关键之一是",["恶寒发热是否并见、有无脏腑症状","脉率快慢","舌苔厚薄","病程长短"],0,"表证多见恶寒发热并见、以体表症状为主；里证以脏腑症状为主，寒热表现不一。","《中医诊断学》八纲辨证章"],["「太阳之为病」的提纲是",["脉浮，头项强痛而恶寒","胃家实","口苦咽干目眩","脉微细但欲寐"],0,"第 1 条为太阳病提纲；胃家实为阳明提纲；口苦咽干目眩为少阳提纲。","《伤寒论》第 1 条"]]},{"d":27,"t":"八纲 · 寒热","s":2,"w":4,"m":"教材寒热辨证章：寒证、热证、真寒假热、真热假寒","a":"《伤寒论》四逆汤证与白虎汤证对照","f":["真寒假热为什么会出现「热」的假象？关键鉴别点在哪？","寒热错杂与寒热转化，是两种病机还是两个阶段？"],"w2":[["辨证卡","写真假寒热鉴别表：口渴、二便、舌脉、喜恶各写一条"],["对比卡","实寒与虚寒：都怕冷，差在哪个字上"]],"q":[["真寒假热的关键鉴别点是",["身热但欲近衣被、口渴不欲饮或喜热饮","高热不退","面红目赤","脉洪大有力"],0,"真寒假热为阴寒内盛、虚阳浮越，虽热象外露，但喜温恶寒、渴不欲饮、脉大而无根。","《中医诊断学》八纲辨证章"],["寒证与热证共有的观察维度不包括",["寒热喜恶","口渴与饮水","二便","身高体重"],3,"寒热辨证看喜恶、口渴、二便、舌脉等；身高体重与寒热属性无关。","《中医诊断学》八纲辨证章"]]},{"d":28,"t":"学情检查 · 第 7 次","s":2,"w":4,"r":1,"qs":[["虚脉与实脉的主要鉴别点是",["脉势有力与无力","脉位浮与沉","脉率快与慢","脉体长与短"],0,"虚实以脉势强弱为纲：虚脉举按无力，实脉举按皆有力。","《中医诊断学》脉诊章"],["表证与里证鉴别的关键之一是",["恶寒发热是否并见、有无脏腑症状","脉率快慢","舌苔厚薄","病程长短"],0,"表证多见恶寒发热并见、以体表症状为主；里证以脏腑症状为主，寒热表现不一。","《中医诊断学》八纲辨证章"],["「太阳之为病」的提纲是",["脉浮，头项强痛而恶寒","胃家实","口苦咽干目眩","脉微细但欲寐"],0,"第 1 条为太阳病提纲；胃家实为阳明提纲；口苦咽干目眩为少阳提纲。","《伤寒论》第 1 条"],["真寒假热的关键鉴别点是",["身热但欲近衣被、口渴不欲饮或喜热饮","高热不退","面红目赤","脉洪大有力"],0,"真寒假热为阴寒内盛、虚阳浮越，虽热象外露，但喜温恶寒、渴不欲饮、脉大而无根。","《中医诊断学》八纲辨证章"],["寒证与热证共有的观察维度不包括",["寒热喜恶","口渴与饮水","二便","身高体重"],3,"寒热辨证看喜恶、口渴、二便、舌脉等；身高体重与寒热属性无关。","《中医诊断学》八纲辨证章"]]},{"d":29,"t":"八纲 · 虚实","s":2,"w":5,"m":"教材虚实辨证章：「邪气盛则实，精气夺则虚」","a":"《素问·通评虚实论》「邪气盛则实，精气夺则虚」","f":["「至虚有盛候」说的是什么现象？如何避免被表象带走？","虚实与表里寒热是并列的四对，还是虚实贯穿其中？"],"w2":[["辨证卡","写虚实鉴别表：病程、体质、声息、疼痛喜按拒按、舌脉"],["对比卡","真实证与假实证：同为胀满，按之如何不同"]],"q":[["「邪气盛则实，精气夺则虚」出自",["《素问·通评虚实论》","《素问·评热病论》","《灵枢·决气》","《难经》"],0,"此语为虚实辨证总纲，出自《素问·通评虚实论》。","《素问·通评虚实论》"],["辨别虚实最直接的依据之一是",["病程长短与体质强弱、疼痛喜按拒按","发热高低","舌苔颜色","饮水多少"],0,"虚实看正气与邪气之势：病程、体质、声息、痛处喜按拒按、脉之有力无力。","《中医诊断学》八纲辨证章"]]},{"d":30,"t":"脏腑辨证 · 心与肝","s":2,"w":5,"m":"教材脏腑辨证·心病与肝病：心气虚、心血虚、心火亢盛；肝气郁结、肝火上炎、肝阳上亢","a":"《素问·灵兰秘典论》心肝二官原文回看","f":["心悸一症，在心与肝两脏的辨证里分别怎么解释？","肝阳上亢与肝火上炎，都见头目症状，病性差在哪？"],"w2":[["辨证卡","把心、肝各三个证型写成「主症 + 兼症 + 舌脉」三列"],["对比卡","肝气郁结与肝火上炎：一条从气滞到化火的演变链"]],"q":[["心悸最常作为哪一脏辨证的核心症状",["心","肝","脾","肾"],0,"心悸病位在心，但需辨虚实及是否兼他脏。","《中医诊断学》脏腑辨证章"],["肝阳上亢与肝火上炎的主要区别是",["前者为本虚标实、后者为实火","前者属寒、后者属热","前者病位在肺","后者无头目症状"],0,"肝阳上亢多因肝肾阴虚、阳亢于上，属本虚标实；肝火上炎为实火循经上炎。","《中医诊断学》脏腑辨证章"]]},{"d":31,"t":"脏腑辨证 · 合病","s":2,"w":5,"m":"教材脏腑兼证章：心脾两虚、肝脾不调、肺肾阴虚、脾肾阳虚","a":"《金匮要略》脏腑经络先后病篇的传变观","f":["一人多脏同病时，你凭什么确定「主证」？写出判定顺序。","「合病」与「并病」在《伤寒论》里是两种情形，差别在哪？"],"w2":[["辨证卡","为肝脾不调写一条从症状到病机的推导链"],["对比卡","心脾两虚与脾肾阳虚：都见乏力，病位如何一步步定位"]],"q":[["确定主证时，最应优先考虑",["最能统摄其余症状的核心病机","最先出现的症状","患者最在意的症状","最严重的症状"],0,"主证应能解释其余症状与舌脉，即抓住核心病机，而非按时间或主观感受排序。","《中医诊断学》脏腑辨证章"],["「合病」指的是",["两经或三经同时受邪发病","一经病未愈又传他经","表里同病","虚实夹杂"],0,"合病为同时受邪；并病为一经未愈又传另一经。","《伤寒论》"]]},{"d":32,"t":"学情检查 · 第 8 次","s":2,"w":5,"r":1,"qs":[["「邪气盛则实，精气夺则虚」出自",["《素问·通评虚实论》","《素问·评热病论》","《灵枢·决气》","《难经》"],0,"此语为虚实辨证总纲，出自《素问·通评虚实论》。","《素问·通评虚实论》"],["心悸最常作为哪一脏辨证的核心症状",["心","肝","脾","肾"],0,"心悸病位在心，但需辨虚实及是否兼他脏。","《中医诊断学》脏腑辨证章"],["肝阳上亢与肝火上炎的主要区别是",["前者为本虚标实、后者为实火","前者属寒、后者属热","前者病位在肺","后者无头目症状"],0,"肝阳上亢多因肝肾阴虚、阳亢于上，属本虚标实；肝火上炎为实火循经上炎。","《中医诊断学》脏腑辨证章"],["确定主证时，最应优先考虑",["最能统摄其余症状的核心病机","最先出现的症状","患者最在意的症状","最严重的症状"],0,"主证应能解释其余症状与舌脉，即抓住核心病机，而非按时间或主观感受排序。","《中医诊断学》脏腑辨证章"],["「合病」指的是",["两经或三经同时受邪发病","一经病未愈又传他经","表里同病","虚实夹杂"],0,"合病为同时受邪；并病为一经未愈又传另一经。","《伤寒论》"]]},{"d":33,"t":"四气五味","s":3,"w":5,"m":"《神农本草经·序录》「药有酸咸甘苦辛五味，又有寒热温凉四气」","a":"教材总论·四气五味：四气的临床意义、五味的功效与主治","f":["四气与五味，哪个决定作用方向、哪个决定作用性质？举例检验你的答案。","「平性」药算不算第五气？它在配伍中起什么作用？"],"w2":[["药对卡","为四气各写一味代表药，注明其主治方向"],["对比卡","辛味「能散能行」与甘味「能补能缓」：同一味药兼有两味时如何取舍"]],"q":[["中药「四气」指的是",["寒、热、温、凉","酸、苦、甘、辛","升、降、浮、沉","表、里、寒、热"],0,"四气即寒热温凉四种药性，平性药另计。","《神农本草经·序录》"],["五味中「能补、能缓、能和」的是",["甘味","辛味","酸味","苦味"],0,"甘能补、能缓、能和；辛能散能行；酸能收能涩；苦能泄能燥能坚。","《中药学》总论"]]},{"d":34,"t":"升降浮沉与归经","s":3,"w":5,"m":"教材总论·升降浮沉与归经；「诸花皆升，旋覆独降；诸子皆降，苍耳独升」","a":"《医学启源》药类法象；《本草备要》序例","f":["「诸花皆升，旋覆独降」——例外为什么值得单独记？它提醒你什么？","归经是把药「分配」给脏腑，还是描述它对某脏腑的选择性作用？"],"w2":[["药对卡","写五味—升降浮沉的对应关系，并各举一味药验证"],["对比卡","桔梗与牛膝：一升一降，用它们说明升降的相对性"]],"q":[["「诸花皆升，旋覆独降」说明",["升降浮沉有一般规律也有例外","花类药全部沉降","旋覆花主升","升降与药物质地无关"],0,"药物质地与升降浮沉有大致对应，但存在例外，须以实际功效为准。","《中药学》总论"],["归经的理论基础主要是",["脏腑经络学说与药物疗效","药物颜色","药物产地","药物价格"],0,"归经依据脏腑经络理论，并结合药物实际作用部位归纳。","《中药学》总论"]]},{"d":35,"t":"配伍七情","s":3,"w":5,"m":"《神农本草经·序录》「药有单行者，有相须者，有相使者，有相畏者，有相恶者，有相反者，有相杀者」","a":"教材总论·配伍七情的临床意义","f":["相须与相使的差别，是程度差别还是结构差别？","相畏与相杀，是同一关系的两种说法吗？从谁的角度看？"],"w2":[["药对卡","为七情各写一句定义，并配一组药对"],["对比卡","相须与相使、相畏与相杀：两对容易混的概念拆开"]],"q":[["七情中「相须」指的是",["性能功效相类似的药物配合，增强原有疗效","两药合用降低毒性","一药抑制另一药功效","两药合用产生毒性"],0,"相须为同类药协同增效；相使为主辅配合增效；相畏相杀为减毒；相恶为减效；相反为增毒。","《神农本草经·序录》"],["相畏与相杀的关系是",["同一配伍关系从不同角度表述","完全相反的两类关系","都属于增毒反应","都指降低疗效"],0,"一种药的毒性被另一种药减轻，对前者称相畏，对后者称相杀。","《中药学》总论"]]},{"d":36,"t":"学情检查 · 第 9 次","s":3,"w":6,"r":1,"qs":[["中药「四气」指的是",["寒、热、温、凉","酸、苦、甘、辛","升、降、浮、沉","表、里、寒、热"],0,"四气即寒热温凉四种药性，平性药另计。","《神农本草经·序录》"],["「诸花皆升，旋覆独降」说明",["升降浮沉有一般规律也有例外","花类药全部沉降","旋覆花主升","升降与药物质地无关"],0,"药物质地与升降浮沉有大致对应，但存在例外，须以实际功效为准。","《中药学》总论"],["归经的理论基础主要是",["脏腑经络学说与药物疗效","药物颜色","药物产地","药物价格"],0,"归经依据脏腑经络理论，并结合药物实际作用部位归纳。","《中药学》总论"],["七情中「相须」指的是",["性能功效相类似的药物配合，增强原有疗效","两药合用降低毒性","一药抑制另一药功效","两药合用产生毒性"],0,"相须为同类药协同增效；相使为主辅配合增效；相畏相杀为减毒；相恶为减效；相反为增毒。","《神农本草经·序录》"],["相畏与相杀的关系是",["同一配伍关系从不同角度表述","完全相反的两类关系","都属于增毒反应","都指降低疗效"],0,"一种药的毒性被另一种药减轻，对前者称相畏，对后者称相杀。","《中药学》总论"]]},{"d":37,"t":"十八反十九畏","s":3,"w":6,"m":"教材总论·用药禁忌；十八反歌诀与十九畏歌诀","a":"《儒门事亲》十八反歌；《珍珠囊》十九畏","f":["配伍禁忌是绝对禁条，还是有条件的判断？依据是什么？","十八反与十九畏，一个属七情中的「相反」，另一个属什么？"],"w2":[["概念卡","抄写十八反三组、十九畏九组，各标出你最易记混的一条"],["对比卡","十八反与十九畏：来源、性质、临床处理上的差别"]],"q":[["「十八反」中甘草反",["甘遂、大戟、海藻、芫花","半夏、瓜蒌、贝母","人参、丹参、玄参","硫黄、水银"],0,"甘草反甘遂、大戟、海藻、芫花；乌头反贝母、瓜蒌、半夏、白蔹、白及；藜芦反诸参、细辛、芍药。","十八反歌诀"],["「十九畏」中人参畏",["五灵脂","犀角","郁金","朴硝"],0,"十九畏含人参畏五灵脂、丁香畏郁金、牙硝畏三棱、官桂畏石脂等。","十九畏歌诀"]]},{"d":38,"t":"麻黄与桂枝","s":3,"w":6,"m":"《中药学》麻黄、桂枝条目；《本草正义》相关条","a":"《伤寒论》麻黄汤、桂枝汤方证条文回看","f":["同是解表，麻黄与桂枝的作用层次差在哪？","麻黄能利水消肿，这个功效与「宣肺」是同一件事吗？"],"w2":[["药对卡","写麻黄与桂枝对照卡：性味、归经、功效、主治、禁忌"],["对比卡","麻黄汤与桂枝汤：药味差在哪，证候边界差在哪"]],"q":[["麻黄的功效不包括",["补气升阳","发汗解表","宣肺平喘","利水消肿"],0,"麻黄功效为发汗解表、宣肺平喘、利水消肿；补气升阳是黄芪。","《中药学》解表药"],["桂枝的功效是",["发汗解肌、温通经脉、助阳化气","清热泻火、除烦止渴","补气升阳、固表止汗","疏肝解郁、升举阳气"],0,"桂枝辛甘温，归心肺膀胱经，功能发汗解肌、温通经脉、助阳化气。","《中药学》解表药"]]},{"d":39,"t":"柴胡与葛根","s":3,"w":6,"m":"《中药学》柴胡、葛根条目；《伤寒论》小柴胡汤、葛根汤条文","a":"《医学启源》论柴胡升阳","f":["柴胡「和解退热」与「升举阳气」，如何统一在一个药性里？","葛根「升阳止泻」与「解肌退热」，是同一走向的两种用途吗？"],"w2":[["药对卡","柴胡与葛根对照卡，重点写「升」的方向差异"],["对比卡","小柴胡汤与葛根汤：都治外感，病位与主症如何分"]],"q":[["柴胡的功效不包括",["滋阴润燥","解表退热","疏肝解郁","升举阳气"],0,"柴胡功能解表退热、疏肝解郁、升举阳气；滋阴润燥是知母等。","《中药学》解表药"],["葛根的功效是",["解肌退热、生津止渴、升阳止泻、透疹","发汗解表、宣肺平喘","清热燥湿、泻火解毒","补血活血"],0,"葛根甘辛凉，归脾胃经，功能解肌退热、生津止渴、升阳止泻、透疹。","《中药学》解表药"]]},{"d":40,"t":"学情检查 · 第 10 次","s":3,"w":6,"r":1,"qs":[["「十八反」中甘草反",["甘遂、大戟、海藻、芫花","半夏、瓜蒌、贝母","人参、丹参、玄参","硫黄、水银"],0,"甘草反甘遂、大戟、海藻、芫花；乌头反贝母、瓜蒌、半夏、白蔹、白及；藜芦反诸参、细辛、芍药。","十八反歌诀"],["麻黄的功效不包括",["补气升阳","发汗解表","宣肺平喘","利水消肿"],0,"麻黄功效为发汗解表、宣肺平喘、利水消肿；补气升阳是黄芪。","《中药学》解表药"],["桂枝的功效是",["发汗解肌、温通经脉、助阳化气","清热泻火、除烦止渴","补气升阳、固表止汗","疏肝解郁、升举阳气"],0,"桂枝辛甘温，归心肺膀胱经，功能发汗解肌、温通经脉、助阳化气。","《中药学》解表药"],["柴胡的功效不包括",["滋阴润燥","解表退热","疏肝解郁","升举阳气"],0,"柴胡功能解表退热、疏肝解郁、升举阳气；滋阴润燥是知母等。","《中药学》解表药"],["葛根的功效是",["解肌退热、生津止渴、升阳止泻、透疹","发汗解表、宣肺平喘","清热燥湿、泻火解毒","补血活血"],0,"葛根甘辛凉，归脾胃经，功能解肌退热、生津止渴、升阳止泻、透疹。","《中药学》解表药"]]},{"d":41,"t":"石膏与知母","s":3,"w":6,"m":"《医学衷中参西录》石膏解；《中药学》清热泻火药章","a":"《伤寒论》白虎汤方证条文","f":["张锡纯用石膏的经验，与教材性味归经的写法有什么不同？","石膏「清而能透」与知母「清而能润」，临床如何取舍？"],"w2":[["药对卡","石膏与知母对照卡，注明共同点与分工"],["对比卡","白虎汤与白虎加人参汤：加一味人参改变了什么"]],"q":[["石膏与知母的共同功效是",["清热泻火","补气升阳","活血化瘀","利水渗湿"],0,"二药均能清热泻火，常相须用于气分实热；石膏兼除烦止渴，知母兼滋阴润燥。","《中药学》清热药"],["石膏的性味是",["甘、辛，大寒","苦、寒","辛、温","甘、平"],0,"石膏甘辛大寒，归肺胃经，为清泻肺胃实火之要药。","《中药学》清热药"]]},{"d":42,"t":"人参与黄芪","s":3,"w":6,"m":"《中药学》补气药章：人参、黄芪条目","a":"《脾胃论》补中益气汤方义；《医学衷中参西录》黄芪解","f":["补气与升阳不是一回事，用两味药说明。","人参「大补元气」与黄芪「补气升阳」，急救与调补的分工在哪？"],"w2":[["药对卡","人参与黄芪对照卡：补的范围、走向、禁忌"],["对比卡","独参汤与补中益气汤：一个救急一个升提，病机前提各是什么"]],"q":[["人参「大补元气」最适用于",["气虚欲脱、脉微欲绝","外感发热","湿热黄疸","血瘀经闭"],0,"人参能大补元气，为治气虚欲脱、脉微欲绝之要药。","《中药学》补虚药"],["与黄芪相比，人参更长于",["大补元气、复脉固脱","补气升阳、固表止汗","利水消肿、托疮生肌","清热生津"],0,"黄芪长于补气升阳、固表止汗、利水消肿、托疮生肌；人参长于大补元气、复脉固脱。","《中药学》补虚药"]]},{"d":43,"t":"活血化瘀药","s":3,"w":7,"m":"《医林改错》相关论述；《中药学》活血化瘀药章（川芎、丹参、桃仁、红花）","a":"《血证论》瘀血篇选读","f":["王清任为什么把瘀血放在这么多病证的共同位置？","活血药常配行气药，依据是哪一句理论？"],"w2":[["药对卡","川芎与丹参对照卡：一温一寒，活血方向差在哪"],["对比卡","活血与破血：程度差异还是作用部位差异"]],"q":[["活血化瘀药常配伍行气药，其理论依据是",["气行则血行","血能载气","气能生津","津血同源"],0,"气为血帅，气行则血行，气滞则血瘀，故活血常配行气。","《中药学》活血化瘀药"],["川芎的性味是",["辛、温","苦、寒","甘、平","酸、涩"],0,"川芎辛温，归肝胆心包经，功能活血行气、祛风止痛。","《中药学》活血化瘀药"]]},{"d":44,"t":"学情检查 · 第 11 次","s":3,"w":7,"r":1,"qs":[["石膏与知母的共同功效是",["清热泻火","补气升阳","活血化瘀","利水渗湿"],0,"二药均能清热泻火，常相须用于气分实热；石膏兼除烦止渴，知母兼滋阴润燥。","《中药学》清热药"],["人参「大补元气」最适用于",["气虚欲脱、脉微欲绝","外感发热","湿热黄疸","血瘀经闭"],0,"人参能大补元气，为治气虚欲脱、脉微欲绝之要药。","《中药学》补虚药"],["与黄芪相比，人参更长于",["大补元气、复脉固脱","补气升阳、固表止汗","利水消肿、托疮生肌","清热生津"],0,"黄芪长于补气升阳、固表止汗、利水消肿、托疮生肌；人参长于大补元气、复脉固脱。","《中药学》补虚药"],["活血化瘀药常配伍行气药，其理论依据是",["气行则血行","血能载气","气能生津","津血同源"],0,"气为血帅，气行则血行，气滞则血瘀，故活血常配行气。","《中药学》活血化瘀药"],["川芎的性味是",["辛、温","苦、寒","甘、平","酸、涩"],0,"川芎辛温，归肝胆心包经，功能活血行气、祛风止痛。","《中药学》活血化瘀药"]]},{"d":45,"t":"利水与化痰","s":3,"w":7,"m":"《中药学》利水渗湿药、化痰止咳平喘药章（茯苓、泽泻、半夏、陈皮）","a":"《丹溪心法》痰病篇；「脾为生痰之源，肺为贮痰之器」","f":["「痰」与「饮」在形态和病位上如何区分？","「脾为生痰之源」——治痰为什么要治脾？"],"w2":[["药对卡","茯苓与泽泻对照卡：健脾与渗湿的分工"],["对比卡","半夏与陈皮：同为化痰，一燥一理，怎么配"]],"q":[["茯苓的功效是",["利水渗湿、健脾、宁心","燥湿化痰、降逆止呕","清热泻火、除烦止渴","补气升阳、固表止汗"],0,"茯苓甘淡平，归心肺脾肾经，功能利水渗湿、健脾、宁心。","《中药学》利水渗湿药"],["半夏的主要功效是",["燥湿化痰、降逆止呕、消痞散结","清热化痰、润肺止咳","补脾益气","活血化瘀"],0,"半夏辛温有毒，功能燥湿化痰、降逆止呕、消痞散结。","《中药学》化痰药"]]},{"d":46,"t":"剂量与煎服法","s":3,"w":7,"m":"《伤寒论》桂枝汤方后注：煎法、服法、啜热稀粥、温覆、取微似汗、中病即止","a":"教材总论·中药的用法：煎煮火候、服药时间、用量","f":["方后注里的「啜热稀粥」「温覆」，是医嘱还是方义的一部分？","「中病即止」针对的是哪一类药？为什么不能久服？"],"w2":[["方证卡","把桂枝汤方后注拆成「煎法／服法／将息／禁忌」四栏"],["对比卡","解表药与补益药的服药时间：为什么一饭前饭后不同"]],"q":[["桂枝汤方后注「啜热稀粥」的目的是",["助药力以发汗","解毒","止呕","补益脾胃"],0,"啜热稀粥可借谷气助药力，使汗出而不伤正，属将息法的一部分。","《伤寒论》桂枝汤方后注"],["「中病即止」主要针对",["峻下、破血、涌吐及有毒之品","补益药","食疗方","针灸"],0,"峻烈之品易伤正气，取效即停，不可过剂。","《中药学》总论"]]},{"d":47,"t":"药对横向比较","s":3,"w":7,"m":"回看本阶段写的所有药对卡，做一次横向整理","a":"《本草备要》同类药比较体例","f":["挑三组最容易混的药对，写出你自己的鉴别维度表。","如果只能用两个维度区分任意两味药，你会选哪两个？"],"w2":[["概念卡","整理一张「本草鉴别维度表」：性味、归经、功效、主治、禁忌"],["对比卡","自选两组药对，按你的维度表逐项填满"]],"q":[["比较两味中药时，最基础的鉴别维度是",["性味与归经","产地与价格","颜色与形状","包装与规格"],0,"性味归经决定作用方向与部位，是药性比较的基础。","《中药学》总论"],["「同味异气」指的是",["味相同而气不同，功效方向随之改变","气味完全相同","只有气没有味","只有味没有气"],0,"如苦寒与苦温，同為苦味而寒温不同，作用方向有别。","《中药学》总论"]]},{"d":48,"t":"学情检查 · 第 12 次","s":3,"w":7,"r":1,"qs":[["茯苓的功效是",["利水渗湿、健脾、宁心","燥湿化痰、降逆止呕","清热泻火、除烦止渴","补气升阳、固表止汗"],0,"茯苓甘淡平，归心肺脾肾经，功能利水渗湿、健脾、宁心。","《中药学》利水渗湿药"],["桂枝汤方后注「啜热稀粥」的目的是",["助药力以发汗","解毒","止呕","补益脾胃"],0,"啜热稀粥可借谷气助药力，使汗出而不伤正，属将息法的一部分。","《伤寒论》桂枝汤方后注"],["「中病即止」主要针对",["峻下、破血、涌吐及有毒之品","补益药","食疗方","针灸"],0,"峻烈之品易伤正气，取效即停，不可过剂。","《中药学》总论"],["比较两味中药时，最基础的鉴别维度是",["性味与归经","产地与价格","颜色与形状","包装与规格"],0,"性味归经决定作用方向与部位，是药性比较的基础。","《中药学》总论"],["「同味异气」指的是",["味相同而气不同，功效方向随之改变","气味完全相同","只有气没有味","只有味没有气"],0,"如苦寒与苦温，同為苦味而寒温不同，作用方向有别。","《中药学》总论"]]},{"d":49,"t":"君臣佐使","s":4,"w":7,"m":"《素问·至真要大论》「主病之谓君，佐君之谓臣，应臣之谓使」","a":"教材方剂学总论·方剂的组成原则与变化","f":["君药是按剂量定的，还是按主治定的？举一个反例检验你的答案。","「佐药」包含佐助、佐制、反佐三类，各自解决什么问题？"],"w2":[["方证卡","用君臣佐使拆一首你熟悉的方（可先用四君子汤）"],["对比卡","君药与主药：什么时候两者不是同一味"]],"q":[["「主病之谓君」出自",["《素问·至真要大论》","《伤寒论》","《金匮要略》","《神农本草经》"],0,"君臣佐使的经典表述出自《素问·至真要大论》。","《素问·至真要大论》"],["君药的定义是",["针对主病或主证起主要治疗作用的药物","剂量最大的药物","价格最贵的药物","最先煎煮的药物"],0,"君药依主治而定，不是按剂量或价格；剂量可随配伍调整。","《方剂学》总论"]]},{"d":50,"t":"桂枝汤","s":4,"w":8,"m":"《伤寒论》第 12、13 条及方后注；桂枝、芍药、甘草、生姜、大枣五味","a":"《伤寒论》第 2 条太阳中风证候","f":["桂枝与芍药，一散一收，为什么缺一不可？","方后注的将息法，若省去「温覆」，疗效会差在哪一步？"],"w2":[["方证卡","写桂枝汤方证卡：组成、功用、主症、舌脉、将息法"],["对比卡","桂枝汤与麻黄汤：药味、汗出、脉象三处对照"]],"q":[["桂枝汤的君药是",["桂枝","芍药","生姜","甘草"],0,"桂枝解肌发表、助卫阳，为君；芍药益阴敛营为臣，二者相配调和营卫。","《伤寒论》第 12 条"],["桂枝汤的功用是",["解肌发表、调和营卫","发汗解表、宣肺平喘","和解少阳","清热生津"],0,"桂枝汤主治太阳中风表虚证，功用为解肌发表、调和营卫。","《方剂学》解表剂"]]},{"d":51,"t":"麻黄汤","s":4,"w":8,"m":"《伤寒论》第 35 条及禁汗条文；麻黄、桂枝、杏仁、甘草四味","a":"《伤寒论》第 3 条太阳伤寒证候","f":["桂枝汤证与麻黄汤证，最关键的鉴别点是「汗」吗？还有别的吗？","麻黄配杏仁，一宣一降，解决的是肺气的什么问题？"],"w2":[["方证卡","写麻黄汤方证卡，注明「无汗而喘」的机理"],["对比卡","麻黄汤与三拗汤：去桂枝后主治发生了什么变化"]],"q":[["麻黄汤的君药是",["麻黄","桂枝","杏仁","甘草"],0,"麻黄发汗解表、宣肺平喘为君；桂枝助其发汗为臣；杏仁降肺气为佐；甘草调和为使。","《伤寒论》第 35 条"],["麻黄汤与桂枝汤的关键鉴别是",["有汗与无汗、脉缓与脉紧","发热高低","病程长短","年龄大小"],0,"桂枝汤证汗出、脉缓（表虚）；麻黄汤证无汗、脉浮紧（表实）。","《方剂学》解表剂"]]},{"d":52,"t":"学情检查 · 第 13 次","s":4,"w":8,"r":1,"qs":[["「主病之谓君」出自",["《素问·至真要大论》","《伤寒论》","《金匮要略》","《神农本草经》"],0,"君臣佐使的经典表述出自《素问·至真要大论》。","《素问·至真要大论》"],["桂枝汤的君药是",["桂枝","芍药","生姜","甘草"],0,"桂枝解肌发表、助卫阳，为君；芍药益阴敛营为臣，二者相配调和营卫。","《伤寒论》第 12 条"],["桂枝汤的功用是",["解肌发表、调和营卫","发汗解表、宣肺平喘","和解少阳","清热生津"],0,"桂枝汤主治太阳中风表虚证，功用为解肌发表、调和营卫。","《方剂学》解表剂"],["麻黄汤的君药是",["麻黄","桂枝","杏仁","甘草"],0,"麻黄发汗解表、宣肺平喘为君；桂枝助其发汗为臣；杏仁降肺气为佐；甘草调和为使。","《伤寒论》第 35 条"],["麻黄汤与桂枝汤的关键鉴别是",["有汗与无汗、脉缓与脉紧","发热高低","病程长短","年龄大小"],0,"桂枝汤证汗出、脉缓（表虚）；麻黄汤证无汗、脉浮紧（表实）。","《方剂学》解表剂"]]},{"d":53,"t":"桂枝汤类方","s":4,"w":8,"m":"《伤寒论》桂枝加葛根汤、桂枝加厚朴杏子汤、桂枝加桂汤、桂枝新加汤条文","a":"教材方剂学·桂枝汤的加减变化","f":["只加一味或改一味，主治为何就变了？变化的是君臣结构还是药量？","桂枝加桂汤中「加桂」加的是什么？解决的是什么病机？"],"w2":[["方证卡","选两个类方做对照卡：加什么、为什么加、主治怎么变"],["对比卡","桂枝加葛根汤与葛根汤：都有葛根，为何一属桂枝类一属麻黄类"]],"q":[["桂枝加葛根汤主治",["太阳病项背强几几、汗出恶风","无汗而喘","往来寒热","心下痞"],0,"桂枝汤证兼项背强几几者，加葛根以升津舒经。","《伤寒论》第 14 条"],["方剂加减变化中，改变君药通常会导致",["功用与主治发生根本变化","只改变煎法","只改变剂量","不改变主治"],0,"君药决定方剂的主要作用方向，君药一变，功用主治随之改变。","《方剂学》总论"]]},{"d":54,"t":"小柴胡汤","s":4,"w":8,"m":"《伤寒论》第 96 条及「但见一证便是，不必悉具」相关条文","a":"教材方剂学·和解剂；柴胡、黄芩、人参、半夏、甘草、生姜、大枣","f":["「但见一证便是」能不能理解成只凭一个症状就定方？前提是什么？","柴胡与黄芩，一散一清，和解少阳的结构如何体现？"],"w2":[["方证卡","写小柴胡汤方证卡，标注「往来寒热、胸胁苦满、默默不欲饮食、心烦喜呕」"],["对比卡","小柴胡汤与大柴胡汤：和解与和解通下，边界在哪"]],"q":[["小柴胡汤的君药是",["柴胡","黄芩","人参","半夏"],0,"柴胡透泄少阳之邪为君；黄芩清泄少阳之热为臣，二者相配和解少阳。","《伤寒论》第 96 条"],["小柴胡汤的功用是",["和解少阳","清热生津","峻下热结","益气健脾"],0,"小柴胡汤为和解少阳的代表方，主治伤寒少阳证。","《方剂学》和解剂"]]},{"d":55,"t":"白虎汤与承气汤","s":4,"w":8,"m":"《伤寒论》阳明病篇：白虎汤（石膏、知母、甘草、粳米）、大承气汤（大黄、芒硝、枳实、厚朴）","a":"《伤寒论》第 180 条「阳明之为病，胃家实是也」","f":["同为阳明病，清法与下法的分界在哪一步？","「痞、满、燥、实」四字，各对应承气汤中的哪味药？"],"w2":[["方证卡","写白虎汤与大承气汤对照卡：病位、病性、主症、治法"],["对比卡","白虎汤与白虎加人参汤：何时加人参"]],"q":[["白虎汤的君药是",["石膏","知母","甘草","粳米"],0,"石膏辛甘大寒，清泻阳明气分实热为君；知母助其清热生津为臣。","《伤寒论》白虎汤"],["大承气汤的功用是",["峻下热结","清热生津","和解少阳","温阳利水"],0,"大承气汤主治阳明腑实证，功用峻下热结。","《方剂学》泻下剂"]]},{"d":56,"t":"学情检查 · 第 14 次","s":4,"w":8,"r":1,"qs":[["桂枝加葛根汤主治",["太阳病项背强几几、汗出恶风","无汗而喘","往来寒热","心下痞"],0,"桂枝汤证兼项背强几几者，加葛根以升津舒经。","《伤寒论》第 14 条"],["小柴胡汤的君药是",["柴胡","黄芩","人参","半夏"],0,"柴胡透泄少阳之邪为君；黄芩清泄少阳之热为臣，二者相配和解少阳。","《伤寒论》第 96 条"],["小柴胡汤的功用是",["和解少阳","清热生津","峻下热结","益气健脾"],0,"小柴胡汤为和解少阳的代表方，主治伤寒少阳证。","《方剂学》和解剂"],["白虎汤的君药是",["石膏","知母","甘草","粳米"],0,"石膏辛甘大寒，清泻阳明气分实热为君；知母助其清热生津为臣。","《伤寒论》白虎汤"],["大承气汤的功用是",["峻下热结","清热生津","和解少阳","温阳利水"],0,"大承气汤主治阳明腑实证，功用峻下热结。","《方剂学》泻下剂"]]},{"d":57,"t":"四君子汤与四物汤","s":4,"w":9,"m":"《太平惠民和剂局方》四君子汤、四物汤；教材补益剂章","a":"《脾胃论》论补气；《血证论》论补血","f":["补气与补血，为什么常要配伍同用？","四君子汤加陈皮叫异功散，这一味陈皮解决了什么副作用？"],"w2":[["方证卡","写四君子汤与四物汤对照卡：组成、功用、主治"],["对比卡","四君子汤与理中丸：同补中焦，一补气一温中，差在哪"]],"q":[["四君子汤的组成是",["人参、白术、茯苓、甘草","熟地、当归、白芍、川芎","柴胡、黄芩、人参、半夏","黄芪、人参、白术、甘草"],0,"四君子汤为补气基础方：人参、白术、茯苓、炙甘草。","《太平惠民和剂局方》"],["四物汤的功用是",["补血调血","益气健脾","疏肝解郁","温阳利水"],0,"四物汤由熟地、当归、白芍、川芎组成，功能补血调血，为补血基础方。","《方剂学》补益剂"]]},{"d":58,"t":"六味地黄丸","s":4,"w":9,"m":"《小儿药证直诀》六味地黄丸；教材补阴剂章（三补三泻）","a":"《医学衷中参西录》论滋阴；六味地黄丸的加减（知柏、杞菊、麦味）","f":["「三补三泻」的结构，解决的是什么配伍矛盾？","熟地用量最大，为什么还要配泽泻？"],"w2":[["方证卡","写六味地黄丸方证卡，画出三补三泻的对应关系"],["对比卡","六味地黄丸与金匮肾气丸：一补阴一补阳，结构如何对应"]],"q":[["六味地黄丸的「三补」是",["熟地黄、山茱萸、山药","泽泻、牡丹皮、茯苓","熟地黄、当归、白芍","人参、白术、甘草"],0,"三补为熟地黄补肾、山茱萸补肝、山药补脾；三泻为泽泻、牡丹皮、茯苓。","《方剂学》补益剂"],["六味地黄丸的功用是",["滋补肝肾","温补肾阳","益气健脾","疏肝解郁"],0,"六味地黄丸主治肝肾阴虚证，功用滋补肝肾。","《方剂学》补益剂"]]},{"d":59,"t":"补中益气汤与逍遥散","s":4,"w":9,"m":"《脾胃论》补中益气汤；《太平惠民和剂局方》逍遥散","a":"教材补益剂、和解剂章","f":["两方都涉及肝脾，方向差在哪？一个升提，一个疏散。","补中益气汤中升麻、柴胡的用量很小，为什么不可省？"],"w2":[["方证卡","写补中益气汤方证卡，注明「气虚发热」与「中气下陷」两种用法"],["对比卡","补中益气汤与逍遥散：同调肝脾，一升一散"]],"q":[["补中益气汤的君药是",["黄芪","人参","升麻","柴胡"],0,"黄芪补中益气、升阳固表为君；人参、白术、甘草为臣；升麻、柴胡升举清阳为使。","《脾胃论》"],["逍遥散的功用是",["疏肝解郁、养血健脾","补中益气、升阳举陷","温阳利水","寒热平调"],0,"逍遥散主治肝郁血虚脾弱证，功用疏肝解郁、养血健脾。","《方剂学》和解剂"]]},{"d":60,"t":"学情检查 · 第 15 次","s":4,"w":9,"r":1,"qs":[["四君子汤的组成是",["人参、白术、茯苓、甘草","熟地、当归、白芍、川芎","柴胡、黄芩、人参、半夏","黄芪、人参、白术、甘草"],0,"四君子汤为补气基础方：人参、白术、茯苓、炙甘草。","《太平惠民和剂局方》"],["六味地黄丸的「三补」是",["熟地黄、山茱萸、山药","泽泻、牡丹皮、茯苓","熟地黄、当归、白芍","人参、白术、甘草"],0,"三补为熟地黄补肾、山茱萸补肝、山药补脾；三泻为泽泻、牡丹皮、茯苓。","《方剂学》补益剂"],["六味地黄丸的功用是",["滋补肝肾","温补肾阳","益气健脾","疏肝解郁"],0,"六味地黄丸主治肝肾阴虚证，功用滋补肝肾。","《方剂学》补益剂"],["补中益气汤的君药是",["黄芪","人参","升麻","柴胡"],0,"黄芪补中益气、升阳固表为君；人参、白术、甘草为臣；升麻、柴胡升举清阳为使。","《脾胃论》"],["逍遥散的功用是",["疏肝解郁、养血健脾","补中益气、升阳举陷","温阳利水","寒热平调"],0,"逍遥散主治肝郁血虚脾弱证，功用疏肝解郁、养血健脾。","《方剂学》和解剂"]]},{"d":61,"t":"半夏泻心汤","s":4,"w":9,"m":"《伤寒论》第 149 条；半夏、黄芩、干姜、人参、甘草、黄连、大枣","a":"教材方剂学·调和寒热剂","f":["寒热并用于一方，是在同时处理什么？","「心下痞」与「结胸」，一虚一实，鉴别点在哪？"],"w2":[["方证卡","写半夏泻心汤方证卡，标注「痞、呕、利」三症"],["对比卡","半夏泻心汤与生姜泻心汤、甘草泻心汤：一字之差，主治何变"]],"q":[["半夏泻心汤的功用是",["寒热平调、消痞散结","清热生津","和解少阳","温阳利水"],0,"半夏泻心汤主治寒热错杂之痞证，功用寒热平调、消痞散结。","《伤寒论》第 149 条"],["半夏泻心汤中黄连、黄芩与干姜同用，体现的配伍特点是",["寒热并用、辛开苦降","纯用寒凉","纯用温热","补泻兼施"],0,"芩连苦寒泄热，干姜辛热温中，半夏辛开散结，共成辛开苦降、寒热平调之剂。","《方剂学》和解剂"]]},{"d":62,"t":"五苓散与真武汤","s":4,"w":9,"m":"《伤寒论》五苓散（猪苓、泽泻、白术、茯苓、桂枝）、真武汤（茯苓、芍药、生姜、白术、附子）","a":"教材方剂学·祛湿剂","f":["同为水液代谢失常，两方病位差在哪一层？","五苓散用桂枝、真武汤用附子，这两味药各在解决什么？"],"w2":[["方证卡","写五苓散与真武汤对照卡：病位、病性、主症、治法"],["对比卡","水湿、水饮、水肿：三个词在病位与程度上如何区分"]],"q":[["五苓散的功用是",["利水渗湿、温阳化气","温阳利水","清热利湿","益气健脾"],0,"五苓散主治膀胱气化不利之蓄水证，功用利水渗湿、温阳化气。","《伤寒论》五苓散"],["真武汤的君药是",["附子","茯苓","白术","生姜"],0,"附子温肾助阳、化气行水为君；茯苓、白术健脾利水，生姜温散水气，芍药缓急。","《伤寒论》真武汤"]]},{"d":63,"t":"银翘散与桑菊饮","s":4,"w":9,"m":"《温病条辨》上焦篇：银翘散、桑菊饮条文","a":"《温热论》「在卫汗之可也」","f":["辛凉平剂与辛凉轻剂，「轻」体现在哪里？","银翘散中荆芥穗的用意，是解表还是透邪？"],"w2":[["方证卡","写银翘散与桑菊饮对照卡：主治、主症重心、功用"],["对比卡","银翘散与麻黄汤：都治外感初起，寒温两途如何分"]],"q":[["银翘散的功用是",["辛凉透表、清热解毒","疏风清热、宣肺止咳","发汗解表、宣肺平喘","清热生津"],0,"银翘散主治温病初起，功用辛凉透表、清热解毒。","《温病条辨》上焦篇"],["桑菊饮与银翘散相比，更偏于",["宣肺止咳","清热解毒","滋阴润燥","通腑泄热"],0,"桑菊饮为辛凉轻剂，主治风温初起以咳嗽为主者，长于宣肺止咳。","《温病条辨》上焦篇"]]},{"d":64,"t":"学情检查 · 第 16 次","s":4,"w":10,"r":1,"qs":[["半夏泻心汤的功用是",["寒热平调、消痞散结","清热生津","和解少阳","温阳利水"],0,"半夏泻心汤主治寒热错杂之痞证，功用寒热平调、消痞散结。","《伤寒论》第 149 条"],["五苓散的功用是",["利水渗湿、温阳化气","温阳利水","清热利湿","益气健脾"],0,"五苓散主治膀胱气化不利之蓄水证，功用利水渗湿、温阳化气。","《伤寒论》五苓散"],["真武汤的君药是",["附子","茯苓","白术","生姜"],0,"附子温肾助阳、化气行水为君；茯苓、白术健脾利水，生姜温散水气，芍药缓急。","《伤寒论》真武汤"],["银翘散的功用是",["辛凉透表、清热解毒","疏风清热、宣肺止咳","发汗解表、宣肺平喘","清热生津"],0,"银翘散主治温病初起，功用辛凉透表、清热解毒。","《温病条辨》上焦篇"],["桑菊饮与银翘散相比，更偏于",["宣肺止咳","清热解毒","滋阴润燥","通腑泄热"],0,"桑菊饮为辛凉轻剂，主治风温初起以咳嗽为主者，长于宣肺止咳。","《温病条辨》上焦篇"]]},{"d":65,"t":"太阳病提纲","s":5,"w":10,"m":"《伤寒论》第 1 条「太阳之为病，脉浮，头项强痛而恶寒」","a":"library/伤寒论.txt 开篇；《医宗金鉴》太阳病篇注","f":["这一条是定义还是诊断标准？三症缺一还成立吗？","为什么把「脉浮」放在「头项强痛」之前？顺序有讲究吗？"],"w2":[["条文卡","抄写第 1 条，逐字注明每个症状的机理"],["对比卡","太阳病提纲与阳明病提纲：一表一里，措辞差别在哪"]],"q":[["太阳病提纲的原文是",["脉浮，头项强痛而恶寒","胃家实","口苦咽干目眩","脉微细但欲寐"],0,"第 1 条为太阳病提纲，以脉浮、头项强痛、恶寒为纲。","《伤寒论》第 1 条"],["「头项强痛」中「强」的意思是",["僵硬不舒","强壮","勉强","增加"],0,"「强」读 jiàng，指僵硬不柔和，形容头项拘急不舒。","《伤寒论》第 1 条"]]},{"d":66,"t":"中风与伤寒","s":5,"w":10,"m":"《伤寒论》第 2 条「太阳病，发热汗出，恶风，脉缓者，名为中风」；第 3 条「太阳病，或已发热，或未发热，必恶寒，体痛，呕逆，脉阴阳俱紧者，名为伤寒」","a":"《医宗金鉴》中风伤寒辨","f":["两条都在「太阳病」之下，分岔的依据是什么？","第 3 条为什么写「或已发热，或未发热」，而第 2 条直接写「发热」？"],"w2":[["条文卡","并排抄写第 2、3 条，标出共有症与鉴别症"],["对比卡","中风与伤寒：汗、脉、恶风恶寒三处差别"]],"q":[["太阳中风的主脉是",["脉缓","脉浮紧","脉沉迟","脉微细"],0,"第 2 条：发热汗出、恶风、脉缓，名为中风（表虚）。","《伤寒论》第 2 条"],["太阳伤寒「脉阴阳俱紧」中的「阴阳」指",["尺脉与寸脉","阴经与阳经","表与里","寒与热"],0,"此处阴阳指尺、寸而言，即寸关尺三部脉俱紧。","《伤寒论》第 3 条"]]},{"d":67,"t":"桂枝汤证再读","s":5,"w":10,"m":"《伤寒论》第 12 条「太阳中风，阳浮而阴弱……桂枝汤主之」；第 13 条","a":"桂枝汤方后注（啜粥、温覆、取微似汗）","f":["从提纲到方证，中间补上了哪些判断环节？","「阳浮而阴弱」是在说脉，还是在说病机？"],"w2":[["条文卡","抄第 12 条，标出「证—机—方」三段"],["方证卡","写桂枝汤方证卡，注明禁忌（表实无汗者不可用）"]],"q":[["第 12 条中「阳浮而阴弱」描述的是",["卫强营弱、营卫不和的病机与脉象","阴阳离决","里寒外热","气血两虚"],0,"阳浮指卫气浮盛于外，阴弱指营阴不足于内，概括营卫不和之病机。","《伤寒论》第 12 条"],["桂枝汤的服法要求「取微似汗」，其原因是",["汗多则伤营卫，病反不除","微汗可解毒","微汗便于观察","微汗可止呕"],0,"方后注强调不可令如水流漓，病必不除；微似汗出，营卫始和。","《伤寒论》桂枝汤方后注"]]},{"d":68,"t":"学情检查 · 第 17 次","s":5,"w":10,"r":1,"qs":[["太阳病提纲的原文是",["脉浮，头项强痛而恶寒","胃家实","口苦咽干目眩","脉微细但欲寐"],0,"第 1 条为太阳病提纲，以脉浮、头项强痛、恶寒为纲。","《伤寒论》第 1 条"],["太阳中风的主脉是",["脉缓","脉浮紧","脉沉迟","脉微细"],0,"第 2 条：发热汗出、恶风、脉缓，名为中风（表虚）。","《伤寒论》第 2 条"],["太阳伤寒「脉阴阳俱紧」中的「阴阳」指",["尺脉与寸脉","阴经与阳经","表与里","寒与热"],0,"此处阴阳指尺、寸而言，即寸关尺三部脉俱紧。","《伤寒论》第 3 条"],["第 12 条中「阳浮而阴弱」描述的是",["卫强营弱、营卫不和的病机与脉象","阴阳离决","里寒外热","气血两虚"],0,"阳浮指卫气浮盛于外，阴弱指营阴不足于内，概括营卫不和之病机。","《伤寒论》第 12 条"],["桂枝汤的服法要求「取微似汗」，其原因是",["汗多则伤营卫，病反不除","微汗可解毒","微汗便于观察","微汗可止呕"],0,"方后注强调不可令如水流漓，病必不除；微似汗出，营卫始和。","《伤寒论》桂枝汤方后注"]]},{"d":69,"t":"麻黄汤证与禁汗","s":5,"w":10,"m":"《伤寒论》第 35 条及汗法禁例（疮家、淋家、衄家、亡血家等不可发汗）","a":"《伤寒论》第 3 条太阳伤寒证候","f":["为什么禁忌条文和主治条文必须一起读？","「疮家不可发汗」的机理是什么？"],"w2":[["条文卡","抄第 35 条，列出「无汗而喘」的完整证据链"],["对比卡","可汗与禁汗：把禁例按「伤津、伤血、伤阳」归类"]],"q":[["麻黄汤证的典型表现是",["头痛发热、身疼腰痛、骨节疼痛、恶风、无汗而喘","汗出恶风、脉缓","往来寒热、胸胁苦满","脉微细、但欲寐"],0,"第 35 条为麻黄汤证，属太阳伤寒表实证。","《伤寒论》第 35 条"],["「疮家不可发汗」的主要原因是",["久患疮疡多气血亏虚，发汗更伤营血","疮疡属热证","疮疡会传染","疮疡需先外治"],0,"疮家久病气血已伤，发汗则更竭营血，易致痉。","《伤寒论》汗法禁例"]]},{"d":70,"t":"观其脉证","s":5,"w":10,"m":"《伤寒论》第 16 条「观其脉证，知犯何逆，随证治之」","a":"《伤寒论》坏病相关条文","f":["这句话对「方证对应」是支持，还是约束？","「知犯何逆」的「逆」，指误治还是指病机逆转？"],"w2":[["条文卡","抄第 16 条，写一段你自己的理解（不超过 100 字）"],["对比卡","「随证治之」与「辨病用专方」：分歧的根子在哪"]],"q":[["「观其脉证，知犯何逆，随证治之」出自",["《伤寒论》第 16 条","《伤寒论》第 1 条","《金匮要略》首篇","《素问·至真要大论》"],0,"此为第 16 条，论坏病处理原则，强调随证施治。","《伤寒论》第 16 条"],["「随证治之」强调的是",["依据当下脉证动态调整治法","固定用方","按病程天数用药","按季节用药"],0,"不拘于原方原法，以现症脉为据，随证变化而治。","《伤寒论》第 16 条"]]},{"d":71,"t":"阳明病提纲","s":5,"w":11,"m":"《伤寒论》第 180 条「阳明之为病，胃家实是也」","a":"阳明经证（白虎汤）与腑证（承气汤）条文","f":["「胃家实」三个字，各家解释分歧的根源是什么？","阳明病为什么容易出现「胃家实」？"],"w2":[["条文卡","抄第 180 条，分别写出「经证」与「腑证」的证据"],["对比卡","阳明经证与腑证：热势、大便、腹诊三处对照"]],"q":[["阳明病提纲的原文是",["胃家实是也","脉浮头项强痛而恶寒","口苦咽干目眩","脉微细但欲寐"],0,"第 180 条以「胃家实」概括阳明病病机。","《伤寒论》第 180 条"],["阳明腑实证的代表方是",["大承气汤","白虎汤","小柴胡汤","桂枝汤"],0,"阳明腑实、燥屎内结者用承气汤峻下热结；阳明经热盛用白虎汤清热生津。","《伤寒论》阳明病篇"]]},{"d":72,"t":"学情检查 · 第 18 次","s":5,"w":11,"r":1,"qs":[["麻黄汤证的典型表现是",["头痛发热、身疼腰痛、骨节疼痛、恶风、无汗而喘","汗出恶风、脉缓","往来寒热、胸胁苦满","脉微细、但欲寐"],0,"第 35 条为麻黄汤证，属太阳伤寒表实证。","《伤寒论》第 35 条"],["「观其脉证，知犯何逆，随证治之」出自",["《伤寒论》第 16 条","《伤寒论》第 1 条","《金匮要略》首篇","《素问·至真要大论》"],0,"此为第 16 条，论坏病处理原则，强调随证施治。","《伤寒论》第 16 条"],["「随证治之」强调的是",["依据当下脉证动态调整治法","固定用方","按病程天数用药","按季节用药"],0,"不拘于原方原法，以现症脉为据，随证变化而治。","《伤寒论》第 16 条"],["阳明病提纲的原文是",["胃家实是也","脉浮头项强痛而恶寒","口苦咽干目眩","脉微细但欲寐"],0,"第 180 条以「胃家实」概括阳明病病机。","《伤寒论》第 180 条"],["阳明腑实证的代表方是",["大承气汤","白虎汤","小柴胡汤","桂枝汤"],0,"阳明腑实、燥屎内结者用承气汤峻下热结；阳明经热盛用白虎汤清热生津。","《伤寒论》阳明病篇"]]},{"d":73,"t":"少阳病提纲","s":5,"w":11,"m":"《伤寒论》第 263 条「少阳之为病，口苦、咽干、目眩也」；第 96 条小柴胡汤证","a":"「但见一证便是，不必悉具」相关条文","f":["少阳为什么被称作「半表半里」？这个位置怎么判断？","口、咽、目三处同时出现，说明了什么？"],"w2":[["条文卡","抄第 263 条，注明三症的共同病机"],["方证卡","写小柴胡汤方证卡，列出「四大主症」"]],"q":[["少阳病提纲的原文是",["口苦、咽干、目眩也","胃家实是也","腹满而吐，食不下","消渴，气上撞心"],0,"第 263 条为少阳病提纲，以口苦、咽干、目眩为纲。","《伤寒论》第 263 条"],["「但见一证便是，不必悉具」是针对",["少阳病小柴胡汤证","太阳病桂枝汤证","阳明病承气汤证","少阴病四逆汤证"],0,"此语指少阳证不必四症俱全，但见一证即可从少阳论治，但仍须结合脉证。","《伤寒论》第 101 条"]]},{"d":74,"t":"三阴提纲","s":5,"w":11,"m":"《伤寒论》第 273 条（太阴）、第 281 条（少阴）、第 326 条（厥阴）","a":"《医宗金鉴》三阴病篇注","f":["三阴提纲各抓一个主症，为什么选的是这几个？","太阴与少阴都可见下利，病机差在哪一层？"],"w2":[["条文卡","三条并抄，各标出一个「主症 + 病机」"],["对比卡","太阴腹满与阳明腹满：一虚一实，按之如何不同"]],"q":[["少阴病提纲的原文是",["脉微细，但欲寐也","胃家实是也","口苦咽干目眩也","腹满而吐，食不下"],0,"第 281 条以脉微细、但欲寐概括少阴病心肾阳衰、阴阳俱虚之候。","《伤寒论》第 281 条"],["太阴病提纲的主症是",["腹满而吐，食不下，自利益甚，时腹自痛","消渴，气上撞心","脉微细，但欲寐","口苦咽干目眩"],0,"第 273 条为太阴病提纲，属脾阳虚弱、寒湿内盛。","《伤寒论》第 273 条"]]},{"d":75,"t":"六经传变","s":5,"w":11,"m":"《伤寒论》论传经、合病、并病的条文","a":"《素问·热论》六经传变说与《伤寒论》的差异","f":["判断「传经」的依据，是日期还是脉证？","「合病」与「并病」，一个是同时，一个是先后，文本依据在哪？"],"w2":[["条文卡","整理传变的三种情形：传经、合病、并病，各配一条原文"],["对比卡","《素问·热论》与《伤寒论》的六经：同名而义同吗"]],"q":[["判断伤寒传经的主要依据是",["脉证变化","发病天数","患者年龄","季节"],0,"仲景以脉证为凭，不机械按日数传经；第 16 条即强调观其脉证。","《伤寒论》"],["「并病」指的是",["一经病证未罢，又见他经病证","两经同时受邪","表里同病","虚实夹杂"],0,"并病为一经未愈又传他经；合病为两经或三经同时受邪。","《伤寒论》"]]},{"d":76,"t":"学情检查 · 第 19 次","s":5,"w":11,"r":1,"qs":[["少阳病提纲的原文是",["口苦、咽干、目眩也","胃家实是也","腹满而吐，食不下","消渴，气上撞心"],0,"第 263 条为少阳病提纲，以口苦、咽干、目眩为纲。","《伤寒论》第 263 条"],["少阴病提纲的原文是",["脉微细，但欲寐也","胃家实是也","口苦咽干目眩也","腹满而吐，食不下"],0,"第 281 条以脉微细、但欲寐概括少阴病心肾阳衰、阴阳俱虚之候。","《伤寒论》第 281 条"],["太阴病提纲的主症是",["腹满而吐，食不下，自利益甚，时腹自痛","消渴，气上撞心","脉微细，但欲寐","口苦咽干目眩"],0,"第 273 条为太阴病提纲，属脾阳虚弱、寒湿内盛。","《伤寒论》第 273 条"],["判断伤寒传经的主要依据是",["脉证变化","发病天数","患者年龄","季节"],0,"仲景以脉证为凭，不机械按日数传经；第 16 条即强调观其脉证。","《伤寒论》"],["「并病」指的是",["一经病证未罢，又见他经病证","两经同时受邪","表里同病","虚实夹杂"],0,"并病为一经未愈又传他经；合病为两经或三经同时受邪。","《伤寒论》"]]},{"d":77,"t":"金匮 · 治未病","s":5,"w":11,"m":"《金匮要略·脏腑经络先后病脉证》首条「见肝之病，知肝传脾，当先实脾」","a":"《素问·四气调神大论》治未病段对照","f":["「当先实脾」为什么不先治肝？背后是怎样的传变观？","「四季脾旺不受邪」在这条里起什么作用？"],"w2":[["条文卡","抄首条，画出「肝病 → 传脾 → 实脾」的逻辑链"],["对比卡","《素问》与《金匮》的治未病：预防与防传的分工"]],"q":[["「见肝之病，知肝传脾，当先实脾」体现的治则是",["既病防传","未病先防","瘥后防复","急则治标"],0,"已病之后预判传变方向并先安未受邪之地，属既病防变。","《金匮要略》首篇"],["该条中「实脾」的目的是",["先安未受邪之地，阻断传变","直接治肝","健脾以化痰","补脾以生血"],0,"实脾即先补脾土，使肝病不得传脾，属治未病之既病防变。","《金匮要略》首篇"]]},{"d":78,"t":"金匮 · 杂病选读","s":5,"w":12,"m":"library/金匮要略.txt 选一篇：痉湿暍病脉证治","a":"《金匮要略》脏腑经络先后病篇的辨证方法","f":["这一篇的辨证框架，与六经辨证有何不同？","「痉」与「湿」同篇，共同点在哪？"],"w2":[["条文卡","选三条抄录，各写一句「症状 → 病机」"],["对比卡","金匮杂病辨证与伤寒六经辨证：一横向一纵向"]],"q":[["《金匮要略》主要论述",["内伤杂病与妇人病","外感热病","本草药性","针灸腧穴"],0,"《金匮要略》为《伤寒杂病论》杂病部分，论内伤杂病及妇人病。","《金匮要略》"],["《金匮要略》与《伤寒论》的关系是",["同出《伤寒杂病论》，一论杂病一论伤寒","完全独立的两本书","后者是前者的注解","前者是后者的方剂附录"],0,"二书同源于张仲景《伤寒杂病论》，后世分为伤寒与杂病两部分。","《金匮要略》序"]]},{"d":79,"t":"病机十九条","s":5,"w":12,"m":"《素问·至真要大论》病机十九条","a":"教材病机章；刘完素《素问玄机原病式》对十九条的发挥","f":["十九条里，哪几条最容易与临床直觉相冲突？为什么？","「皆属于」的「皆」，是全部还是多半？"],"w2":[["条文卡","抄十九条，按五脏、六气两类重新归类"],["对比卡","「诸风掉眩」与「诸寒收引」：一条属肝一条属肾，归类依据是什么"]],"q":[["「诸湿肿满，皆属于」",["脾","肝","肾","肺"],0,"病机十九条：诸湿肿满，皆属于脾；诸风掉眩，皆属于肝；诸寒收引，皆属于肾。","《素问·至真要大论》"],["「诸气膹郁，皆属于」",["肺","肝","脾","心"],0,"诸气膹郁，皆属于肺，指气机郁滞、胸满喘急多责之于肺。","《素问·至真要大论》"]]},{"d":80,"t":"学情检查 · 第 20 次","s":5,"w":12,"r":1,"qs":[["「见肝之病，知肝传脾，当先实脾」体现的治则是",["既病防传","未病先防","瘥后防复","急则治标"],0,"已病之后预判传变方向并先安未受邪之地，属既病防变。","《金匮要略》首篇"],["《金匮要略》主要论述",["内伤杂病与妇人病","外感热病","本草药性","针灸腧穴"],0,"《金匮要略》为《伤寒杂病论》杂病部分，论内伤杂病及妇人病。","《金匮要略》"],["《金匮要略》与《伤寒论》的关系是",["同出《伤寒杂病论》，一论杂病一论伤寒","完全独立的两本书","后者是前者的注解","前者是后者的方剂附录"],0,"二书同源于张仲景《伤寒杂病论》，后世分为伤寒与杂病两部分。","《金匮要略》序"],["「诸湿肿满，皆属于」",["脾","肝","肾","肺"],0,"病机十九条：诸湿肿满，皆属于脾；诸风掉眩，皆属于肝；诸寒收引，皆属于肾。","《素问·至真要大论》"],["「诸气膹郁，皆属于」",["肺","肝","脾","心"],0,"诸气膹郁，皆属于肺，指气机郁滞、胸满喘急多责之于肺。","《素问·至真要大论》"]]},{"d":81,"t":"上古天真论","s":5,"w":12,"m":"《素问·上古天真论》全篇：法于阴阳、和于术数、食饮有节、起居有常","a":"《素问·四气调神大论》四时养生","f":["「和于术数」的「数」，与「食饮有节」是同一层要求吗？","「恬淡虚无，真气从之」是心理建议还是病机判断？"],"w2":[["条文卡","抄「法于阴阳……度百岁乃去」一段，逐句翻译"],["对比卡","上古天真论与四气调神大论：一论总则一论四时"]],"q":[["「法于阴阳，和于术数」之后接",["食饮有节，起居有常，不妄作劳","恬淡虚无，真气从之","虚邪贼风，避之有时","志闲而少欲"],0,"原文：法于阴阳，和于术数，食饮有节，起居有常，不妄作劳，故能形与神俱。","《素问·上古天真论》"],["「恬淡虚无，真气从之」强调的是",["情志调摄对正气的影响","药物补益","饮食禁忌","针灸调气"],0,"该句论精神内守、情志安定则真气和顺，属养生总则。","《素问·上古天真论》"]]},{"d":82,"t":"温热论纲领","s":5,"w":12,"m":"《温热论》「温邪上受，首先犯肺，逆传心包」及卫气营血四层","a":"叶天士《温热论》论透热转气、凉血散血","f":["卫气营血是四个阶段，还是四种病位？依据在哪句？","「逆传」的「逆」相对什么而言？"],"w2":[["条文卡","抄纲领句，画出顺传与逆传两条路径"],["对比卡","卫分证与气分证：热势、舌象、治法三步对照"]],"q":[["「温邪上受，首先犯肺，逆传心包」出自",["《温热论》","《温病条辨》","《湿热病篇》","《伤寒论》"],0,"此为叶天士《温热论》开篇纲领，创卫气营血辨证。","《温热论》"],["卫气营血辨证的创立者是",["叶天士","吴鞠通","薛生白","王孟英"],0,"叶天士创卫气营血辨证；吴鞠通创三焦辨证；薛生白著《湿热病篇》。","《温热论》"]]},{"d":83,"t":"三焦辨证","s":5,"w":12,"m":"《温病条辨》上焦篇开篇；吴鞠通三焦辨证体系","a":"《温病条辨》中焦、下焦篇纲领","f":["三焦与卫气营血两套坐标，是竞争关系还是互补关系？","上焦、中焦、下焦各对应哪些脏腑？"],"w2":[["条文卡","画三焦—脏腑对应表，各写一条代表证候"],["对比卡","三焦辨证与卫气营血辨证：一横一纵，如何合用"]],"q":[["三焦辨证的创立者是",["吴鞠通","叶天士","薛生白","吴又可"],0,"吴鞠通著《温病条辨》，创三焦辨证。","《温病条辨》"],["温病上焦病位主要在",["肺与心包","脾胃","肝肾","膀胱"],0,"上焦包括手太阴肺与手厥阴心包；中焦属脾胃；下焦属肝肾。","《温病条辨》上焦篇"]]},{"d":84,"t":"学情检查 · 第 21 次","s":5,"w":12,"r":1,"qs":[["「法于阴阳，和于术数」之后接",["食饮有节，起居有常，不妄作劳","恬淡虚无，真气从之","虚邪贼风，避之有时","志闲而少欲"],0,"原文：法于阴阳，和于术数，食饮有节，起居有常，不妄作劳，故能形与神俱。","《素问·上古天真论》"],["「温邪上受，首先犯肺，逆传心包」出自",["《温热论》","《温病条辨》","《湿热病篇》","《伤寒论》"],0,"此为叶天士《温热论》开篇纲领，创卫气营血辨证。","《温热论》"],["卫气营血辨证的创立者是",["叶天士","吴鞠通","薛生白","王孟英"],0,"叶天士创卫气营血辨证；吴鞠通创三焦辨证；薛生白著《湿热病篇》。","《温热论》"],["三焦辨证的创立者是",["吴鞠通","叶天士","薛生白","吴又可"],0,"吴鞠通著《温病条辨》，创三焦辨证。","《温病条辨》"],["温病上焦病位主要在",["肺与心包","脾胃","肝肾","膀胱"],0,"上焦包括手太阴肺与手厥阴心包；中焦属脾胃；下焦属肝肾。","《温病条辨》上焦篇"]]},{"d":85,"t":"湿热病篇","s":5,"w":13,"m":"《湿热病篇》提纲条文；薛生白论湿热","a":"《温病条辨》湿温相关条文；湿温三禁","f":["湿与热合，为什么治法上比单纯清热更受约束？","「湿温三禁」禁的是哪三法？各因何而禁？"],"w2":[["条文卡","抄湿热提纲，注明「始恶寒、后但热不寒」的演变"],["对比卡","湿温与温热：起病、传变、治法三处差别"]],"q":[["《湿热病篇》的作者是",["薛生白","叶天士","吴鞠通","王孟英"],0,"《湿热病篇》为薛生白所著，专论湿热病证治。","《湿热病篇》"],["「湿温三禁」通常指",["禁汗、禁下、禁润","禁吐、禁下、禁补","禁汗、禁吐、禁清","禁补、禁涩、禁温"],0,"湿温初起，汗之则神昏耳聋，下之则洞泄，润之则病深不解，故有三禁。","《温病条辨》"]]},{"d":86,"t":"寒温之辨","s":5,"w":13,"m":"对照《伤寒论》太阳病篇与《温病条辨》上焦篇","a":"《温热经纬》诸家论寒温之异","f":["伤寒与温病的分歧，根子在病因认识还是传变模型？","「辛温解表」与「辛凉解表」，各自的前提条件是什么？"],"w2":[["概念卡","写一张寒温对照表：病因、初起证、治法、代表方"],["对比卡","麻黄汤与银翘散：同治初起外感，寒温两途如何分"]],"q":[["伤寒与温病在初起治法上的主要差别是",["伤寒用辛温解表，温病用辛凉解表","伤寒用补法，温病用泻法","伤寒用针灸，温病用药","无差别"],0,"伤寒初起寒邪束表，宜辛温解表；温病初起温邪犯肺，宜辛凉透表。","《温病条辨》"],["温病学派与伤寒学派分歧的焦点之一是",["温邪是否可径用辛温发汗","是否使用针灸","是否重视脉诊","是否使用汤剂"],0,"温病忌辛温发汗，恐助热伤津；伤寒则以辛温解表为正治。","《温热经纬》"]]},{"d":87,"t":"条文互证","s":5,"w":13,"m":"自选三条互见条文对照阅读（如太阳提纲、少阳提纲、温热论纲领）","a":"library/ 内多部古籍交叉检索","f":["同一概念在不同条文里的用法一致吗？不一致说明了什么？","互证时，你以哪一部书为准？依据是什么？"],"w2":[["条文卡","选三条互见条文，列表比较关键词的用法差异"],["概念卡","写一段「我的引文规则」：引用时如何标注出处与版本"]],"q":[["条文互证的首要前提是",["确认版本与条文编号，避免张冠李戴","记住尽可能多的条文","只看注家解释","只读一家之言"],0,"互证须先确定文本来源与编号，否则比较失去基准。","文献学常识"],["引用古籍时最稳妥的做法是",["标注书名、篇名（或条文号），并核对原文","只写书名","凭记忆引用","只写作者"],0,"可核对的出处是学术引用的底线，也便于他人复核。","文献学常识"]]},{"d":88,"t":"学情检查 · 第 22 次","s":5,"w":13,"r":1,"qs":[["《湿热病篇》的作者是",["薛生白","叶天士","吴鞠通","王孟英"],0,"《湿热病篇》为薛生白所著，专论湿热病证治。","《湿热病篇》"],["伤寒与温病在初起治法上的主要差别是",["伤寒用辛温解表，温病用辛凉解表","伤寒用补法，温病用泻法","伤寒用针灸，温病用药","无差别"],0,"伤寒初起寒邪束表，宜辛温解表；温病初起温邪犯肺，宜辛凉透表。","《温病条辨》"],["温病学派与伤寒学派分歧的焦点之一是",["温邪是否可径用辛温发汗","是否使用针灸","是否重视脉诊","是否使用汤剂"],0,"温病忌辛温发汗，恐助热伤津；伤寒则以辛温解表为正治。","《温热经纬》"],["条文互证的首要前提是",["确认版本与条文编号，避免张冠李戴","记住尽可能多的条文","只看注家解释","只读一家之言"],0,"互证须先确定文本来源与编号，否则比较失去基准。","文献学常识"],["引用古籍时最稳妥的做法是",["标注书名、篇名（或条文号），并核对原文","只写书名","凭记忆引用","只写作者"],0,"可核对的出处是学术引用的底线，也便于他人复核。","文献学常识"]]},{"d":89,"t":"医案读法","s":6,"w":13,"m":"选读 library/ 中一部医案类古籍的序或开篇（如《名医类案》体例）","a":"教材医案书写规范：时间、姓名、主诉、现病史、舌脉、诊断、治法、方药、转归","f":["把一段医案拆成「原文写明的事实」与「后人的推断」两栏，界线在哪？","医案里的「无效」记录，为什么比「效如桴鼓」更有学习价值？"],"w2":[["医案卡","选一则医案，按九项要素逐条摘录，缺项标注「原文未载」"],["对比卡","事实与推断：各摘三句，说明你的判断依据"]],"q":[["一份完整医案通常不包括",["患者职业与收入","主诉与现病史","舌象脉象","治法与方药"],0,"医案要素为时间、姓名、主诉、病史、舌脉、诊断、治法、方药、转归；职业收入非必需。","教材医案书写规范"],["读医案时区分「事实」与「推断」的意义在于",["避免把后人解释当成原文证据","便于背诵","加快阅读速度","减少字数"],0,"区分二者才能判断哪些是原始观察、哪些是解释框架，避免循环论证。","中医文献学常识"]]},{"d":90,"t":"叶天士医案","s":6,"w":13,"m":"《临证指南医案》选一案（可用 skills/ye-tianshi 语料对照）","a":"《温热论》卫气营血框架回看","f":["先自己辨证，再对照医家思路：你漏掉了哪条线索？","叶案常不写明确方名，这对读案提出了什么要求？"],"w2":[["医案卡","选一案，先写自己的辨证，再写叶氏思路，最后标出差异"],["对比卡","叶氏用药「轻灵」与经方「峻猛」：各自适用什么病势"]],"q":[["《临证指南医案》由谁整理成书",["华岫云等门人","叶天士本人","吴鞠通","薛生白"],0,"叶氏医案由门人华岫云等整理编次而成，非叶氏手定。","《临证指南医案》"],["叶天士在温病学上的主要贡献是",["创立卫气营血辨证","创立三焦辨证","著《温疫论》","著《湿热病篇》"],0,"叶天士创卫气营血辨证；三焦辨证为吴鞠通所创。","《温热论》"]]},{"d":91,"t":"经方医案","s":6,"w":13,"m":"选读一则经方医案（桂枝汤类或柴胡类），对照《伤寒论》原条文","a":"《经方实验录》选案（如可得）","f":["这案的方证对应，是抓主症还是抓病机？","若原条文与本案症状不完全吻合，作者凭什么用此方？"],"w2":[["医案卡","写「条文—本案—差异」三列对照表"],["对比卡","方证对应与辨证论治：两种表述的侧重点"]],"q":[["「方证对应」的核心是",["方剂的适应证与患者现症高度吻合","方名与病名相同","药味越多越好","剂量越大越好"],0,"方证对应强调方与证的对应关系，以现症群为用方依据。","《伤寒论》"],["经方医案的学习价值主要在于",["展示条文在具体病例中的适用边界","提供固定套路","替代理论学习","证明某方万能"],0,"医案显示条文的适用条件与变通，帮助理解方证边界。","中医医案学常识"]]},{"d":92,"t":"学情检查 · 第 23 次","s":6,"w":14,"r":1,"qs":[["一份完整医案通常不包括",["患者职业与收入","主诉与现病史","舌象脉象","治法与方药"],0,"医案要素为时间、姓名、主诉、病史、舌脉、诊断、治法、方药、转归；职业收入非必需。","教材医案书写规范"],["《临证指南医案》由谁整理成书",["华岫云等门人","叶天士本人","吴鞠通","薛生白"],0,"叶氏医案由门人华岫云等整理编次而成，非叶氏手定。","《临证指南医案》"],["叶天士在温病学上的主要贡献是",["创立卫气营血辨证","创立三焦辨证","著《温疫论》","著《湿热病篇》"],0,"叶天士创卫气营血辨证；三焦辨证为吴鞠通所创。","《温热论》"],["「方证对应」的核心是",["方剂的适应证与患者现症高度吻合","方名与病名相同","药味越多越好","剂量越大越好"],0,"方证对应强调方与证的对应关系，以现症群为用方依据。","《伤寒论》"],["经方医案的学习价值主要在于",["展示条文在具体病例中的适用边界","提供固定套路","替代理论学习","证明某方万能"],0,"医案显示条文的适用条件与变通，帮助理解方证边界。","中医医案学常识"]]},{"d":93,"t":"针灸 · 经络与取穴","s":6,"w":14,"m":"library/针灸甲乙经.txt 选读；教材经络腧穴章：骨度分寸、体表标志","a":"《针灸大成》卷一部分；十四经循行","f":["循经取穴与局部取穴，各自的判断前提是什么？","骨度分寸为什么必须结合体表标志使用？"],"w2":[["概念卡","写「循经取穴／局部取穴／对症取穴」三类各两条例子"],["对比卡","同经取穴与表里经取穴：什么时候选后者"]],"q":[["「肚腹三里留，腰背委中求，头项寻列缺，面口合谷收」出自",["四总穴歌","八会穴歌","十四经发挥","标幽赋"],0,"此为四总穴歌，概括四个常用要穴的主治范围。","针灸歌赋"],["循经取穴的主要依据是",["经脉所过，主治所及","穴位编号顺序","左右对称","穴位面积大小"],0,"循经取穴依据经脉循行与病位的对应关系，即「经脉所过，主治所及」。","《针灸学》治疗总论"]]},{"d":94,"t":"针灸 · 特定穴","s":6,"w":14,"m":"教材特定穴章：五输穴（井荥输经合）、原穴、络穴、郄穴、募穴、背俞穴","a":"《难经·六十八难》五输穴主治；《针灸大成》特定穴歌","f":["为什么五输穴要用五行属性来配？","募穴与背俞穴，一在前一在后，反映的是同一件事吗？"],"w2":[["概念卡","画五输穴—五行对应表，各写一条主治规律"],["对比卡","原穴与络穴：一治本经一治表里，如何配用"]],"q":[["五输穴不包括",["原穴","井穴","荥穴","合穴"],0,"五输穴为井、荥、输、经、合；原穴属另一类特定穴。","《针灸学》特定穴"],["背俞穴位于",["背腰部足太阳膀胱经第一侧线","胸腹部","四肢末端","头面部"],0,"背俞穴为脏腑之气输注于背部的腧穴，位于膀胱经第一侧线。","《针灸学》特定穴"]]},{"d":95,"t":"复盘第一张卡","s":6,"w":14,"m":"重读你在第 1 天写的概念卡；回看 96 天里所有卡片","a":"全部条文卡与医案卡","f":["哪些当时写对了，哪些现在能自己纠正？为什么当时会错？","如果只保留十张卡，你留哪十张？依据是什么？"],"w2":[["概念卡","重写第 1 天那张卡，并附一段「修订说明」"],["对比卡","旧版与新版并列，标出认知改变的关键一步"]],"q":[["复盘旧笔记时最有价值的动作是",["找出当时判断错误的环节并说明原因","重新抄写一遍","只看正确答案","删掉旧笔记"],0,"复盘的目的是定位认知偏差的形成机制，而非重复记忆。","学习方法常识"],["间隔重复对长期记忆的作用主要来自",["在遗忘临界点主动提取","增加阅读次数","延长学习时间","抄写速度"],0,"主动提取比被动重读更有效，间隔安排可强化长期保持。","认知心理学常识"]]},{"d":96,"t":"学情检查 · 第 24 次","s":6,"w":14,"r":1,"qs":[["「肚腹三里留，腰背委中求，头项寻列缺，面口合谷收」出自",["四总穴歌","八会穴歌","十四经发挥","标幽赋"],0,"此为四总穴歌，概括四个常用要穴的主治范围。","针灸歌赋"],["五输穴不包括",["原穴","井穴","荥穴","合穴"],0,"五输穴为井、荥、输、经、合；原穴属另一类特定穴。","《针灸学》特定穴"],["背俞穴位于",["背腰部足太阳膀胱经第一侧线","胸腹部","四肢末端","头面部"],0,"背俞穴为脏腑之气输注于背部的腧穴，位于膀胱经第一侧线。","《针灸学》特定穴"],["复盘旧笔记时最有价值的动作是",["找出当时判断错误的环节并说明原因","重新抄写一遍","只看正确答案","删掉旧笔记"],0,"复盘的目的是定位认知偏差的形成机制，而非重复记忆。","学习方法常识"],["间隔重复对长期记忆的作用主要来自",["在遗忘临界点主动提取","增加阅读次数","延长学习时间","抄写速度"],0,"主动提取比被动重读更有效，间隔安排可强化长期保持。","认知心理学常识"]]}];
+  var START = '2026-11-14';
+
+  var S = {
+    nodes: [], checks: [], focus: [], view: 'timeline', onlyTodo: false,
+    tag: '精读', loaded: 0, open: {}, ans: {}
+  };
+  var P = { min: 25, total: 1500, left: 1500, running: false, timer: null, startedAt: '' };
+
+  function $(id) { return document.getElementById(id); }
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function fmtDate(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function todayStr() { return fmtDate(new Date()); }
+  function d10(v) { return v ? String(v).slice(0, 10) : ''; }
+  function toast(msg) {
+    var t = $('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.className = 'toast show';
+    clearTimeout(t._t);
+    t._t = setTimeout(function () { t.className = 'toast'; }, 2000);
+  }
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\x22/g, '&quot;')
+      .replace(/\x27/g, '&#39;');
+  }
+
+  /* ---------------- data ---------------- */
+  function loadAll(dbId, cb) {
+    var acc = [], guard = 0;
+    function step(cursor) {
+      if (guard++ > 60) { cb(acc); return; }
+      db.query({ databaseId: dbId, pageSize: 200, startCursor: cursor }).then(function (r) {
+        acc = acc.concat((r && r.results) || []);
+        var next = r && r.nextCursor;
+        if (r && r.hasMore && next && next !== cursor && (r.results || []).length) step(next);
+        else cb(acc);
+      }).catch(function (err) {
+        console.error('[database] load fail', dbId, err);
+        cb(acc);
+      });
+    }
+    step(undefined);
+  }
+
+  function reload() {
+    if (!db) { $('syncState').textContent = '未检测到数据环境，仅预览界面'; return; }
+    S.loaded = 0;
+    $('syncState').textContent = '正在同步数据表…';
+    loadAll(DB_NODES, function (rows) { S.nodes = rows; onLoaded(); });
+    loadAll(DB_CHECK, function (rows) { S.checks = rows; onLoaded(); });
+    loadAll(DB_FOCUS, function (rows) { S.focus = rows; onLoaded(); });
+  }
+  function onLoaded() {
+    S.loaded++;
+    if (S.loaded >= 3) {
+      $('syncState').textContent = '已连接 3 张数据表 · 双向同步';
+      renderAll();
+    }
+  }
+
+  /* ---------------- derived ---------------- */
+  function currentDay() {
+    var start = new Date(START + 'T00:00:00');
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    var diff = Math.floor((now - start) / 86400000) + 1;
+    if (diff < 1) return 1;
+    return diff > PLAN.length ? PLAN.length : diff;
+  }
+  function currentWeek() { return Math.ceil(currentDay() / 7); }
+  function doneNodes() { return S.nodes.filter(function (n) { return n['状态'] === '已完成'; }); }
+  function nodeOf(day) {
+    for (var i = 0; i < S.nodes.length; i++) if (Number(S.nodes[i]['天数']) === day) return S.nodes[i];
+    return null;
+  }
+  function todayFocusMin() {
+    var t = todayStr(), sum = 0;
+    S.focus.forEach(function (f) {
+      if (d10(f['日期']) === t && f['番茄类型'] === '专注25') sum += Number(f['时长分钟'] || 0);
+    });
+    return sum;
+  }
+  function totalFocusMin() {
+    var sum = 0;
+    S.focus.forEach(function (f) { if (f['番茄类型'] === '专注25') sum += Number(f['时长分钟'] || 0); });
+    return sum;
+  }
+  function streak() {
+    var set = {};
+    S.checks.forEach(function (c) { set[d10(c['日期'])] = 1; });
+    var n = 0, d = new Date();
+    if (!set[fmtDate(d)]) d.setDate(d.getDate() - 1);
+    while (set[fmtDate(d)]) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+  function expValue() {
+    return doneNodes().length * 10 + Math.round(totalFocusMin() * 0.5) + S.checks.length * 5;
+  }
+  function levelInfo() {
+    var exp = expValue();
+    return { lv: Math.floor(exp / 150) + 1, cur: exp % 150, next: 150, exp: exp };
+  }
+  var MEDALS = [
+    { name: '三日不辍', desc: '连续打卡 3 天', got: function () { return streak() >= 3; } },
+    { name: '一周有恒', desc: '连续打卡 7 天', got: function () { return streak() >= 7; } },
+    { name: '半月成习', desc: '连续打卡 14 天', got: function () { return streak() >= 14; } },
+    { name: '月满功成', desc: '连续打卡 30 天', got: function () { return streak() >= 30; } },
+    { name: '初入专注', desc: '累计 10 个番茄', got: function () { return S.focus.filter(function (f) { return f['番茄类型'] === '专注25'; }).length >= 10; } },
+    { name: '专注成瘾', desc: '累计 50 个番茄', got: function () { return S.focus.filter(function (f) { return f['番茄类型'] === '专注25'; }).length >= 50; } },
+    { name: '十节通关', desc: '完成 10 个节点', got: function () { return doneNodes().length >= 10; } },
+    { name: '三十而立', desc: '完成 30 个节点', got: function () { return doneNodes().length >= 30; } },
+    { name: '过半程碑', desc: '完成 60 个节点', got: function () { return doneNodes().length >= 60; } }
+  ];
+
+  /* ---------------- render ---------------- */
+  function markBind(el, dbId) {
+    if (!el) return;
+    el.setAttribute('data-sp-bindable', 'database');
+    el.setAttribute('data-sp-database-id', dbId);
+  }
+
+  function quizHtml(qs, dayKey) {
+    if (!qs || !qs.length) return '';
+    var html = '';
+    for (var i = 0; i < qs.length; i++) {
+      var q = qs[i], key = dayKey + ':' + i, ans = S.ans[key];
+      var revealed = ans !== undefined;
+      var opts = '';
+      for (var j = 0; j < q[1].length; j++) {
+        var cls = 'opt';
+        if (revealed && j === q[2]) cls += ' ok';
+        else if (revealed && ans === j) cls += ' bad';
+        else if (!revealed && ans === j) cls += ' sel';
+        opts += '<button class="' + cls + '" data-q="' + key + ':' + j + '">'
+          + 'ABCD'.charAt(j) + '. ' + escapeHtml(q[1][j]) + '</button>';
+      }
+      var fb = '';
+      if (revealed) {
+        var right = ans === q[2];
+        fb = '<div class="fb ' + (right ? 'good' : 'bad2') + '">'
+          + (right ? '正确' : '正确答案 ' + 'ABCD'.charAt(q[2]))
+          + '　' + escapeHtml(q[3]) + '（' + escapeHtml(q[4]) + '）</div>';
+      }
+      html += '<div class="q"><p class="q-t"><b>' + (i + 1) + '.</b> ' + escapeHtml(q[0]) + '</p>'
+        + '<div class="opts">' + opts + '</div>' + fb + '</div>';
+    }
+    return html;
+  }
+
+  function dsec(title, inner, note) {
+    return '<div class="dsec"><h5>' + escapeHtml(title) + '</h5>'
+      + (note ? '<p class="dnote">' + escapeHtml(note) + '</p>' : '') + inner + '</div>';
+  }
+
+  function detailHtml(p) {
+    if (p.r) {
+      return '<div class="detail">'
+        + dsec('学情检查', '', '5 道单选题，每题 2 分，选完即出解析')
+        + quizHtml(p.qs, p.d)
+        + '</div>';
+    }
+    var ul = function (arr) {
+      var s = '<ul>';
+      for (var i = 0; i < arr.length; i++) s += '<li>' + escapeHtml(arr[i]) + '</li>';
+      return s + '</ul>';
+    };
+    var cards = '<ul>';
+    for (var k = 0; k < p.w2.length; k++) {
+      cards += '<li><span class="mini">' + escapeHtml(p.w2[k][0]) + '</span> ' + escapeHtml(p.w2[k][1]) + '</li>';
+    }
+    cards += '</ul>';
+    return '<div class="detail">'
+      + dsec('精读', '<p>' + escapeHtml(p.m) + '</p>')
+      + dsec('泛读（建立联系）', '<p>' + escapeHtml(p.a) + '</p>')
+      + dsec('带着问题读', ul(p.f))
+      + dsec('今天写两张卡', cards)
+      + dsec('随堂自测', quizHtml(p.q, p.d), '2 道单选题，选完即出解析')
+      + '</div>';
+  }
+
+  function renderToday() {
+    var day = currentDay();
+    var p = PLAN[day - 1];
+    var n = nodeOf(day);
+    var done = n && n['状态'] === '已完成';
+    var head = '<div class="today-head">'
+      + '<span class="today-badge">第 ' + day + ' 天</span>'
+      + '<span class="tag ' + (p.r ? 'review' : 't-' + p.s) + '">' + (p.r ? '学情检查' : STAGE[p.s]) + '</span>'
+      + (done ? '<span class="tag t-2">已完成</span>' : '')
+      + '<span class="today-date">' + (n ? '已同步' : '') + '</span>'
+      + '</div>';
+    var actions = '<div class="today-act">'
+      + (n ? '<button class="btn primary" data-node="' + n._id + '" data-done="' + (done ? 1 : 0) + '">'
+        + (done ? '撤销完成' : '标记完成') + '</button>' : '<span class="st">尚未同步到数据表</span>')
+      + '<button class="btn" data-go="focus">开番茄钟</button>'
+      + '</div>';
+    $('todayPanel').innerHTML = '<div class="today">'
+      + head + '<h3 class="today-title">' + escapeHtml(p.t) + '</h3>'
+      + detailHtml(p) + actions + '</div>';
+    markBind($('todayPanel'), DB_NODES);
+  }
+
+  function renderAll() {
+    renderHead();
+    renderLevel();
+    renderToday();
+    renderTimeline();
+    renderWeek();
+    renderFocus();
+    renderChapter();
+    renderStats();
+  }
+
+  function renderHead() {
+    $('hStreak').textContent = streak();
+    $('hFocus').textContent = todayFocusMin();
+    var total = S.nodes.length || PLAN.length;
+    $('hRate').textContent = (total ? Math.round(doneNodes().length / total * 100) : 0) + '%';
+  }
+
+  function renderLevel() {
+    var L = levelInfo();
+    $('lvNum').textContent = L.lv;
+    $('expTxt').textContent = L.cur + ' / ' + L.next;
+    $('expBar').style.width = (L.cur / L.next * 100) + '%';
+    var html = '';
+    MEDALS.forEach(function (m) {
+      html += '<div class="medal' + (m.got() ? ' on' : '') + '" title="' + escapeHtml(m.name) + '">' + escapeHtml(m.name.slice(0, 1)) + '</div>';
+    });
+    $('miniBadges').innerHTML = html;
+  }
+
+  function renderTimeline() {
+    var box = $('timeline');
+    if (!S.nodes.length) {
+      box.innerHTML = '<div class="empty">任务轴还没有数据，点右上角「同步 96 天课程」写入节点。</div>';
+      $('initBtn').style.display = '';
+      return;
+    }
+    $('initBtn').style.display = 'none';
+    var today = currentDay();
+    var html = '', lastWeek = 0;
+    for (var i = 0; i < PLAN.length; i++) {
+      var p = PLAN[i], n = nodeOf(p.d);
+      if (!n) continue;
+      var done = n['状态'] === '已完成';
+      if (S.onlyTodo && done) continue;
+      if (p.w !== lastWeek) {
+        lastWeek = p.w;
+        var wkTotal = 0, wkDone = 0;
+        for (var t = 0; t < PLAN.length; t++) {
+          if (PLAN[t].w === p.w) {
+            wkTotal++;
+            var nn = nodeOf(PLAN[t].d);
+            if (nn && nn['状态'] === '已完成') wkDone++;
+          }
+        }
+        html += '<div class="week-title"><b>第 ' + p.w + ' 周</b><span>第 ' + (p.w * 7 - 6) + '–'
+          + Math.min(p.w * 7, PLAN.length) + ' 天</span><span class="line"></span><span class="pct">'
+          + wkDone + '/' + wkTotal + '</span></div>';
+      }
+      var open = !!S.open[p.d];
+      html += '<div class="node ' + (done ? 'done' : (p.d === today ? 'now' : '')) + (open ? ' open' : '') + '">'
+        + '<div class="node-card" data-day="' + p.d + '">'
+        + '<div class="node-day">D<b>' + p.d + '</b></div>'
+        + '<div class="node-body"><h4>' + escapeHtml(p.t)
+        + ' <span class="tag ' + (p.r ? 'review' : 't-' + p.s) + '">' + (p.r ? '检查' : STAGE[p.s]) + '</span>'
+        + (done ? ' <span class="tag t-2">已完成</span>' : '') + '</h4>'
+        + '<div class="focus">' + escapeHtml(p.r ? '学情检查：5 道单选题' : p.m) + '</div>'
+        + '<div class="node-more">' + (open ? '收起详情' : '展开今日内容') + '</div></div>'
+        + '<div class="node-act"><span class="st' + (done ? ' done' : '') + '">' + (done ? '✓ 完成' : (n['预计分钟'] || '') + ' 分钟') + '</span>'
+        + '<button class="btn sm ' + (done ? '' : 'primary') + '" data-node="' + n._id + '" data-done="' + (done ? 1 : 0) + '">'
+        + (done ? '撤销' : '完成') + '</button></div></div>'
+        + detailHtml(p)
+        + '</div>';
+    }
+    box.innerHTML = html || '<div class="empty">没有符合条件的节点</div>';
+    markBind(box, DB_NODES);
+  }
+
+  function renderWeek() {
+    var wk = currentWeek();
+    $('weekLabel').textContent = '当前第 ' + wk + ' 周 · 共 14 周';
+    var html = '', list = [];
+    for (var i = 0; i < PLAN.length; i++) if (PLAN[i].w === wk) list.push(PLAN[i]);
+    for (var j = 0; j < list.length; j++) {
+      var p = list[j], n = nodeOf(p.d), done = n && n['状态'] === '已完成';
+      html += '<div class="day-row"><div class="day-d">周' + '日一二三四五六'.charAt((p.d - 1) % 7) + '<b>D' + p.d + '</b></div>'
+        + '<div class="day-t" title="' + escapeHtml(p.t) + '">' + escapeHtml(p.t) + '</div>'
+        + '<div class="day-s">' + (done ? '<span class="st done">已完成</span>'
+          : (n ? '<button class="btn sm" data-node="' + n._id + '" data-done="0">完成</button>' : '<span class="st">未同步</span>'))
+        + '</div></div>';
+    }
+    $('weekList').innerHTML = html || '<div class="empty">本周还没有节点</div>';
+    markBind($('weekList'), DB_NODES);
+    var doneN = 0;
+    for (var k = 0; k < list.length; k++) {
+      var nn = nodeOf(list[k].d);
+      if (nn && nn['状态'] === '已完成') doneN++;
+    }
+    var rate = list.length ? Math.round(doneN / list.length * 100) : 0;
+    $('weekRate').textContent = rate + '%';
+    $('weekRing').setAttribute('stroke-dashoffset', String(364.4 * (1 - rate / 100)));
+    $('weekFocusTxt').textContent = list.length ? (list[0].r ? '学情检查周' : list[0].m) : '—';
+    $('weekStreak').textContent = streak();
+  }
+
+  function renderFocus() {
+    var chips = '';
+    TAGS.forEach(function (t) {
+      chips += '<button class="chip' + (S.tag === t ? ' on' : '') + '" data-tag="' + t + '">' + t + '</button>';
+    });
+    $('tagChips').innerHTML = chips;
+    $('ftMin').textContent = todayFocusMin();
+    $('ftCnt').textContent = S.focus.filter(function (f) {
+      return d10(f['日期']) === todayStr() && f['番茄类型'] === '专注25';
+    }).length;
+    var rows = S.focus.filter(function (f) { return d10(f['日期']) === todayStr(); });
+    if (!rows.length) { $('focusLog').innerHTML = '<div style="color:var(--ink3)">还没有记录</div>'; return; }
+    var html = '';
+    rows.forEach(function (f) {
+      html += '<div><span>' + escapeHtml(f['开始时间'] || '') + ' · ' + escapeHtml(f['关联任务'] || '未标注')
+        + '</span><b>' + (f['时长分钟'] || 0) + ' 分钟</b></div>';
+    });
+    $('focusLog').innerHTML = html;
+  }
+
+  function renderChapter() {
+    var html = '';
+    for (var s = 1; s <= 6; s++) {
+      var total = 0, done = 0;
+      for (var i = 0; i < PLAN.length; i++) {
+        if (PLAN[i].s === s) {
+          total++;
+          var n = nodeOf(PLAN[i].d);
+          if (n && n['状态'] === '已完成') done++;
+        }
+      }
+      var pct = total ? Math.round(done / total * 100) : 0;
+      html += '<div class="chap"><div class="chap-top"><b>' + STAGE[s] + '</b><span>'
+        + done + ' / ' + total + ' 节点 · ' + pct + '%</span></div>'
+        + '<div class="chap-bar"><i style="width:' + pct + '%"></i></div></div>';
+    }
+    $('chapters').innerHTML = html;
+    markBind($('chapters'), DB_NODES);
+  }
+
+  function renderStats() {
+    var L = levelInfo();
+    $('statGrid').innerHTML = ''
+      + '<div class="stat"><b>' + L.exp + '</b><span>累计经验</span></div>'
+      + '<div class="stat"><b>' + totalFocusMin() + '</b><span>累计专注分钟</span></div>'
+      + '<div class="stat"><b>' + S.focus.filter(function (f) { return f['番茄类型'] === '专注25'; }).length + '</b><span>番茄个数</span></div>'
+      + '<div class="stat"><b>' + S.checks.length + '</b><span>打卡天数</span></div>'
+      + '<div class="stat"><b>' + doneNodes().length + '</b><span>完成节点</span></div>';
+    markBind($('statGrid'), DB_FOCUS);
+
+    var days = [], max = 1;
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var key = fmtDate(d), sum = 0;
+      S.focus.forEach(function (f) {
+        if (d10(f['日期']) === key && f['番茄类型'] === '专注25') sum += Number(f['时长分钟'] || 0);
+      });
+      if (sum > max) max = sum;
+      days.push({ label: (d.getMonth() + 1) + '月' + d.getDate() + '日', sum: sum });
+    }
+    var svg = '', bw = 56, gap = 32, x0 = 24;
+    for (var k = 0; k < days.length; k++) {
+      var h = Math.max(3, Math.round(days[k].sum / max * 130));
+      var x = x0 + k * (bw + gap);
+      svg += '<rect x="' + x + '" y="' + (150 - h) + '" width="' + bw + '" height="' + h + '" rx="8" fill="url(#g1)"></rect>';
+      svg += '<text x="' + (x + bw / 2) + '" y="170" text-anchor="middle" font-size="11" fill="#9b98ad">' + days[k].label + '</text>';
+      if (days[k].sum) svg += '<text x="' + (x + bw / 2) + '" y="' + (142 - h) + '" text-anchor="middle" font-size="11" fill="#5b5bd6">' + days[k].sum + '</text>';
+    }
+    $('chart7').innerHTML = '<defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">'
+      + '<stop offset="0%" stop-color="#7b4fd8"></stop><stop offset="100%" stop-color="#b9a6f2"></stop></linearGradient></defs>' + svg;
+
+    var mh = '';
+    MEDALS.forEach(function (m) {
+      var got = m.got();
+      mh += '<div class="medal-card' + (got ? ' on' : '') + '"><div class="m">✦</div><b>'
+        + escapeHtml(m.name) + '</b><span>' + escapeHtml(m.desc) + '</span></div>';
+    });
+    $('medalGrid').innerHTML = mh;
+  }
+
+  /* ---------------- actions ---------------- */
+  function initPlan() {
+    if (!db) { toast('未连接数据环境'); return; }
+    var have = {};
+    S.nodes.forEach(function (n) { have[Number(n['天数'])] = 1; });
+    var todo = [];
+    for (var i = 0; i < PLAN.length; i++) if (!have[PLAN[i].d]) todo.push(PLAN[i]);
+    if (!todo.length) { toast('96 天节点已齐全'); return; }
+    var btn = $('initBtn');
+    btn.disabled = true;
+    var k = 0;
+    function step() {
+      if (k >= todo.length) {
+        btn.disabled = false; btn.textContent = '同步 96 天课程';
+        toast('已写入 ' + todo.length + ' 个节点');
+        reload();
+        return;
+      }
+      var p = todo[k++];
+      btn.textContent = '同步中 ' + k + ' / ' + todo.length;
+      db.addRecord({
+        databaseId: DB_NODES,
+        properties: {
+          '任务': { text: p.t }, '天数': { number: p.d }, '阶段': { select: STAGE[p.s] },
+          '周次': { number: p.w }, '重点': { text: p.r ? '学情检查：5 道单选题' : p.m },
+          '状态': { select: '未开始' }
+        }
+      }).then(function () { setTimeout(step, 60); })
+        .catch(function (err) { console.error(err); setTimeout(step, 150); });
+    }
+    step();
+  }
+
+  function toggleNode(id, isDone) {
+    if (!db) return;
+    var props = { '状态': { select: isDone ? '未开始' : '已完成' } };
+    if (!isDone) props['完成日期'] = { date: todayStr() };
+    db.updateRecord({ databaseId: DB_NODES, recordId: id, properties: props })
+      .then(function () { toast(isDone ? '已撤销' : '节点完成'); reload(); })
+      .catch(function (err) { console.error(err); toast('更新失败，请重试'); });
+  }
+
+  function checkin() {
+    if (!db) return;
+    var t = todayStr(), day = currentDay();
+    var exist = S.checks.filter(function (c) { return d10(c['日期']) === t; })[0];
+    var tags = [];
+    S.focus.forEach(function (f) {
+      if (d10(f['日期']) === t && f['关联任务'] && tags.indexOf(f['关联任务']) < 0) tags.push(f['关联任务']);
+    });
+    var props = {
+      '学习天数': { number: day },
+      '打卡状态': { select: '正常' },
+      '实际分钟': { number: todayFocusMin() },
+      '学习标签': { multi_select: tags.length ? tags : [S.tag] }
+    };
+    if (exist) {
+      db.updateRecord({ databaseId: DB_CHECK, recordId: exist._id, properties: props })
+        .then(function () { toast('今日打卡已更新'); reload(); })
+        .catch(function (e) { console.error(e); toast('打卡失败'); });
+    } else {
+      props['日期'] = { date: t };
+      props['心得'] = { text: '' };
+      db.addRecord({ databaseId: DB_CHECK, properties: props })
+        .then(function () { toast('今日打卡成功'); reload(); })
+        .catch(function (e) { console.error(e); toast('打卡失败'); });
+    }
+  }
+
+  function setPomo(min) {
+    P.min = min; P.total = min * 60; P.left = min * 60; P.running = false;
+    clearInterval(P.timer);
+    $('clockSub').textContent = '准备开始';
+    $('pomoStart').textContent = min === 25 ? '开始专注' : '开始休息';
+    paintClock();
+    var tabs = $('pomoTabs').getElementsByTagName('button');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].className = 'pomo-tab' + (Number(tabs[i].getAttribute('data-min')) === min ? ' on' : '');
+    }
+  }
+  function paintClock() {
+    $('clock').textContent = pad(Math.floor(P.left / 60)) + ':' + pad(P.left % 60);
+    $('pomoRing').setAttribute('stroke-dashoffset', String(603.2 * (1 - P.left / P.total)));
+  }
+  function tick() {
+    P.left--;
+    if (P.left <= 0) {
+      clearInterval(P.timer); P.running = false; P.left = 0; paintClock();
+      $('pomoStart').textContent = '开始专注';
+      if (P.min === 25) {
+        db.addRecord({
+          databaseId: DB_FOCUS,
+          properties: {
+            '日期': { date: todayStr() },
+            '开始时间': { text: P.startedAt },
+            '时长分钟': { number: 25 },
+            '番茄类型': { select: '专注25' },
+            '关联任务': { text: S.tag }
+          }
+        }).then(function () { toast('完成一个番茄，已记录'); reload(); })
+          .catch(function (e) { console.error(e); toast('记录失败'); });
+      } else {
+        toast('休息结束，回到专注');
+      }
+      return;
+    }
+    paintClock();
+  }
+
+  /* ---------------- events ---------------- */
+  $('nav').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.nav-item') : null;
+    if (!b) return;
+    S.view = b.getAttribute('data-view');
+    var items = document.querySelectorAll('.nav-item');
+    for (var i = 0; i < items.length; i++) items[i].className = 'nav-item' + (items[i] === b ? ' active' : '');
+    var views = document.querySelectorAll('.view');
+    for (var j = 0; j < views.length; j++) views[j].className = 'view' + (views[j].id === 'v-' + S.view ? ' active' : '');
+  });
+
+  $('initBtn').addEventListener('click', initPlan);
+  $('onlyTodo').addEventListener('change', function () { S.onlyTodo = this.checked; renderTimeline(); });
+
+  function handleQuiz(e) {
+    var q = e.target.closest ? e.target.closest('[data-q]') : null;
+    if (!q) return false;
+    var parts = q.getAttribute('data-q').split(':');
+    S.ans[parts[0] + ':' + parts[1]] = Number(parts[2]);
+    var sc = window.scrollY;
+    renderAll();
+    window.scrollTo(0, sc);
+    return true;
+  }
+
+  function handleNodeBtn(e) {
+    var b = e.target.closest ? e.target.closest('[data-node]') : null;
+    if (!b) return false;
+    toggleNode(b.getAttribute('data-node'), b.getAttribute('data-done') === '1');
+    return true;
+  }
+
+  $('v-timeline').addEventListener('click', function (e) {
+    if (handleQuiz(e)) return;
+    if (handleNodeBtn(e)) return;
+    var card = e.target.closest ? e.target.closest('[data-day]') : null;
+    if (card) {
+      var d = card.getAttribute('data-day');
+      S.open[d] = !S.open[d];
+      var sc = window.scrollY;
+      renderTimeline();
+      window.scrollTo(0, sc);
+    }
+  });
+
+  $('weekList').addEventListener('click', function (e) { handleNodeBtn(e); });
+  $('checkinBtn').addEventListener('click', checkin);
+
+  $('tagChips').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-tag]') : null;
+    if (!b) return;
+    S.tag = b.getAttribute('data-tag');
+    renderFocus();
+  });
+
+  $('pomoTabs').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('[data-min]') : null;
+    if (!b) return;
+    setPomo(Number(b.getAttribute('data-min')));
+  });
+
+  $('pomoStart').addEventListener('click', function () {
+    if (P.running) {
+      clearInterval(P.timer); P.running = false;
+      this.textContent = '继续';
+      $('clockSub').textContent = '已暂停';
+      return;
+    }
+    P.running = true;
+    if (!P.startedAt || P.left === P.total) {
+      var d = new Date();
+      P.startedAt = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+    $('clockSub').textContent = P.min === 25 ? '专注中' : '休息中';
+    this.textContent = '暂停';
+    P.timer = setInterval(tick, 1000);
+  });
+
+  $('pomoReset').addEventListener('click', function () {
+    clearInterval(P.timer); P.running = false; P.left = P.total; P.startedAt = '';
+    $('pomoStart').textContent = P.min === 25 ? '开始专注' : '开始休息';
+    $('clockSub').textContent = '准备开始';
+    paintClock();
+  });
+
+  document.addEventListener('click', function (e) {
+    var g = e.target.closest ? e.target.closest('[data-go]') : null;
+    if (!g) return;
+    var target = g.getAttribute('data-go');
+    var b = document.querySelector('.nav-item[data-view="' + target + '"]');
+    if (b) b.click();
+  });
+
+  setPomo(25);
+  reload();
+})();
+
+</script>
+</body>
+</html>
