@@ -309,6 +309,84 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
   .wrap{padding:18px 14px 40px} .panel{padding:20px}
   .daybar{grid-template-columns:repeat(7,minmax(0,1fr))}
 }
+/* ===== 古籍书库 ===== */
+#libChips .chip i{font-style:normal;font-size:11px;color:var(--ink3);margin-left:5px}
+.shelf-cat{margin-top:16px}
+.shelf-h{display:flex;align-items:baseline;gap:9px;margin-bottom:9px;padding-bottom:6px;border-bottom:1px solid var(--line2)}
+.shelf-h b{font-family:Georgia,serif;font-size:15px;color:var(--ink)}
+.shelf-h span{font-size:12px;color:var(--ink3)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:10px}
+.book{display:flex;flex-direction:column;gap:3px;text-align:left;padding:12px 14px;
+  border:1px solid var(--line);border-left:3px solid var(--green);border-radius:9px;background:#FDFEFD;
+  cursor:pointer;transition:.14s}
+.book:hover{border-color:var(--green);box-shadow:0 2px 10px rgba(0,0,0,.05);transform:translateY(-1px)}
+.book .bk-t{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
+.book .bk-a{font-size:11.5px;color:var(--ink3)}
+.book .bk-d{font-size:12px;color:var(--ink2);line-height:1.6;margin-top:2px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.book .bk-s{font-size:11px;color:var(--green);margin-top:3px}
+.book.na{border-left-color:var(--line);opacity:.6;cursor:not-allowed}
+.book.na .bk-s{color:var(--ink3)}
+
+/* 阅读器 */
+.reader{position:fixed;inset:0;z-index:80;background:rgba(26,34,29,.45);
+  display:flex;align-items:center;justify-content:center;padding:20px}
+.reader[hidden]{display:none}
+.reader-box{width:min(920px,100%);max-height:92vh;background:#fff;border-radius:14px;
+  display:flex;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.25)}
+.reader-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+  padding:16px 20px 12px;border-bottom:1px solid var(--line2)}
+.reader-title{font-family:Georgia,serif;font-size:20px;color:var(--ink);font-weight:600}
+.reader-meta{font-size:12px;color:var(--ink3);margin-top:3px}
+.reader-x{border:none;background:none;font-size:26px;line-height:1;color:var(--ink3);cursor:pointer;padding:0 4px}
+.reader-x:hover{color:var(--ink)}
+.reader-tools{display:flex;align-items:center;gap:10px;padding:10px 20px;border-bottom:1px solid var(--line2);flex-wrap:wrap}
+.reader-tools input{flex:1 1 200px;max-width:320px;border:1px solid var(--line);border-radius:7px;
+  padding:6px 10px;font-size:13px;background:#FCFDFC}
+.rfstat{font-size:12px;color:var(--ink3)}
+.reader-body{flex:1;overflow:auto;padding:18px 24px;background:#FDFDFB}
+.reader-text{margin:0;white-space:pre-wrap;word-break:break-word;font-size:15px;line-height:1.95;
+  color:var(--ink);font-family:"Songti SC","SimSun",Georgia,serif}
+.reader-load{color:var(--ink3);font-size:13px}
+.reader-foot{display:flex;align-items:center;gap:12px;padding:10px 20px;border-top:1px solid var(--line2);background:#fff}
+
+/* 复习 / 预习 */
+.study-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:6px 0 20px}
+.study-col{border:1px solid var(--line);border-radius:11px;padding:14px 16px;background:#FDFEFD}
+.study-h b{display:block;font-family:Georgia,serif;font-size:15.5px;color:var(--ink)}
+.study-h span{display:block;font-size:12px;color:var(--ink3);line-height:1.7;margin-top:4px}
+.study-sub{display:flex;align-items:center;gap:7px;margin:14px 0 4px;padding-bottom:4px;
+  border-bottom:1px dashed var(--line2);font-size:12.5px;color:var(--ink2);font-weight:600}
+.study-sub i{font-style:normal;font-size:11px;color:var(--green);background:var(--green-soft);
+  border-radius:9px;padding:1px 7px}
+.study-col .empty{padding:12px;font-size:12.5px;margin:6px 0}
+.mini{font-size:11.5px;color:var(--ink3);line-height:1.6}
+details.recall{border-bottom:1px dashed var(--line2);padding:7px 0;font-size:13px}
+details.recall summary{cursor:pointer;color:var(--ink2);list-style:none}
+details.recall summary::-webkit-details-marker{display:none}
+details.recall summary::before{content:"▸ ";color:var(--ink3)}
+details.recall[open] summary::before{content:"▾ "}
+.rc-body{margin:7px 0 2px;padding:9px 12px;background:#FAFCFA;border-left:2px solid var(--green);
+  border-radius:0 7px 7px 0;font-size:13px;line-height:1.85;color:var(--ink)}
+.prev-item{border-bottom:1px dashed var(--line2);padding:10px 0}
+.prev-item:last-child{border-bottom:none}
+.pi-h{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.pi-d{font-size:11px;color:var(--green);font-weight:600;font-variant-numeric:tabular-nums}
+.pi-t{font-size:13.5px;font-weight:600;color:var(--ink)}
+.pi-tag{margin-left:auto;font-size:10.5px;color:#fff;background:var(--green);border-radius:4px;padding:1px 6px}
+.pi-goal,.pi-pt{margin:6px 0 0;font-size:12.5px;color:var(--ink2);line-height:1.7}
+.pi-goal b,.pi-pt b{color:var(--ink);margin-right:6px;font-weight:600}
+.pi-foot{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.pi-foot .mini{margin-right:auto}
+
+@media (max-width:820px){
+  .study-grid{grid-template-columns:1fr}
+  .shelf{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .reader{padding:0}
+  .reader-box{max-height:100vh;height:100vh;border-radius:0}
+  .reader-body{padding:14px 16px}
+}
+
 /* ===== 每日课程 · 49 天 ===== */
 #course{scroll-margin-top:76px}
 .c-today{position:relative;display:block;width:100%;text-align:left;border:1px solid #CFE2D6;
@@ -496,10 +574,10 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 <div class="row a">
   <section class="panel" id="heat">
     <div class="panel-h"><span class="no">01</span><h2>近 14 天打卡</h2></div>
-    <p class="desc">一格一天：上面日期，中间是当天学习分钟数，下面星期。绿色＝已完成当日课程（≥20 分钟），橙色＝有记录未达标，灰色＝没记录。</p>
+    <p class="desc">一格一天：上面日期，中间是当天实际专注分钟数，下面星期。绿色＝已完成当日课程，橙色＝有专注记录但没完成课程，灰色＝没记录。</p>
     <div class="hgrid" id="heatGrid"></div>
     <div class="hsum" id="heatSum"></div>
-    <p class="hlegend">做完当日课程的练习才会记成绿色，时长为该课自然时长。连续上课按「课程完成」算，今天没做完就从昨天往回数。</p>
+    <p class="hlegend">做完当日课程的练习才记成绿色；格子里是计时器记录的实际专注分钟，不含计划时长。连续上课按「课程完成」算，今天没做完就从昨天往回数。</p>
   </section>
 
   <section class="panel o" id="weekfocus">
@@ -514,7 +592,7 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 <div class="row">
   <section class="panel" id="today">
     <div class="panel-h"><span class="no">03</span><h2>今日课程</h2></div>
-    <p class="desc">当天这一课的全部内容：原文、要点、任务。做完练习即完成打卡，45–48 分钟自动计入今日学习。要翻别天，去下面的「每日课程」。</p>
+    <p class="desc">当天这一课的全部内容：原文、要点、任务。做完练习即完成打卡；实际专注时间由课程页的计时器单独记录。要翻别天，去下面的「每日课程」。</p>
     <div id="todayBody"></div>
   </section>
 </div>
@@ -522,12 +600,12 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 <div class="row">
   <section class="panel" id="course">
     <div class="panel-h"><span class="no">04</span><h2>每日课程 · 168 天</h2></div>
-    <p class="desc">阶段 1–4 的完整课表，共 168 天：每课 3–4 段经典原文（原文 + 出处 + 白话 + 校读提示）、4–5 条要点、一个动手任务、四道客观题。单课 45–48 分钟，做完练习即计入当日学习时长。第 N 天只在第 N 天解锁，未来日期点不开。</p>
+    <p class="desc">阶段 1–4 的完整课表，共 168 天：每课 3–4 段经典原文（原文 + 出处 + 白话 + 校读提示）、4–5 条要点、一个动手任务、六道基础题加一道综合大题。全部课程随时可点开学——提前学、回头补、跳着读都不拦。</p>
     <div id="cBody"></div>
   </section>
 </div>
 
-<div class="row a">
+<div class="row">
   <section class="panel b" id="check">
     <div class="panel-h"><span class="no">05</span><h2>学情检查 · 客观题</h2></div>
     <p class="desc">每次达标学习后第 3 天开放、第 5 天截止，抽 3 道客观题（单选 / 多选 / 判断）。提交即自动判分，没有主观题；错题自动进错题本。</p>
@@ -537,19 +615,11 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
     <div id="mistakeList"></div>
   </section>
 
-  <section class="panel g">
-    <div class="panel-h"><span class="no">06</span><h2>红线与验歪</h2></div>
-    <p class="desc">常驻可见。学偏了比学慢了更麻烦，第 4 周末拿下面三条自查。</p>
-    <h3>红线</h3>
-    <div id="redlines"></div>
-    <h3>第 4 周末验歪</h3>
-    <div id="checks"></div>
-  </section>
 </div>
 
 <div class="row">
   <section class="panel b" id="track">
-    <div class="panel-h"><span class="no">07</span><h2>25 周进度轨</h2></div>
+    <div class="panel-h"><span class="no">06</span><h2>25 周进度轨</h2></div>
     <p class="desc">点格子直接跳到那一周。底色是阶段，空心是未完成，实心带勾是已完成，橙框是当前周。</p>
     <div class="track" id="trackBox"></div>
     <div class="bar"><i id="barFill" style="width:0%"></i></div>
@@ -566,17 +636,45 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
 <div class="row">
   <section class="panel g" id="repos">
-    <div class="panel-h"><span class="no">08</span><h2>资料入口 · 按阶段归位</h2></div>
-    <p class="desc" id="repoDesc">43 份资料里挑出的 26 个常用入口。按当前周自动筛到对应阶段，避免一上来把 700 部古籍全打开。</p>
-    <div class="chips" id="repoChips"></div>
-    <div class="repo-grid" id="repoList"></div>
+    <div class="panel-h"><span class="no">07</span><h2>资料入口 · 古籍书库</h2></div>
+    <p class="desc" id="repoDesc"></p>
+    <div class="chips" id="libChips"></div>
+    <div id="shelfList"></div>
   </section>
 </div>
 
-<div class="row d">
+<div class="reader" id="reader" hidden>
+  <div class="reader-box" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+    <div class="reader-head">
+      <div>
+        <div class="reader-title" id="readerTitle"></div>
+        <div class="reader-meta" id="readerMeta"></div>
+      </div>
+      <button class="reader-x" id="readerClose" aria-label="关闭">×</button>
+    </div>
+    <div class="reader-tools">
+      <input type="text" id="readerFind" placeholder="在本书中查找（回车定位）">
+      <span class="rfstat" id="readerFindStat"></span>
+      <span class="sp"></span>
+      <span class="rfstat" id="readerPage"></span>
+    </div>
+    <div class="reader-body" id="readerBody"></div>
+    <div class="reader-foot">
+      <button class="btn ghost sm" id="readerMore">加载更多</button>
+      <span class="rfstat" id="readerHint"></span>
+    </div>
+  </div>
+</div>
+
+<div class="row">
   <section class="panel p" id="cards">
-    <div class="panel-h"><span class="no">09</span><h2>卡片工作台</h2></div>
-    <p class="desc">概念 / 药 / 方 / 条文校读四类。掌握度 ≤2 会自动进入右侧「今日复习」。药卡与方卡不记剂量。</p>
+    <div class="panel-h"><span class="no">08</span><h2>卡片工作台</h2></div>
+    <p class="desc">上半部按课程进度自动出题：左边拿已学的回炉，右边把要学的先铺一层底。下面是自建的概念 / 药 / 方 / 条文校读四类卡片。药卡与方卡不记剂量。</p>
+    <div class="study-grid">
+      <div class="study-col" id="reviewBlock"></div>
+      <div class="study-col" id="previewBlock"></div>
+    </div>
+    <h3>我的卡片 <span class="cnt" id="cardCount"></span></h3>
     <div class="chips" id="cardChips"></div>
     <div id="cardList"></div>
     <h3>新增卡片</h3>
@@ -599,33 +697,17 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
     </div>
   </section>
 
-  <div>
-    <section class="panel o" style="margin-bottom:20px">
-      <div class="panel-h"><span class="no">10</span><h2>今日复习</h2></div>
-      <p class="desc">掌握度 ≤2 或已到复习日的卡片自动聚到这里。</p>
-      <div id="reviewList"></div>
-    </section>
-    <section class="panel g">
-      <div class="panel-h"><span class="no">11</span><h2>疑问清单</h2></div>
-      <p class="desc">只记问题不急着答。清单在变短，说明骨架在成形。</p>
-      <div id="questionList"></div>
-      <div class="inline-add">
-        <input type="text" id="qInput" placeholder="例：证与候的边界在哪">
-        <button class="btn sm" id="addQ">记下</button>
-      </div>
-    </section>
-  </div>
 </div>
 
 <div class="row e">
   <section class="panel" id="quiz">
-    <div class="panel-h"><span class="no">12</span><h2>阶段过关自测</h2></div>
+    <div class="panel-h"><span class="no">09</span><h2>阶段过关自测</h2></div>
     <p class="desc">每阶段 3 题，先自己答，再点开要点核对。答不出就别往下推。</p>
     <div class="chips" id="quizChips"></div>
     <div id="quizList"></div>
   </section>
   <section class="panel b">
-    <div class="panel-h"><span class="no">13</span><h2>概念速查与常见错误</h2></div>
+    <div class="panel-h"><span class="no">10</span><h2>概念速查与常见错误</h2></div>
     <p class="desc">术语定义以教材为准，训诂只助记忆。每条错误后面都跟着改法。</p>
     <div id="concepts"></div>
     <h3>常见错误 → 改法</h3>
@@ -635,7 +717,7 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
 <div class="row">
   <section class="panel g">
-    <div class="panel-h"><span class="no">14</span><h2>数据与设置</h2></div>
+    <div class="panel-h"><span class="no">11</span><h2>数据与设置</h2></div>
     <p class="desc">全部数据（周进度、卡片、每日时长、检查记录、错题）存在浏览器 localStorage，不上传、不需要账号。换电脑或清缓存前请先导出备份。</p>
     <div class="grid3">
       <div><label class="f">学习起始日（用于自动推算当前周）</label><input type="date" id="startDate"></div>
@@ -859,7 +941,6 @@ function cCurDay(){
   if(n > COURSE.length) n = COURSE.length;
   return n;
 }
-function cUnlocked(d){ return today() >= addD(cStart(), d - 1); }
 function cDone(d){ var st = cState(); return !!(st.done[d] && st.done[d].date); }
 function cHasCompletedOn(date){
   var done = cState().done;
@@ -906,7 +987,7 @@ function cHomeHTML(){
     h += '<div class="c-complete"><b>168 天课程已完成</b><p>本轮课程已全部完成。历史答题记录与最佳成绩会保留；可以查看薄弱知识点，或显式开启新一轮。</p>'
        + '<button class="btn" data-cnewround="1">开启新一轮学习</button></div>';
   }
-  h += '<button class="c-today' + (cUnlocked(cur) ? "" : " lock") + '" data-copen="' + cur + '">'
+  h += '<button class="c-today" data-copen="' + cur + '">'
      + '<div class="k">今日课程 · DAY ' + c2(cur) + '</div>'
      + '<h3>' + esc(c.t) + '</h3>'
      + '<div class="meta">' + esc(c.u) + ' · 计划 ' + c.min + ' 分钟 · ' + (RD[cur] || []).length + ' 段原文 · 6+1 题型'
@@ -938,12 +1019,10 @@ function cHomeHTML(){
        + ' · ' + list.length + ' 天 · 已完成 ' + dn + '</span></div><div class="c-plan">';
     list.forEach(function(x){
       var cls = cDone(x.d) ? "done" : (x.d === cur ? "cur" : "");
-      var un = cUnlocked(x.d);
-      if(!un) cls += " lock";
       var sub = cDone(x.d)
         ? ("已完成 " + st.done[x.d].score + "/" + st.done[x.d].total + " · 最佳 " + (st.done[x.d].best_score || st.done[x.d].score))
-        : (un ? "可学" : "未解锁");
-      h += '<button class="c-day ' + cls + '" data-cd="' + x.d + '"' + (un ? "" : " disabled")
+        : (x.d === cur ? "今日" : "可学");
+      h += '<button class="c-day ' + cls + '" data-cd="' + x.d + '"'
          + ' title="D' + c2(x.d) + ' · ' + esc(x.t) + '">'
          + '<span class="n">D' + c2(x.d) + '</span>'
          + '<span class="t">' + esc(x.t) + '</span>'
@@ -995,9 +1074,7 @@ function cCourseHTML(d){
   var prev = d > 1 ? '<button class="btn ghost sm" data-cgo="' + (d-1) + '">← 上一课</button>' : "";
   var next = "";
   if(d < COURSE.length){
-    next = cUnlocked(d+1)
-      ? '<button class="btn ghost sm" data-cgo="' + (d+1) + '">下一课 →</button>'
-      : '<button class="btn ghost sm" disabled style="opacity:.45">下一课明天解锁</button>';
+    next = '<button class="btn ghost sm" data-cgo="' + (d+1) + '">下一课 →</button>';
   }
   h += '<div class="c-actions"><button class="btn" data-cquiz="' + d + '">'
      + (cDone(d) ? "重做这天的练习" : "做今日练习 · 6+1") + '</button>'
@@ -1238,7 +1315,6 @@ function cStartNewRound(){
 }
 
 function cOpen(d, scroll){
-  if(!cUnlocked(d)){ toast("第 " + d + " 天还没解锁"); return; }
   if(CF.timer && CF.day !== d) cPauseFocus(true);
   CV.view = "course"; CV.day = d;
   CQ = {day:d, ans:{}, compositeAns:{}, submitted:false, score:0};
@@ -1333,15 +1409,11 @@ function bindCourse(){
   if(!box) return;
   var open = box.querySelector("[data-copen]");
   if(open) open.onclick = function(){
-    var d = +open.dataset.copen;
-    if(!cUnlocked(d)){ toast("这一课还没到日期，明天再来"); return; }
-    cOpen(d);
+    cOpen(+open.dataset.copen);
   };
   box.querySelectorAll("[data-cd]").forEach(function(b){
     b.onclick = function(){
-      var d = +b.dataset.cd;
-      if(!cUnlocked(d)){ toast("第 " + d + " 天还没解锁"); return; }
-      cOpen(d);
+      cOpen(+b.dataset.cd);
     };
   });
   box.querySelectorAll("[data-cgo]").forEach(function(b){
@@ -1378,7 +1450,7 @@ function bindCourse(){
   };
 }
 
-const PLAN = [{"w": "W0", "stage": "0 准备", "topic": "建坐标系与术语表", "mat": "TCM.Skill 的 SKILL.md；ChiryuhLii 互链站", "act": "只通读索引与工作流程，抄八大块概念总表，建疑问清单", "out": "概念总表1张 + 疑问清单", "pass": "能说清证与症、八纲四对、肝≠肝脏", "note": "不打开内经/倪海厦/古籍语料库"}, {"w": "W1", "stage": "1 骨架", "topic": "阴阳五行", "mat": "TCM.Skill 教材层·中基", "act": "读单元→做概念卡→回索引校表述", "out": "概念卡 8 张", "pass": "能用阴阳说明一对病机", "note": "训诂只助记忆，定义以教材为准"}, {"w": "W2", "stage": "1 骨架", "topic": "藏象·五脏", "mat": "TCM.Skill 教材层·中基；纸质中基", "act": "逐脏做功能卡，标出与解剖器官的区别", "out": "概念卡 8 张", "pass": "能说清肝主疏泄的功能含义", "note": "禁止用《说文》代替教材定义"}, {"w": "W3", "stage": "1 骨架", "topic": "六腑/奇恒之腑 + 气血津液", "mat": "TCM.Skill 教材层·中基", "act": "整理气、血、津液关系图", "out": "概念卡 8 张 + 关系图1张", "pass": "能解释气滞与血瘀的先后关系", "note": ""}, {"w": "W4", "stage": "1 骨架", "topic": "经络", "mat": "TCM.Skill 教材层·中基；aicuc/acupoint 只作看图", "act": "十二正经循行记忆，穴位不实操", "out": "概念卡 6 张 + 经络表", "pass": "能说出十二经脉名称与大体走向", "note": "不扎针、不按摩穴位作治疗"}, {"w": "W5", "stage": "1 骨架", "topic": "病因病机", "mat": "TCM.Skill 教材层·中基", "act": "六淫、七情、痰饮瘀血各自成卡", "out": "概念卡 8 张", "pass": "能把一个病因推到具体病机", "note": ""}, {"w": "W6", "stage": "1 骨架", "topic": "四诊", "mat": "TCM.Skill 教材层·中诊；舌诊图谱（纸质/图谱站）", "act": "望闻问切分卡；舌诊只识图", "out": "概念卡 8 张 + 舌象对照表", "pass": "能识别常见舌象术语", "note": "舌诊不作自诊，脉诊放弃实操"}, {"w": "W7", "stage": "1 骨架", "topic": "辨证总论 + 阶段复盘", "mat": "TCM.Skill 教材层·中诊", "act": "八纲/脏腑/六经辨证表；整周不进新内容", "out": "八纲辨证表 + 阶段自测", "pass": "给症状描述能写出八纲定位", "note": "月度复盘周，不进新单元"}, {"w": "W8", "stage": "2 血肉", "topic": "中药总论 + 解表药 12 味", "mat": "TCM-HerbDB 的 CSV；TCM.Skill 中药层", "act": "按性味归经/功效/主治做药卡", "out": "药卡 12 张", "pass": "能分麻黄与桂枝的功用差别", "note": "药卡不记剂量"}, {"w": "W9", "stage": "2 血肉", "topic": "清热药、祛风湿药 12 味", "mat": "TCM-HerbDB；纸质中药学", "act": "同上，加配伍要点栏", "out": "药卡 12 张", "pass": "能按主治证反查药", "note": ""}, {"w": "W10", "stage": "2 血肉", "topic": "利水渗湿、温里、理气 12 味", "mat": "TCM-HerbDB", "act": "同上", "out": "药卡 12 张", "pass": "能说清同类药的差异", "note": ""}, {"w": "W11", "stage": "2 血肉", "topic": "活血化瘀、止血、补虚（上）12 味", "mat": "TCM-HerbDB；moneywei/qw-zhongyi 药材库", "act": "同上", "out": "药卡 12 张", "pass": "能辨认十八反涉及药对", "note": "安全表只作知识记录"}, {"w": "W12", "stage": "2 血肉", "topic": "补虚（下）、安神、平肝 + 药卡复盘", "mat": "TCM-HerbDB", "act": "100 味药卡汇总，按掌握度排序", "out": "药卡 12 张 + 药卡索引", "pass": "任抽10味能说性味归经功效", "note": "月度复盘周"}, {"w": "W13", "stage": "2 血肉", "topic": "方剂总论 + 解表剂 6 首", "mat": "TCM.Skill 方剂层；moneywei 方剂库", "act": "方卡写满君臣佐使/主治证/方歌", "out": "方卡 6 张", "pass": "能说清麻黄汤与桂枝汤之别", "note": "方卡只记药味，不记剂量"}, {"w": "W14", "stage": "2 血肉", "topic": "清热剂、和解剂 6 首", "mat": "moneywei/qw-zhongyi；xiaogege6697/tcm-db", "act": "同上，后半周用 SQLite 练按症检索", "out": "方卡 6 张 + 检索记录", "pass": "检索结论能回指原文锚点", "note": "tcm-db 不作答案库"}, {"w": "W15", "stage": "2 血肉", "topic": "温里剂、补益剂 6 首 + 闭卷方解", "mat": "同上", "act": "随机抽5首默写组成/主治/辨证要点", "out": "方卡 6 张 + 闭卷卷面", "pass": "闭卷方解 ≥4/5 正确", "note": "月度复盘周，同时做阶段2自测"}, {"w": "W16", "stage": "3 溯源", "topic": "伤寒论·太阳病上（校读 1–20 条）", "mat": "abc01013579/tcm-classics 定位；xiaopangxia 取全文", "act": "条文校读卡八栏，异文栏留白待核", "out": "校读卡 20 张", "pass": "每条能落到具体证或方", "note": "此时才启用古籍语料库"}, {"w": "W17", "stage": "3 溯源", "topic": "太阳病中下（21–40 条）", "mat": "同上", "act": "同上，加前条互见栏", "out": "校读卡 20 张", "pass": "能指出条文互见关系", "note": ""}, {"w": "W18", "stage": "3 溯源", "topic": "阳明、少阳、太阴（41–60 条）", "mat": "同上", "act": "同上", "out": "校读卡 20 张", "pass": "能说六经提纲证的区别", "note": ""}, {"w": "W19", "stage": "3 溯源", "topic": "少阴、厥阴 + 金匮选篇（61–80 条）", "mat": "xiaopangxia / jobkoko 按类取书", "act": "同上", "out": "校读卡 20 张", "pass": "金匮条文能对应到已学方剂", "note": "不要通读内经"}, {"w": "W20", "stage": "3 溯源", "topic": "内经选篇 + 温病条辨选读（81–100 条）", "mat": "abc01013579 内经中英对照；jobkoko 按朝代取书", "act": "选与已学理论对应的篇，做义项卡", "out": "校读卡 20 张 + 义项表", "pass": "每个原文判断能回指篇卷", "note": "白话译文只作提示，不作定本"}, {"w": "W21", "stage": "3 溯源", "topic": "版本对读 + 阶段复盘", "mat": "jasam-xm/shanghanlun（宋本/桂林古本对照）", "act": "补填此前留白的异文栏；整周不进新条文", "out": "异文对照表 + 阶段自测", "pass": "能指出一处异文并说明理解影响", "note": "月度复盘周；凭印象填异文一律作废"}, {"w": "W22", "stage": "4 输出", "topic": "选题 + 材料长编", "mat": "OpenTCM01/OpenTCM 的回指思路；tyang816 了解边界", "act": "定专题、列材料清单、做条目长编", "out": "选题说明 + 长编", "pass": "专题不依赖临床判断", "note": "推荐：桂枝汤类方互见 / 证症候词义 / 阳气义项"}, {"w": "W23", "stage": "4 输出", "topic": "撰写专题长文 或 建结构化笔记库", "mat": "全部已做卡片", "act": "逐条核对回指，标出未解决问题", "out": "专题长文 / 笔记库", "pass": "每个结论可回指原文条目", "note": ""}, {"w": "W24", "stage": "4 输出", "topic": "自测 + 全文回指核对 + 总复盘", "mat": "orangeshushu/TCM-Ladder（自测）", "act": "做一次自测；列出知道/不知道清单", "out": "自测记录 + 总复盘表", "pass": "能说清文本理解与临床判断的边界", "note": "月度复盘周；不追求分数"}];
+const PLAN = [{"w": "W0", "stage": "0 准备", "topic": "建坐标系与术语表", "mat": "TCM.Skill 的 SKILL.md；ChiryuhLii 互链站", "act": "只通读索引与工作流程，抄八大块概念总表，建待解问题", "out": "概念总表1张 + 待解问题", "pass": "能说清证与症、八纲四对、肝≠肝脏", "note": "不打开内经/倪海厦/古籍语料库"}, {"w": "W1", "stage": "1 骨架", "topic": "阴阳五行", "mat": "TCM.Skill 教材层·中基", "act": "读单元→做概念卡→回索引校表述", "out": "概念卡 8 张", "pass": "能用阴阳说明一对病机", "note": "训诂只助记忆，定义以教材为准"}, {"w": "W2", "stage": "1 骨架", "topic": "藏象·五脏", "mat": "TCM.Skill 教材层·中基；纸质中基", "act": "逐脏做功能卡，标出与解剖器官的区别", "out": "概念卡 8 张", "pass": "能说清肝主疏泄的功能含义", "note": "禁止用《说文》代替教材定义"}, {"w": "W3", "stage": "1 骨架", "topic": "六腑/奇恒之腑 + 气血津液", "mat": "TCM.Skill 教材层·中基", "act": "整理气、血、津液关系图", "out": "概念卡 8 张 + 关系图1张", "pass": "能解释气滞与血瘀的先后关系", "note": ""}, {"w": "W4", "stage": "1 骨架", "topic": "经络", "mat": "TCM.Skill 教材层·中基；aicuc/acupoint 只作看图", "act": "十二正经循行记忆，穴位不实操", "out": "概念卡 6 张 + 经络表", "pass": "能说出十二经脉名称与大体走向", "note": "不扎针、不按摩穴位作治疗"}, {"w": "W5", "stage": "1 骨架", "topic": "病因病机", "mat": "TCM.Skill 教材层·中基", "act": "六淫、七情、痰饮瘀血各自成卡", "out": "概念卡 8 张", "pass": "能把一个病因推到具体病机", "note": ""}, {"w": "W6", "stage": "1 骨架", "topic": "四诊", "mat": "TCM.Skill 教材层·中诊；舌诊图谱（纸质/图谱站）", "act": "望闻问切分卡；舌诊只识图", "out": "概念卡 8 张 + 舌象对照表", "pass": "能识别常见舌象术语", "note": "舌诊不作自诊，脉诊放弃实操"}, {"w": "W7", "stage": "1 骨架", "topic": "辨证总论 + 阶段复盘", "mat": "TCM.Skill 教材层·中诊", "act": "八纲/脏腑/六经辨证表；整周不进新内容", "out": "八纲辨证表 + 阶段自测", "pass": "给症状描述能写出八纲定位", "note": "月度复盘周，不进新单元"}, {"w": "W8", "stage": "2 血肉", "topic": "中药总论 + 解表药 12 味", "mat": "TCM-HerbDB 的 CSV；TCM.Skill 中药层", "act": "按性味归经/功效/主治做药卡", "out": "药卡 12 张", "pass": "能分麻黄与桂枝的功用差别", "note": "药卡不记剂量"}, {"w": "W9", "stage": "2 血肉", "topic": "清热药、祛风湿药 12 味", "mat": "TCM-HerbDB；纸质中药学", "act": "同上，加配伍要点栏", "out": "药卡 12 张", "pass": "能按主治证反查药", "note": ""}, {"w": "W10", "stage": "2 血肉", "topic": "利水渗湿、温里、理气 12 味", "mat": "TCM-HerbDB", "act": "同上", "out": "药卡 12 张", "pass": "能说清同类药的差异", "note": ""}, {"w": "W11", "stage": "2 血肉", "topic": "活血化瘀、止血、补虚（上）12 味", "mat": "TCM-HerbDB；moneywei/qw-zhongyi 药材库", "act": "同上", "out": "药卡 12 张", "pass": "能辨认十八反涉及药对", "note": "安全表只作知识记录"}, {"w": "W12", "stage": "2 血肉", "topic": "补虚（下）、安神、平肝 + 药卡复盘", "mat": "TCM-HerbDB", "act": "100 味药卡汇总，按掌握度排序", "out": "药卡 12 张 + 药卡索引", "pass": "任抽10味能说性味归经功效", "note": "月度复盘周"}, {"w": "W13", "stage": "2 血肉", "topic": "方剂总论 + 解表剂 6 首", "mat": "TCM.Skill 方剂层；moneywei 方剂库", "act": "方卡写满君臣佐使/主治证/方歌", "out": "方卡 6 张", "pass": "能说清麻黄汤与桂枝汤之别", "note": "方卡只记药味，不记剂量"}, {"w": "W14", "stage": "2 血肉", "topic": "清热剂、和解剂 6 首", "mat": "moneywei/qw-zhongyi；xiaogege6697/tcm-db", "act": "同上，后半周用 SQLite 练按症检索", "out": "方卡 6 张 + 检索记录", "pass": "检索结论能回指原文锚点", "note": "tcm-db 不作答案库"}, {"w": "W15", "stage": "2 血肉", "topic": "温里剂、补益剂 6 首 + 闭卷方解", "mat": "同上", "act": "随机抽5首默写组成/主治/辨证要点", "out": "方卡 6 张 + 闭卷卷面", "pass": "闭卷方解 ≥4/5 正确", "note": "月度复盘周，同时做阶段2自测"}, {"w": "W16", "stage": "3 溯源", "topic": "伤寒论·太阳病上（校读 1–20 条）", "mat": "abc01013579/tcm-classics 定位；xiaopangxia 取全文", "act": "条文校读卡八栏，异文栏留白待核", "out": "校读卡 20 张", "pass": "每条能落到具体证或方", "note": "此时才启用古籍语料库"}, {"w": "W17", "stage": "3 溯源", "topic": "太阳病中下（21–40 条）", "mat": "同上", "act": "同上，加前条互见栏", "out": "校读卡 20 张", "pass": "能指出条文互见关系", "note": ""}, {"w": "W18", "stage": "3 溯源", "topic": "阳明、少阳、太阴（41–60 条）", "mat": "同上", "act": "同上", "out": "校读卡 20 张", "pass": "能说六经提纲证的区别", "note": ""}, {"w": "W19", "stage": "3 溯源", "topic": "少阴、厥阴 + 金匮选篇（61–80 条）", "mat": "xiaopangxia / jobkoko 按类取书", "act": "同上", "out": "校读卡 20 张", "pass": "金匮条文能对应到已学方剂", "note": "不要通读内经"}, {"w": "W20", "stage": "3 溯源", "topic": "内经选篇 + 温病条辨选读（81–100 条）", "mat": "abc01013579 内经中英对照；jobkoko 按朝代取书", "act": "选与已学理论对应的篇，做义项卡", "out": "校读卡 20 张 + 义项表", "pass": "每个原文判断能回指篇卷", "note": "白话译文只作提示，不作定本"}, {"w": "W21", "stage": "3 溯源", "topic": "版本对读 + 阶段复盘", "mat": "jasam-xm/shanghanlun（宋本/桂林古本对照）", "act": "补填此前留白的异文栏；整周不进新条文", "out": "异文对照表 + 阶段自测", "pass": "能指出一处异文并说明理解影响", "note": "月度复盘周；凭印象填异文一律作废"}, {"w": "W22", "stage": "4 输出", "topic": "选题 + 材料长编", "mat": "OpenTCM01/OpenTCM 的回指思路；tyang816 了解边界", "act": "定专题、列材料清单、做条目长编", "out": "选题说明 + 长编", "pass": "专题不依赖临床判断", "note": "推荐：桂枝汤类方互见 / 证症候词义 / 阳气义项"}, {"w": "W23", "stage": "4 输出", "topic": "撰写专题长文 或 建结构化笔记库", "mat": "全部已做卡片", "act": "逐条核对回指，标出未解决问题", "out": "专题长文 / 笔记库", "pass": "每个结论可回指原文条目", "note": ""}, {"w": "W24", "stage": "4 输出", "topic": "自测 + 全文回指核对 + 总复盘", "mat": "orangeshushu/TCM-Ladder（自测）", "act": "做一次自测；列出知道/不知道清单", "out": "自测记录 + 总复盘表", "pass": "能说清文本理解与临床判断的边界", "note": "月度复盘周；不追求分数"}];
 const CARD_SEED = [{"type": "概念卡", "item": "证", "points": "疾病某一阶段病因、病位、病性、邪正关系的病理概括", "source": "《中医基础理论》", "link": "症；候", "note": "风寒表证是证，恶寒是症", "mastery": 5, "review": ""}, {"type": "概念卡", "item": "八纲", "points": "表里、寒热、虚实、阴阳四对辨证纲领", "source": "《中医诊断学》", "link": "六经辨证；脏腑辨证", "note": "", "mastery": 4, "review": ""}, {"type": "药卡", "item": "麻黄", "points": "辛、微苦，温；肺、膀胱经；发汗解表、宣肺平喘、利水消肿", "source": "《中药学》", "link": "桂枝；杏仁", "note": "不记剂量", "mastery": 5, "review": ""}, {"type": "方卡", "item": "桂枝汤", "points": "桂枝、芍药、生姜、大枣、炙甘草；君桂枝臣芍药，姜枣佐甘草使；主太阳中风证", "source": "《伤寒论》第12条", "link": "麻黄汤", "note": "辨证要点：发热、汗出、恶风、脉浮缓；只记药味", "mastery": 5, "review": ""}, {"type": "条文校读卡", "item": "太阳之为病，脉浮，头项强痛而恶寒", "points": "训诂：强读 jiàng，僵急不柔；异文待核宋本/桂林古本/康平本", "source": "宋本《伤寒论》第1条", "link": "第2、3条", "note": "对应证：太阳病提纲证；存疑：恶寒是否兼指恶风", "mastery": 4, "review": ""}];
 
 const REPOS = [
@@ -1457,7 +1529,7 @@ const FIXES = [
  ["把术语训诂当医学定义","训诂只助记忆，定义以教材为准。"],
  ["拿 Agent Skill / 大模型当老师","只用于检索定位，任何结论回原仓库核验。"],
  ["只阅读、不留产出","每周强制交卡片，无产出记 0，周复盘补。"],
- ["囤资料、同时开三个仓库","按阶段归位表，每阶段只许开「现在就用」那一列。"]
+ ["囤资料、同时开三个仓库","书库按分类一次只开一类，先把经典与诊法读通，本草方剂按需查。"]
 ];
 
 /* ============ 客观题库：W0–W24，每周 5 题 ============
@@ -1769,9 +1841,9 @@ function renderWeekFocus(){
     + '<span>本周完成 <b>' + dn + '/' + days.length + '</b></span>'
     + '<span>累计 ' + doneAll + '/' + COURSE.length + '</span>';
   box.innerHTML = days.map(function(d){
-    var c = COURSE[d - 1], done = cDone(d), un = cUnlocked(d);
+    var c = COURSE[d - 1], done = cDone(d);
     var cls = done ? "ok" : (d === cur ? "cur" : "lock");
-    var txt = done ? "已完成" : (d === cur ? "今日" : (un ? "可学" : "未解锁"));
+    var txt = done ? "已完成" : (d === cur ? "今日" : "未学");
     return '<div class="wf"><span class="wn">D' + c2(d) + '</span><div class="wb">'
       + '<div class="wt">' + esc(c.t) + '</div>'
       + '<div class="wm">' + esc(c.pts[0]) + '</div></div>'
@@ -1822,33 +1894,130 @@ function setWeek(i){
 }
 
 /* ---------- repos ---------- */
-function renderRepos(){
-  const opts = [["week","本周"],["all","全部"],[0,"准备"],[1,"骨架"],[2,"血肉"],[3,"溯源"],[4,"输出"],["avoid","慎用"]];
-  $("repoChips").innerHTML = opts.map(o =>
-    `<button class="chip ${S.repoFilter===o[0]?"on":""}" data-f="${o[0]}">${o[1]}</button>`).join("");
-  $("repoChips").querySelectorAll(".chip").forEach(b => b.onclick = () => {
-    S.repoFilter = b.dataset.f === "week" || b.dataset.f === "all" || b.dataset.f === "avoid" ? b.dataset.f : +b.dataset.f;
-    save(); renderRepos();
+const LIB = [{"title": "黄帝内经素问", "file": "黄帝内经素问.txt", "cat": "经典", "author": "佚名", "era": "先秦至汉", "desc": "中医理论奠基之作，阴阳五行、藏象、诊法、治则的源头。", "kb": 326, "hasText": true}, {"title": "黄帝内经灵枢", "file": "黄帝内经灵枢.txt", "cat": "经典", "author": "佚名", "era": "先秦至汉", "desc": "与《素问》互为表里，重在经络、腧穴、针法与刺禁。", "kb": 237, "hasText": true}, {"title": "伤寒论", "file": "伤寒论.txt", "cat": "经典", "author": "张仲景", "era": "汉", "desc": "创六经辨证与外感病辨治体系，后世方证之祖。", "kb": 198, "hasText": true}, {"title": "金匮要略", "file": "金匮要略.txt", "cat": "经典", "author": "张仲景", "era": "汉", "desc": "论内伤杂病与妇人病，开脏腑经络辨证先河。", "kb": 120, "hasText": true}, {"title": "难经", "file": "难经.txt", "cat": "经典", "author": "扁鹊（传）", "era": "汉", "desc": "以问答体阐发脉学、经络、脏腑与针法，补《内经》之未备。", "kb": 49, "hasText": true}, {"title": "本草纲目", "file": "本草纲目.txt", "cat": "本草", "author": "李时珍", "era": "明", "desc": "载药一千八百九十二种，集本草学之大成。", "kb": 5315, "hasText": true}, {"title": "本草纲目拾遗", "file": "本草纲目拾遗.txt", "cat": "本草", "author": "赵学敏", "era": "清", "desc": "补《纲目》之遗，新增药物七百余种。", "kb": 697, "hasText": true}, {"title": "本草正义", "file": "本草正义.txt", "cat": "本草", "author": "张山雷", "era": "民国", "desc": "以医理疏证药性，近代本草代表作。", "kb": 633, "hasText": true}, {"title": "本草备要", "file": "本草备要.txt", "cat": "本草", "author": "汪昂", "era": "清", "desc": "删繁就简的本草入门，旧时流传极广。", "kb": 411, "hasText": true}, {"title": "神农本草经", "file": "神农本草经.txt", "cat": "本草", "author": "佚名", "era": "汉", "desc": "现存最早本草专著，载药三百六十五味，分上中下三品。", "kb": 236, "hasText": true}, {"title": "医方集解", "file": "医方集解.txt", "cat": "方剂", "author": "汪昂", "era": "清", "desc": "按治法分类辑方，方论并重。", "kb": 669, "hasText": true}, {"title": "成方切用", "file": "成方切用.txt", "cat": "方剂", "author": "吴仪洛", "era": "清", "desc": "取《医方考》《医方集解》之长，方论精详。", "kb": 450, "hasText": true}, {"title": "汤头歌诀", "file": "汤头歌诀.txt", "cat": "方剂", "author": "汪昂", "era": "清", "desc": "方剂歌诀，便于记诵，初学常用。", "kb": 235, "hasText": true}, {"title": "脉经", "file": "脉经.txt", "cat": "诊断", "author": "王叔和", "era": "晋", "desc": "系统归纳二十四种脉象，脉学奠基之作。", "kb": 265, "hasText": true}, {"title": "濒湖脉学", "file": "濒湖脉学.txt", "cat": "诊断", "author": "李时珍", "era": "明", "desc": "以七言诀述二十七脉，脉学入门经典。", "kb": 35, "hasText": true}, {"title": "针灸大成", "file": "针灸大成.txt", "cat": "针灸", "author": "杨继洲", "era": "明", "desc": "集历代针灸文献与临床经验之大成。", "kb": 741, "hasText": true}, {"title": "针灸甲乙经", "file": "针灸甲乙经.txt", "cat": "针灸", "author": "皇甫谧", "era": "晋", "desc": "现存最早针灸学专著，厘定腧穴与刺灸法。", "kb": 406, "hasText": true}, {"title": "温热经纬", "file": "温热经纬.txt", "cat": "温病", "author": "王孟英", "era": "清", "desc": "汇辑温病诸家原文，附以按语。", "kb": 388, "hasText": true}, {"title": "温病条辨", "file": "温病条辨.txt", "cat": "温病", "author": "吴鞠通", "era": "清", "desc": "创三焦辨证，温病学的集大成之作。", "kb": 346, "hasText": true}, {"title": "温疫论", "file": "温疫论.txt", "cat": "温病", "author": "吴又可", "era": "明", "desc": "倡「戾气」致疫，温疫学说奠基之作。", "kb": 118, "hasText": true}, {"title": "湿热病篇", "file": "湿热病篇.txt", "cat": "温病", "author": "薛生白", "era": "清", "desc": "专论湿热病证的病因、辨证与治法。", "kb": 29, "hasText": true}, {"title": "温热论", "file": "温热论.txt", "cat": "温病", "author": "叶天士述", "era": "清", "desc": "创卫气营血辨证，温病学纲领性文献。", "kb": 14, "hasText": true}, {"title": "医宗金鉴", "file": "医宗金鉴.txt", "cat": "综合", "author": "吴谦等奉敕编", "era": "清", "desc": "清代官修，集医理、方药与各科证治，附歌诀心法。", "kb": 3016, "hasText": true}, {"title": "医学衷中参西录", "file": "医学衷中参西录.txt", "cat": "综合", "author": "张锡纯", "era": "民国", "desc": "中西汇通代表，重实践与药性发挥。", "kb": 1604, "hasText": true}, {"title": "医学心悟", "file": "医学心悟.txt", "cat": "综合", "author": "程国彭", "era": "清", "desc": "提出「医门八法」，论述切于实用。", "kb": 412, "hasText": true}, {"title": "丹溪心法", "file": "丹溪心法.txt", "cat": "医论", "author": "朱丹溪", "era": "元", "desc": "门人整理，倡「阳有余阴不足」，滋阴派代表。", "kb": 429, "hasText": true}, {"title": "脾胃论", "file": "脾胃论.txt", "cat": "医论", "author": "李东垣", "era": "金", "desc": "倡「内伤脾胃，百病由生」，补土派代表之作。", "kb": 131, "hasText": true}, {"title": "医林改错", "file": "医林改错.txt", "cat": "医论", "author": "王清任", "era": "清", "desc": "重脏腑实证与气血瘀滞，创多首活血名方。", "kb": 87, "hasText": true}, {"title": "诸病源候论", "file": "诸病源候论.txt", "cat": "病源", "author": "巢元方等", "era": "隋", "desc": "论病源与证候，现存最早的病因证候学专著。", "kb": 692, "hasText": true}, {"title": "外科正宗", "file": "外科正宗.txt", "cat": "外科", "author": "陈实功", "era": "明", "desc": "外科证治与手术外治的集成之作。", "kb": 440, "hasText": true}, {"title": "傅青主女科", "file": "傅青主女科.txt", "cat": "妇科", "author": "傅山", "era": "清", "desc": "妇科辨证与方治，影响深远。", "kb": 194, "hasText": true}];
+function libCats(){
+  var seen = [], map = {};
+  LIB.forEach(function(b){ if(!map[b.cat]){ map[b.cat] = []; seen.push(b.cat); } map[b.cat].push(b); });
+  var order = ["经典","诊断","本草","方剂","针灸","温病","综合","医论","病源","外科","妇科"];
+  seen.sort(function(a,b){
+    var ia = order.indexOf(a), ib = order.indexOf(b);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
   });
-  let list = REPOS.slice();
-  if(S.repoFilter === "week") list = list.filter(r => r.s === stageOf(S.cur));
-  else if(S.repoFilter === "avoid") list = list.filter(r => r.u === "avoid");
-  else if(S.repoFilter !== "all") list = list.filter(r => r.s === S.repoFilter);
-  const order = {now:0,opt:1,avoid:2};
-  list.sort((a,b)=>order[a.u]-order[b.u] || b.star-a.star);
-  const scope = S.repoFilter === "week" ? ("本周 · " + stageName(S.cur))
-    : S.repoFilter === "all" ? "全部阶段"
-    : S.repoFilter === "avoid" ? "明确不用 / 慎用"
-    : STAGES[S.repoFilter];
-  $("repoDesc").textContent = "共 " + REPOS.length + " 个常用入口，当前显示 " + list.length + " 个（" + scope
-    + "）。按阶段归位，避免一上来把 700 部古籍全打开；点「全部」可看完整列表。";
-  const label = {now:"现在就用",opt:"可选 / 后续",avoid:"明确不用"};
-  $("repoList").innerHTML = list.length ? list.map(r =>
-    `<div class="repo"><div class="rn"><a href="https://github.com/${esc(r.n)}" target="_blank" rel="noopener">${esc(r.n)}</a></div>
-     <div class="rd">${esc(r.d)}</div>
-     <span class="pill ${r.u}">${label[r.u]}</span><span class="st">★ ${r.star} · ${STAGES[r.s]}</span></div>`).join("")
-    : `<div class="empty">这个阶段暂无归位资料</div>`;
+  return {names:seen, map:map};
 }
+
+function renderRepos(){
+  var cats = libCats();
+  var cur = S.libCat || "全部";
+  if(cur !== "全部" && cats.names.indexOf(cur) < 0) cur = "全部";
+  var chips = ["全部"].concat(cats.names);
+  $("libChips").innerHTML = chips.map(function(c){
+    var n = c === "全部" ? LIB.length : cats.map[c].length;
+    return '<button class="chip ' + (cur === c ? "on" : "") + '" data-c="' + esc(c) + '">'
+      + esc(c) + '<i>' + n + '</i></button>';
+  }).join("");
+  $("libChips").querySelectorAll(".chip").forEach(function(b){
+    b.onclick = function(){ S.libCat = b.dataset.c; save(); renderRepos(); };
+  });
+  $("repoDesc").innerHTML = "共 <b>" + LIB.length + "</b> 部，按书自身分类分为 <b>" + cats.names.length
+    + "</b> 类。点书名打开正文，可搜索、可续读；底本均在公有领域，取自仓库 <code>library/</code> 目录。"
+    + (LIB.some(function(b){ return !b.hasText; })
+        ? " 标「缺正文」的是索引里有、文件还没到位，等补齐。" : "");
+
+  var list = cur === "全部" ? LIB.slice() : cats.map[cur].slice();
+  var byCat = {};
+  list.forEach(function(b){ (byCat[b.cat] = byCat[b.cat] || []).push(b); });
+  var html = cats.names.filter(function(c){ return byCat[c]; }).map(function(c){
+    return '<div class="shelf-cat"><div class="shelf-h"><b>' + esc(c) + '</b><span>' + byCat[c].length + ' 部</span></div>'
+      + '<div class="shelf">' + byCat[c].map(function(b){
+          return '<button class="book' + (b.hasText ? "" : " na") + '" data-book="' + esc(b.file) + '"'
+            + ' title="' + esc(b.title) + ' · ' + esc(b.author || "") + '">'
+            + '<span class="bk-t">' + esc(b.title) + '</span>'
+            + '<span class="bk-a">' + esc((b.author || "佚名")) + (b.era ? " · " + esc(b.era) : "") + '</span>'
+            + '<span class="bk-d">' + esc(b.desc || "") + '</span>'
+            + '<span class="bk-s">' + (b.hasText ? Math.round(b.kb) + " KB · 点开就读" : "缺正文") + '</span></button>';
+        }).join("") + '</div></div>';
+  }).join("");
+  $("shelfList").innerHTML = html || '<div class="empty">这一类还没有书</div>';
+  $("shelfList").querySelectorAll("[data-book]").forEach(function(b){
+    b.onclick = function(){ openBook(b.dataset.book); };
+  });
+}
+
+/* ---------- 书库阅读器 ---------- */
+var RD_STATE = {file:"", title:"", text:"", shown:0, step:40000, hunk:""};
+function bookByFile(f){ for(var i=0;i<LIB.length;i++) if(LIB[i].file === f) return LIB[i]; return null; }
+function readerRender(){
+  var r = RD_STATE;
+  var part = r.text.slice(0, r.shown);
+  $("readerBody").innerHTML = '<pre class="reader-text">' + esc(part) + '</pre>';
+  $("readerPage").textContent = "已显示 " + Math.min(r.shown, r.text.length).toLocaleString()
+    + " / " + r.text.length.toLocaleString() + " 字";
+  $("readerMore").style.display = r.shown < r.text.length ? "" : "none";
+  $("readerHint").textContent = r.shown < r.text.length ? "一次显示 " + r.step.toLocaleString() + " 字，避免长文卡顿" : "已到卷末";
+}
+function openBook(file){
+  var b = bookByFile(file);
+  if(!b){ toast("索引里没有这本书"); return; }
+  RD_STATE = {file:file, title:b.title, text:"", shown:0, step:40000, hunk:""};
+  $("reader").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("readerTitle").textContent = b.title;
+  $("readerMeta").textContent = [b.author || "佚名", b.era, b.cat, b.kb ? Math.round(b.kb) + " KB" : ""]
+    .filter(Boolean).join(" · ");
+  $("readerBody").innerHTML = '<p class="reader-load">正在取正文…</p>';
+  $("readerFind").value = "";
+  $("readerFindStat").textContent = "";
+  fetch("library/" + encodeURIComponent(file)).then(function(r){
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    return r.text();
+  }).then(function(t){
+    RD_STATE.text = t;
+    RD_STATE.shown = Math.min(RD_STATE.step, t.length);
+    readerRender();
+  }).catch(function(e){
+    $("readerBody").innerHTML = '<div class="empty" style="text-align:left">取不到正文（' + esc(e.message) + '）。'
+      + '本地以 file:// 直接打开时浏览器禁止读取同目录文件，这是浏览器的限制，不是书丢了。<br><br>'
+      + '两个走法：① 用线上版 <a href="https://zhshy.github.io/tcm-workbench/" target="_blank" rel="noopener">zhshy.github.io/tcm-workbench</a>；'
+      + '② 直接打开文件 <code>library/' + esc(file) + '</code>。</div>';
+    $("readerMore").style.display = "none";
+    $("readerPage").textContent = "";
+  });
+}
+function closeReader(){
+  $("reader").hidden = true;
+  document.body.style.overflow = "";
+  RD_STATE = {file:"", title:"", text:"", shown:0, step:40000, hunk:""};
+}
+function readerFind(){
+  var kw = $("readerFind").value.trim();
+  if(!RD_STATE.text || !kw){ $("readerFindStat").textContent = ""; return; }
+  var i = RD_STATE.text.indexOf(kw);
+  if(i < 0){ $("readerFindStat").textContent = "未找到「" + kw + "」"; return; }
+  var total = RD_STATE.text.split(kw).length - 1;
+  if(i + kw.length > RD_STATE.shown) RD_STATE.shown = Math.min(RD_STATE.text.length, i + kw.length + RD_STATE.step);
+  readerRender();
+  var pre = $("readerBody").querySelector(".reader-text");
+  if(pre){
+    var node = pre.firstChild;
+    if(node && node.nodeType === 3){
+      var range = document.createRange();
+      range.setStart(node, i); range.setEnd(node, Math.min(node.length, i + kw.length));
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      var rect = range.getBoundingClientRect();
+      pre.parentElement.scrollTop += rect.top - pre.parentElement.getBoundingClientRect().top - 80;
+    }
+  }
+  $("readerFindStat").textContent = "命中 " + total + " 处，已定位第 1 处";
+}
+$("readerClose").onclick = closeReader;
+$("readerMore").onclick = function(){
+  RD_STATE.shown = Math.min(RD_STATE.text.length, RD_STATE.shown + RD_STATE.step);
+  readerRender();
+};
+$("readerFind").onkeydown = function(e){ if(e.key === "Enter"){ e.preventDefault(); readerFind(); } };
+$("reader").onclick = function(e){ if(e.target === $("reader")) closeReader(); };
+document.addEventListener("keydown", function(e){ if(e.key === "Escape" && !$("reader").hidden) closeReader(); });
 
 /* ---------- cards ---------- */
 function renderCards(){
@@ -1857,6 +2026,7 @@ function renderCards(){
     `<button class="chip ${S.cardFilter===t?"on":""}" data-t="${t}">${t}</button>`).join("");
   $("cardChips").querySelectorAll(".chip").forEach(b => b.onclick = () => { S.cardFilter = b.dataset.t; save(); renderCards(); });
   const list = S.cardFilter === "全部" ? S.cards : S.cards.filter(c => c.type === S.cardFilter);
+  $("cardCount").textContent = S.cards.length ? "共 " + S.cards.length + " 张" : "还没建";
   $("cardList").innerHTML = list.length ? list.map(c => {
     const idx = S.cards.indexOf(c);
     return `<div class="carditem"><div class="top"><span class="ty">${esc(c.type)}</span>
@@ -1867,35 +2037,113 @@ function renderCards(){
         <span>${esc(c.link||"")}</span><button class="del" data-d="${idx}">删除</button></div></div>`;
   }).join("") : `<div class="empty">还没有卡片。下面填一条，或直接导出 CSV 用模板批量做。</div>`;
   $("cardList").querySelectorAll(".mstars button").forEach(b => b.onclick = () => {
-    S.cards[+b.dataset.i].mastery = +b.dataset.m; save(); renderCards(); renderReview(); renderMetrics();
+    S.cards[+b.dataset.i].mastery = +b.dataset.m; save(); renderCards(); renderReviewBlock(); renderMetrics();
   });
   $("cardList").querySelectorAll(".del").forEach(b => b.onclick = () => {
     S.cards.splice(+b.dataset.d,1); save(); renderAll(); toast("卡片已删除");
   });
 }
-function renderReview(){
-  const due = S.cards.filter(c => +c.mastery <= 2 || (c.review && c.review <= today()));
-  $("reviewList").innerHTML = due.length ? due.slice(0,8).map(c => {
-    const i = S.cards.indexOf(c);
-    return `<div class="qitem"><span style="flex:1"><b>${esc(c.item)}</b><br>
-      <span style="font-size:12px;color:var(--ink3)">${esc(c.type)} · 掌握度 ${c.mastery}</span></span>
-      <button class="btn ghost sm" data-r="${i}">已复习</button></div>`;
-  }).join("") + (due.length>8?`<p style="font-size:12.5px;color:var(--ink3)">另有 ${due.length-8} 条待复习</p>`:"")
-    : `<div class="empty">暂无待复习卡片</div>`;
-  $("reviewList").querySelectorAll("[data-r]").forEach(b => b.onclick = () => {
-    const c = S.cards[+b.dataset.r]; c.mastery = Math.max(+c.mastery,3); c.review = "";
-    save(); renderAll(); toast("已记为复习过");
+function dueCards(){
+  return S.cards.filter(function(c){ return +c.mastery <= 2 || (c.review && c.review <= today()); });
+}
+function renderReviewBlock(){
+  var due = dueCards();
+  var weak = Object.keys(S.course.weakQuestions || {}).map(function(k){ return S.course.weakQuestions[k]; })
+    .filter(function(w){ return w && !w.resolved; })
+    .sort(function(a,b){ return (a.due_date || "").localeCompare(b.due_date || ""); });
+  var learned = [];
+  for(var d = cCurDay(); d >= 1 && learned.length < 3; d--){ if(cDone(d)) learned.push(d); }
+
+  var h = '<div class="study-h"><b>复习 · 已经学过的</b><span>掌握度 ≤2 或到复习日的卡片、答错过的题，都从这里回炉。</span></div>';
+  if(!due.length && !weak.length && !learned.length){
+    $("reviewBlock").innerHTML = h + '<div class="empty" style="margin-top:12px">还没有可复习的内容。去 04 学完一课、或在下面建一张卡，这里就会长出待办。</div>';
+    return;
+  }
+  h += '<div class="study-sub">待复习卡片 <i>' + due.length + '</i></div>';
+  h += due.length
+    ? due.slice(0,5).map(function(c){
+        var i = S.cards.indexOf(c);
+        return '<div class="qitem"><span style="flex:1"><b>' + esc(c.item) + '</b><br>'
+          + '<span class="mini">' + esc(c.type) + ' · 掌握度 ' + c.mastery + (c.source ? " · " + esc(c.source) : "") + '</span></span>'
+          + '<button class="btn ghost sm" data-r="' + i + '">已复习</button></div>';
+      }).join("") + (due.length > 5 ? '<p class="mini">另有 ' + (due.length-5) + ' 条待复习</p>' : "")
+    : '<div class="empty">没有到期的卡片</div>';
+
+  h += '<div class="study-sub">答错过的题 <i>' + weak.length + '</i></div>';
+  h += weak.length
+    ? weak.slice(0,4).map(function(w){
+        return '<div class="qitem"><span style="flex:1"><b>D' + c2(w.lesson_day) + ' · ' + esc((COURSE[w.lesson_day-1] || {}).t || "")
+          + '</b><br><span class="mini">' + esc(String(w.question || "").slice(0,42))
+          + (w.due_date ? " · 复习日 " + esc(w.due_date) : "") + ' · 错 ' + (w.wrong_count || 1) + ' 次</span></span>'
+          + '<button class="btn ghost sm" data-wk="' + w.lesson_day + '">重做</button></div>';
+      }).join("")
+    : '<div class="empty">暂无错题</div>';
+
+  h += '<div class="study-sub">主句回想 <i>' + learned.length + '</i></div>';
+  h += learned.length ? learned.map(function(d){
+    var c = COURSE[d-1];
+    return '<details class="recall"><summary>D' + c2(d) + ' · ' + esc(c.t) + '</summary>'
+      + '<div class="rc-body">' + esc(c.quote[1]) + '<span class="mini">　—— ' + esc(c.quote[0]) + '</span></div></details>';
+  }).join("") : '<div class="empty">还没有完成的课，先去 04 学一课</div>';
+
+  $("reviewBlock").innerHTML = h;
+  $("reviewBlock").querySelectorAll("[data-r]").forEach(function(b){
+    b.onclick = function(){
+      var c = S.cards[+b.dataset.r];
+      c.mastery = Math.max(+c.mastery, 3); c.review = "";
+      save(); renderAll(); toast("已记为复习过");
+    };
+  });
+  $("reviewBlock").querySelectorAll("[data-wk]").forEach(function(b){
+    b.onclick = function(){ cOpenQuiz(+b.dataset.wk); };
   });
 }
-function renderQuestions(){
-  $("questionList").innerHTML = S.questions.length ? S.questions.map((q,i) =>
-    `<div class="qitem ${q.solved?"solved":""}"><input type="checkbox" data-q="${i}" ${q.solved?"checked":""}><span style="flex:1">${esc(q.text)}</span>
-     <button class="del" data-qd="${i}">×</button></div>`).join("") : `<div class="empty">还没有疑问。读教材时把不懂的先记下来，不急着答。</div>`;
-  $("questionList").querySelectorAll("[data-q]").forEach(b => b.onchange = () => {
-    S.questions[+b.dataset.q].solved = b.checked; save(); renderQuestions();
+
+function bookFor(src){
+  if(!src) return null;
+  var m = /《([^》]+)》/.exec(src);
+  if(!m) return null;
+  // 「素问·阴阳应象大论」「伤寒论 第12条」都收成书名本身
+  var raw = m[1].split(/[·・、，,：:\s]/)[0].replace(/第\s*\d+.*$/, "").trim();
+  var alias = {"素问":"黄帝内经素问","灵枢":"黄帝内经灵枢","灵枢经":"黄帝内经灵枢","针经":"黄帝内经灵枢",
+               "本经":"神农本草经","金匮":"金匮要略","金匮要略方论":"金匮要略",
+               "温病条辨":"温病条辨","湿热病篇":"湿热病篇","温热论":"温热论",
+               "医学衷中参西录":"医学衷中参西录","衷中参西录":"医学衷中参西录"};
+  var want = alias[raw] || alias[m[1]] || raw;
+  var i;
+  for(i=0;i<LIB.length;i++) if(LIB[i].title === want) return LIB[i];
+  // 前缀/包含兜底：取最长的匹配，避免「本草」错配
+  var best = null;
+  for(i=0;i<LIB.length;i++){
+    var t = LIB[i].title;
+    if(t.indexOf(want) === 0 || want.indexOf(t) === 0 || t.indexOf(want) >= 0){
+      if(!best || t.length > best.title.length) best = LIB[i];
+    }
+  }
+  return best;
+}
+function renderPreviewBlock(){
+  var cur = cCurDay(), n = 3, items = [];
+  for(var d = cur; d <= COURSE.length && items.length < n; d++) items.push(d);
+  var h = '<div class="study-h"><b>预习 · 将要学的</b><span>先把下面几课的骨架看一遍，正式学的时候不陌生。不懂的先记着，不急着查。</span></div>';
+  if(!items.length){ h += '<div class="empty">168 天已走完</div>'; $("previewBlock").innerHTML = h; return; }
+  h += items.map(function(d){
+    var c = COURSE[d-1], bk = bookFor(c.quote[0]);
+    var tag = d === cur ? "今日" : (d === cur+1 ? "明日" : "第 " + d + " 天");
+    return '<div class="prev-item"><div class="pi-h"><span class="pi-d">D' + c2(d) + '</span>'
+      + '<span class="pi-t">' + esc(c.t) + '</span><span class="pi-tag">' + tag + '</span></div>'
+      + '<p class="pi-goal"><b>目标</b>' + esc(c.goal) + '</p>'
+      + '<p class="pi-pt"><b>先记一条</b>' + esc(c.pts[0] || "") + '</p>'
+      + '<div class="pi-foot"><span class="mini">主句出处 ' + esc(c.quote[0]) + '</span>'
+      + (bk ? '<button class="btn ghost sm" data-bk="' + esc(bk.file) + '">翻原著 →</button>' : '')
+      + '<button class="btn ghost sm" data-pv="' + d + '">现在就看</button></div></div>';
+  }).join("");
+  $("previewBlock").innerHTML = h;
+  $("previewBlock").querySelectorAll("[data-pv]").forEach(function(b){
+    b.onclick = function(){ cOpen(+b.dataset.pv, true); };
   });
-  $("questionList").querySelectorAll("[data-qd]").forEach(b => b.onclick = () => {
-    S.questions.splice(+b.dataset.qd,1); save(); renderQuestions();
+  $("previewBlock").querySelectorAll("[data-bk]").forEach(function(b){
+    b.onclick = function(){ openBook(b.dataset.bk); };
   });
 }
 
@@ -1913,14 +2161,12 @@ function renderQuiz(){
   });
 }
 function renderStatic(){
-  $("redlines").innerHTML = REDLINES.map((t,i)=>`<div class="rl"><span class="n">0${i+1}</span><span>${esc(t)}</span></div>`).join("");
-  $("checks").innerHTML = CHECKS.map((t,i)=>`<div class="rl"><span class="n">0${i+1}</span><span>${esc(t)}</span></div>`).join("");
   $("concepts").innerHTML = CONCEPTS.map(c=>`<details class="c"><summary>${esc(c[0])}</summary><div class="body">${esc(c[1])}</div></details>`).join("");
   $("fixes").innerHTML = FIXES.map(f=>`<details class="c"><summary>${esc(f[0])}</summary><div class="body">改成：${esc(f[1])}</div></details>`).join("");
 }
 function renderAll(){
   renderMetrics(); renderWeekFocus(); renderTrack(); renderHeat();
-  renderRepos(); renderCards(); renderReview(); renderQuestions(); renderQuiz();
+  renderRepos(); renderCards(); renderReviewBlock(); renderPreviewBlock(); renderQuiz();
   renderToday(); renderChecks(); renderCheckPanel(); renderMistakes(); renderCourse();
 }
 
@@ -1945,12 +2191,6 @@ $("clearCards").onclick = () => {
   if(!confirm("确定清空全部卡片？建议先导出备份。")) return;
   S.cards = []; save(); renderAll(); toast("卡片已清空");
 };
-$("addQ").onclick = () => {
-  const v = $("qInput").value.trim(); if(!v) return;
-  S.questions.unshift({text:v, solved:false}); $("qInput").value = "";
-  save(); renderQuestions();
-};
-$("qInput").onkeydown = e => { if(e.key === "Enter") $("addQ").click(); };
 $("setDate").onclick = () => { $("startDate").scrollIntoView({behavior:"smooth",block:"center"}); $("startDate").focus(); };
 $("startDate").onchange = e => {
   S.startDate = e.target.value;
@@ -1982,7 +2222,7 @@ $("resetAll").onclick = () => {
 /* ============ 今日面板 ============ */
 const DAY_NAMES = ["周一","周二","周三","周四","周五","周六","周日"];
 const CARD_TASK = [
- "把今天遇到的 3 个不懂的术语写进疑问清单，不查答案。",
+ "把今天遇到的 3 个不懂的术语写成待解问题，先不查答案。",
  "做 3 张概念卡：定义 / 易混点 / 出处回指，三栏都要有内容。",
  "做 2–3 张药卡或方卡：性味归经、功效、主治、易混；方卡写满君臣佐使 / 主治证 / 方歌。",
  "做 2–3 张条文校读卡：原文 / 词义 / 所属证 / 对应方，异文栏留白待核。",
@@ -1993,7 +2233,7 @@ const DAILY = [
   ["抄概念总表","把八大块的名字抄成一张表（只写名称、不解释），空着的格就是后面要填的。"],
   ["辨析三词","查「证 / 症 / 候」在教材里的表述差异，各抄一句原话，不掺自己的理解。"],
   ["列八纲四对","写出八纲四对，每一对后面加一句能自测的问句。"],
-  ["建疑问清单","把本周所有不懂的术语列进疑问清单，不急着查答案。"],
+  ["建待解问题","把本周所有不懂的术语列成待解问题，不急着查答案。"],
   ["闭卷回述","不看资料，说出八大块的名称与顺序；说不出的回表上标红。"],
   ["补欠账","本周缺哪天补哪天；都齐了就预读下周主题的标题词。"]],
  [["精读单元","精读本周单元全节，只标不懂的句子和术语，不抄书、不摘金句。"],
@@ -2026,7 +2266,7 @@ const DAILY = [
   ["总复盘","对一遍总目标：知道 / 不知道 / 需回补，三栏写完。"]]
 ];
 const REVIEW_DAY = [
- "整周复盘，不进新内容：重做卡片，把疑问清单里已经能答的划掉。",
+ "整周复盘，不进新内容：重做卡片，把已经能答的待解问题划掉。",
  "整周复盘，不进新单元：卡片按掌握度重排，做一次阶段自测。",
  "整周复盘，不进新单元：抽 10 味药、5 首方闭卷，错的重新做卡。",
  "整周复盘，不进新条文：补填异文栏，指出一处异文并说明对理解的影响。",

@@ -4,8 +4,9 @@ const fs = require("node:fs");
 const path = require("node:path");
 const engine = require("../tools/course-engine.js");
 const root = path.resolve(__dirname, "..");
-const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
-const source = fs.readFileSync(path.join(root, "tools/course-engine.js"), "utf8").trim();
+const read = (f) => fs.readFileSync(path.join(root, f), "utf8").replace(/\r\n/g, "\n");
+const html = read("index.html");
+const source = read("tools/course-engine.js").trim();
 function loadCourse() {
   const start = html.indexOf("var COURSE=[") + "var COURSE=".length;
   const end = html.indexOf(";\nwindow.RD", start);

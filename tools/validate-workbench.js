@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const engine = require("./course-engine.js");
 const root = path.resolve(__dirname, "..");
-const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8").replace(/\r\n/g, "\n");
 const start = html.indexOf("var COURSE=[") + "var COURSE=".length;
 const end = html.indexOf(";\nwindow.RD", start);
 if (start < "var COURSE=".length || end < 0) throw new Error("无法定位 index.html 内嵌 COURSE 数据");
