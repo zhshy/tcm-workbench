@@ -31,7 +31,7 @@ tcm-workbench/
 
 | 文件 | 内容 |
 | --- | --- |
-| [resources/learning-path.md](resources/learning-path.md) | 六阶段路径、96 天节奏、每日五板块、学情检查规则 |
+| [resources/learning-path.md](resources/learning-path.md) | 当前 168 天四阶段课程与目标六阶段知识架构的映射说明 |
 | [TCM-CURRICULUM-IMPROVEMENT.md](TCM-CURRICULUM-IMPROVEMENT.md) | 课程改进实施方案；每日 6+1 客观题目标及验收标准 |
 | [docs/课程说明.md](docs/课程说明.md) | 168 天课程的编排说明、单元表、解锁与计分规则 |
 | [resources/github-projects.md](resources/github-projects.md) | GitHub 中医开源项目清单，按数据/知识/模型/应用四层整理 |
