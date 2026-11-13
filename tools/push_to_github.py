@@ -16,7 +16,16 @@ import urllib.parse
 import urllib.request
 
 ROOT = pathlib.Path("/Users/iptv/WorkBuddy/2026-11-13-13-44-58/tcm-workbench")
-ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+ARGS = []
+_i = 1
+while _i < len(sys.argv):
+    _a = sys.argv[_i]
+    if _a == "--message":
+        _i += 2          # 跳过 --message 及其取值，别当成位置参数
+        continue
+    if not _a.startswith("--"):
+        ARGS.append(_a)
+    _i += 1
 MSG = ("chore: 整理仓库结构并归档学习资源\n\n"
        "- 入口保留在根目录；图标移入 assets/，课程表移入 data/，脚本移入 tools/\n"
        "- 新增 resources/：学习路径、GitHub 项目清单、Skill 审计结论\n"
