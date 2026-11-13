@@ -20,8 +20,8 @@ tcm-workbench/
 │   └── learning-path.md    当前 168 天课程现状与目标六阶段知识架构
 ├── docs/
 │   ├── 课程说明.md         当前 168 天课程实现说明
-│   ├── ARCHITECTURE.md     本文件
-│   └── TCM-CURRICULUM-IMPROVEMENT.md
+│   └── ARCHITECTURE.md     本文件
+├── TCM-CURRICULUM-IMPROVEMENT.md
 │                            课程体系改进实施方案（仓库根目录）
 ├── tools/
 │   └── push_to_github.py   Git Data API 推送脚本
