@@ -1,235 +1,190 @@
 #!/usr/bin/env python3
-"""Push the TCM workbench to GitHub via the Git Data API (git protocol is blocked here).
-
-Usage: GH_TOKEN=... python3 ghpush_tcm.py [repo_name]
+"""Safely publish the TCM Workbench through the GitHub Git Data API.
+Default mode is read-only dry-run. Pass --apply to create a commit.
+Set GH_TOKEN locally; never put tokens in source files or command history.
 """
-import base64
-import concurrent.futures
-import hashlib
-import json
-import os
-import pathlib
-import sys
-import time
-import urllib.error
-import urllib.parse
-import urllib.request
+from __future__ import annotations
+import argparse, base64, hashlib, json, os, sys, urllib.error, urllib.request
+from pathlib import Path
 
-ROOT = pathlib.Path("/Users/iptv/WorkBuddy/2026-11-13-13-44-58/tcm-workbench")
-ARGS = []
-_i = 1
-while _i < len(sys.argv):
-    _a = sys.argv[_i]
-    if _a == "--message":
-        _i += 2          # 跳过 --message 及其取值，别当成位置参数
-        continue
-    if not _a.startswith("--"):
-        ARGS.append(_a)
-    _i += 1
-MSG = ("chore: 整理仓库结构并归档学习资源\n\n"
-       "- 入口保留在根目录；图标移入 assets/，课程表移入 data/，脚本移入 tools/\n"
-       "- 新增 resources/：学习路径、GitHub 项目清单、Skill 审计结论\n"
-       "- 新增 docs/ARCHITECTURE.md：目录职责、三套数据流、部署与版权边界\n"
-       "- 归档资料库版工作台到 library-page/\n"
-       "- 同步 README 与 .gitignore；版权教材仍排除在外")
-if "--message" in sys.argv:
-    i = sys.argv.index("--message")
-    if i + 1 < len(sys.argv):
-        MSG = sys.argv[i + 1]
-REPO = ARGS[0] if ARGS else "tcm-workbench"
-TOKEN = os.environ.get("GH_TOKEN", "").strip()
-EXCLUDE_DIRS = {"skills", ".git"}
-EXCLUDE_NAMES = {".DS_Store"}
+ROOT = Path(os.environ.get("TCM_ROOT", Path(__file__).resolve().parents[1])).resolve()
 API = "https://api.github.com"
+DEFAULT_REPO = "zhshy/tcm-workbench"
+ALLOWED_TOP_LEVEL = {
+    ".github", "assets", "data", "docs", "library", "library-page", "tests",
+    "resources", "tools", "index.html", "service-worker.js", "package.json",
+    "v1-96天版.html", "README.md", "CHANGELOG.md", "VERSION", ".gitignore",
+    ".nojekyll", "manifest.json", "TCM-CURRICULUM-IMPROVEMENT.md",
+}
+EXCLUDED_PARTS = {
+    ".git", ".venv", "venv", "__pycache__", ".pytest_cache", "node_modules",
+    "skills", ".cache", "coverage", "dist", "build",
+}
+EXCLUDED_NAMES = {".DS_Store", "Thumbs.db", ".env", ".env.local", ".env.production"}
+SENSITIVE_NAMES = {"token.txt", "token.json", ".token", "gh_token", "github_token", "credentials.json"}
+SENSITIVE_SUFFIXES = {".pem", ".key", ".p12", ".pfx", ".sqlite", ".db", ".log", ".bak"}
 
 
-def req(method, path, body=None, timeout=180, raw=False):
-    url = API + path
-    data = json.dumps(body).encode() if body is not None else None
-    r = urllib.request.Request(url, data=data, method=method)
-    r.add_header("Authorization", "Bearer " + TOKEN)
-    r.add_header("Accept", "application/vnd.github+json")
-    r.add_header("User-Agent", "workbuddy-tcm-push")
-    if data:
-        r.add_header("Content-Type", "application/json")
-    try:
-        with urllib.request.urlopen(r, timeout=timeout) as resp:
-            payload = resp.read()
-            return resp.status, (payload if raw else json.loads(payload or b"{}"))
-    except urllib.error.HTTPError as e:
-        payload = e.read()
-        try:
-            parsed = json.loads(payload or b"{}")
-        except Exception:
-            parsed = {"raw": payload[:300].decode("utf-8", "replace")}
-        return e.code, parsed
-
-
-def blob_sha(data):
-    h = hashlib.sha1()
-    h.update(b"blob " + str(len(data)).encode() + b"\0")
-    h.update(data)
-    return h.hexdigest()
-
-
-def collect():
-    files = {}
-    for p in sorted(ROOT.rglob("*")):
-        if not p.is_file():
+def collect(root: Path = ROOT) -> dict[str, Path]:
+    root = Path(root).resolve()
+    if not root.is_dir() or not (root / "README.md").is_file() or not (root / "index.html").is_file():
+        raise RuntimeError(f"不是有效的 TCM Workbench 仓库根目录：{root}")
+    files: dict[str, Path] = {}
+    for path in sorted(root.rglob("*")):
+        if not path.is_file():
             continue
-        rel = p.relative_to(ROOT)
-        if any(part in EXCLUDE_DIRS for part in rel.parts):
+        rel = path.relative_to(root)
+        parts = rel.parts
+        if not parts or parts[0] not in ALLOWED_TOP_LEVEL:
             continue
-        if p.name in EXCLUDE_NAMES or p.name.endswith(".tar.gz"):
+        if any(part in EXCLUDED_PARTS for part in parts):
             continue
-        files[rel.as_posix()] = p
+        name = path.name.lower()
+        if name in EXCLUDED_NAMES or name.startswith(".env.") or name in SENSITIVE_NAMES:
+            continue
+        if path.suffix.lower() in SENSITIVE_SUFFIXES:
+            continue
+        if any(marker in name for marker in ("secret", "credential", "access-token", "github-token")):
+            continue
+        files[rel.as_posix()] = path
     return files
 
 
-def main():
-    if not TOKEN:
-        print("ERROR: GH_TOKEN 未设置")
-        return 2
+def blob_sha(data: bytes) -> str:
+    return hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data).hexdigest()
 
-    code, me = req("GET", "/user")
+
+def request(token: str, method: str, path: str, body: dict | None = None):
+    data = json.dumps(body).encode("utf-8") if body is not None else None
+    req = urllib.request.Request(API + path, data=data, method=method)
+    req.add_header("Authorization", "Bearer " + token)
+    req.add_header("Accept", "application/vnd.github+json")
+    req.add_header("X-GitHub-Api-Version", "2022-11-28")
+    req.add_header("User-Agent", "tcm-workbench-safe-publisher")
+    if data is not None:
+        req.add_header("Content-Type", "application/json")
+    try:
+        with urllib.request.urlopen(req, timeout=90) as response:
+            raw = response.read()
+            return response.status, json.loads(raw or b"{}")
+    except urllib.error.HTTPError as error:
+        raw = error.read()
+        try:
+            payload = json.loads(raw or b"{}")
+        except Exception:
+            payload = {"message": raw[:300].decode("utf-8", "replace")}
+        return error.code, payload
+
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description="TCM Workbench 安全发布工具（默认 dry-run）")
+    parser.add_argument("--repo", default=os.environ.get("GH_REPO", DEFAULT_REPO), help="owner/repo")
+    parser.add_argument("--message", default="chore: publish TCM Workbench")
+    parser.add_argument("--apply", action="store_true", help="确认执行远端写入；不传时只 dry-run")
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv)
+    if "/" not in args.repo or args.repo.count("/") != 1:
+        print("ERROR: --repo 必须是 owner/repo")
+        return 2
+    try:
+        files = collect(ROOT)
+    except RuntimeError as error:
+        print(f"ERROR: {error}")
+        return 2
+    local, total_bytes = {}, 0
+    for rel, path in files.items():
+        data = path.read_bytes()
+        local[rel] = (data, blob_sha(data))
+        total_bytes += len(data)
+    print(f"仓库目录：{ROOT}")
+    print(f"目标仓库：{args.repo}")
+    print(f"发布清单：{len(local)} 个文件，{total_bytes / 1024 / 1024:.2f} MiB")
+    for rel in local:
+        print(f"  {rel}")
+    print("安全排除：本地技能目录、依赖目录、环境变量文件和密钥/数据库文件")
+    print("同步语义：仅新增/更新白名单文件；不删除远端多余文件，不自动创建仓库或更改 Pages 设置。")
+    if not args.apply:
+        print("DRY-RUN：本模式仅检查本地白名单清单，不读取或写入远端。")
+        return 0
+    token = os.environ.get("GH_TOKEN", "").strip()
+    if not token:
+        print("ERROR: --apply 需要在本机环境变量中设置 GH_TOKEN。")
+        return 2
+    owner, repo_name = args.repo.split("/", 1)
+    code, repo_info = request(token, "GET", f"/repos/{owner}/{repo_name}")
+    if code != 200 or repo_info.get("full_name", "").lower() != args.repo.lower():
+        print(f"ERROR: 目标仓库不可访问或不匹配（HTTP {code}）：{repo_info.get('message', '')}")
+        return 2
+    branch, base_commit = None, None
+    for candidate in ("main", "master"):
+        code, ref = request(token, "GET", f"/repos/{owner}/{repo_name}/git/ref/heads/{candidate}")
+        if code == 200:
+            branch, base_commit = candidate, ref["object"]["sha"]
+            break
+    if not branch:
+        print("ERROR: 找不到 main/master 分支；不会自动创建分支或仓库。")
+        return 2
+    code, commit = request(token, "GET", f"/repos/{owner}/{repo_name}/git/commits/{base_commit}")
     if code != 200:
-        print("ERROR: 令牌无效 ->", code, me.get("message"))
+        print("ERROR: 无法读取当前提交。")
         return 2
-    owner = me["login"]
-    print(f"账号: {owner}")
-
-    code, repo = req("GET", f"/repos/{owner}/{REPO}")
-    if code == 404:
-        print(f"仓库 {owner}/{REPO} 不存在，创建中…")
-        code, repo = req("POST", "/user/repos", {
-            "name": REPO,
-            "description": "中医学习工作台：六阶段路径、公版古籍资料库、学习卡片与提问模板",
-            "private": False, "has_issues": True, "has_wiki": False, "auto_init": False,
+    base_tree = commit["tree"]["sha"]
+    code, tree_data = request(token, "GET", f"/repos/{owner}/{repo_name}/git/trees/{base_tree}?recursive=1")
+    if code != 200 or tree_data.get("truncated"):
+        print("ERROR: 远端文件树读取失败或被截断，停止发布。")
+        return 2
+    remote = {entry["path"]: entry["sha"] for entry in tree_data.get("tree", []) if entry.get("type") == "blob"}
+    changed = {name: item for name, item in local.items() if remote.get(name) != item[1]}
+    print(f"远端差异：{len(changed)} 个文件需要新增/更新。")
+    if not changed:
+        print("远端已与本地白名单文件一致，无需提交。")
+        return 0
+    tree_entries = []
+    for name, (data, _) in changed.items():
+        code, blob = request(token, "POST", f"/repos/{owner}/{repo_name}/git/blobs", {
+            "content": base64.b64encode(data).decode("ascii"), "encoding": "base64",
         })
         if code not in (200, 201):
-            print("ERROR: 建仓库失败 ->", code, repo.get("message"))
+            print(f"ERROR: 上传 {name} 失败（HTTP {code}）：{blob.get('message', '')}")
             return 2
-        print("仓库已创建（空仓库，需要先播种一次提交）")
-    elif code != 200:
-        print("ERROR: 查询仓库失败 ->", code, repo.get("message"))
+        tree_entries.append({"path": name, "mode": "100644", "type": "blob", "sha": blob["sha"]})
+    code, tree = request(token, "POST", f"/repos/{owner}/{repo_name}/git/trees", {
+        "base_tree": base_tree, "tree": tree_entries,
+    })
+    if code not in (200, 201):
+        print(f"ERROR: 创建 tree 失败：{tree.get('message', '')}")
         return 2
-    else:
-        print("仓库已存在，增量推送")
-
-    # 1) 取分支与基点
-    branch, base_commit, base_tree, remote_tree = None, None, None, {}
-    for b in ("main", "master"):
-        c, ref = req("GET", f"/repos/{owner}/{REPO}/git/ref/heads/{b}")
-        if c == 200:
-            branch = b
-            base_commit = ref["object"]["sha"]
-            break
-    if branch is None:
-        # 空仓库：播种一次提交
-        c, seed = req("PUT", f"/repos/{owner}/{REPO}/contents/.bootstrap",
-                      {"message": "chore: bootstrap", "content": base64.b64encode(b"bootstrap\n").decode()})
-        if c not in (200, 201):
-            print("ERROR: 播种失败 ->", c, seed.get("message"))
-            return 2
-        for b in ("main", "master"):
-            c, ref = req("GET", f"/repos/{owner}/{REPO}/git/ref/heads/{b}")
-            if c == 200:
-                branch, base_commit = b, ref["object"]["sha"]
-                break
-        print(f"已播种首次提交，分支 {branch}")
-
-    if base_commit:
-        c, commit = req("GET", f"/repos/{owner}/{REPO}/git/commits/{base_commit}")
-        if c == 200:
-            base_tree = commit["tree"]["sha"]
-            tcode, tdata = req("GET", f"/repos/{owner}/{REPO}/git/trees/{base_tree}?recursive=1")
-            if tcode == 200:
-                remote_tree = {e["path"]: e["sha"] for e in tdata.get("tree", []) if e["type"] == "blob"}
-
-    # 2) 差分
-    files = collect()
-    local = {}
-    for rel, p in files.items():
-        data = p.read_bytes()
-        local[rel] = (data, blob_sha(data))
-    to_upload = {k: v for k, v in local.items() if remote_tree.get(k) != v[1]}
-    print(f"本地 {len(local)} 个文件，需上传 {len(to_upload)} 个（{sum(len(v[0]) for v in to_upload.values())/1024/1024:.1f} MB）")
-
-    # 3) 建 blobs
-    shas = {}
-    done = [0]
-
-    def upload(item):
-        rel, (data, sha) = item
-        c, res = req("POST", f"/repos/{owner}/{REPO}/git/blobs",
-                     {"content": base64.b64encode(data).decode(), "encoding": "base64"})
-        if c not in (200, 201):
-            raise RuntimeError(f"{rel}: HTTP {c} {res.get('message')}")
-        done[0] += 1
-        if done[0] % 8 == 0 or done[0] == len(to_upload):
-            print(f"  blob {done[0]}/{len(to_upload)}")
-        return rel, res["sha"]
-
-    if to_upload:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-            for rel, sha in pool.map(upload, to_upload.items()):
-                shas[rel] = sha
-
-    # 4) 建 tree（base_tree 保留远端其它文件；空仓库播种文件不保留）
-    payload = {"tree": [{"path": k, "mode": "100644", "type": "blob", "sha": v[1]} for k, v in local.items()]}
-    if base_tree and (set(remote_tree) - {".bootstrap"}):
-        payload["base_tree"] = base_tree
-    c, tree = req("POST", f"/repos/{owner}/{REPO}/git/trees", payload)
-    if c not in (200, 201):
-        print("ERROR: 建 tree 失败 ->", c, tree.get("message"))
+    code, new_commit = request(token, "POST", f"/repos/{owner}/{repo_name}/git/commits", {
+        "message": args.message, "tree": tree["sha"], "parents": [base_commit],
+    })
+    if code not in (200, 201):
+        print(f"ERROR: 创建提交失败：{new_commit.get('message', '')}")
         return 2
-
-    # 5) 提交
-    body = {"message": MSG,
-            "tree": tree["sha"],
-            "author": {"name": "zhshy", "email": "zhshy@users.noreply.github.com"},
-            "committer": {"name": "zhshy", "email": "zhshy@users.noreply.github.com"}}
-    if base_commit:
-        body["parents"] = [base_commit]
-    c, commit = req("POST", f"/repos/{owner}/{REPO}/git/commits", body)
-    if c not in (200, 201):
-        print("ERROR: 建提交失败 ->", c, commit.get("message"))
+    code, latest_ref = request(token, "GET", f"/repos/{owner}/{repo_name}/git/ref/heads/{branch}")
+    if code != 200 or latest_ref["object"]["sha"] != base_commit:
+        print("ERROR: 上传期间远端分支已变化；提交对象已创建但未移动分支，请检查后重试。")
         return 2
-    print("提交:", commit["sha"][:10])
-
-    # 6) 移动分支
-    c, ref = req("PATCH", f"/repos/{owner}/{REPO}/git/refs/heads/{branch}", {"sha": commit["sha"], "force": False})
-    if c != 200:
-        print("ERROR: 更新分支失败 ->", c, ref.get("message"))
+    code, updated = request(token, "PATCH", f"/repos/{owner}/{repo_name}/git/refs/heads/{branch}", {
+        "sha": new_commit["sha"], "force": False,
+    })
+    if code != 200:
+        print(f"ERROR: 更新分支失败：{updated.get('message', '')}")
         return 2
-    print(f"分支 {branch} -> {commit['sha'][:10]}")
-
-    # 7) 开启 Pages
-    c, pages = req("POST", f"/repos/{owner}/{REPO}/pages", {"source": {"branch": branch, "path": "/"}})
-    if c in (200, 201):
-        print("Pages 已启用:", pages.get("html_url"))
-    elif c == 409:
-        c2, pages2 = req("PUT", f"/repos/{owner}/{REPO}/pages", {"source": {"branch": branch, "path": "/"}})
-        print("Pages 已存在，更新源 ->", c2, pages2.get("html_url") or pages2.get("message"))
-    else:
-        print("WARN: Pages 开启失败 ->", c, pages.get("message"))
-
-    # 8) 回验：重新取远端树逐文件比对
-    time.sleep(2)
-    c, tdata = req("GET", f"/repos/{owner}/{REPO}/git/trees/{branch}?recursive=1")
-    remote_after = {e["path"]: e["sha"] for e in tdata.get("tree", []) if e["type"] == "blob"} if c == 200 else {}
-    mismatch = [k for k, (_, sha) in local.items() if remote_after.get(k) != sha]
-    extra = [k for k in remote_after if k not in local]
-    print(f"回验：远端 {len(remote_after)} 文件，本地 {len(local)}，不一致 {len(mismatch)}，远端多出 {len(extra)}")
-    if mismatch:
-        print("  不一致:", mismatch[:5])
-    if extra:
-        print("  多出:", extra[:5])
-
-    url = f"https://{owner}.github.io/{REPO}/"
-    print("页面地址（首次构建需 1–3 分钟）:", url)
-    print("仓库地址:", f"https://github.com/{owner}/{REPO}")
-    return 0 if not mismatch else 1
+    code, after = request(token, "GET", f"/repos/{owner}/{repo_name}/git/trees/{new_commit['sha']}?recursive=1")
+    if code != 200 or after.get("truncated"):
+        print("WARN: 已提交，但回验读取失败；请在 GitHub 检查提交。")
+        return 1
+    after_map = {entry["path"]: entry["sha"] for entry in after.get("tree", []) if entry.get("type") == "blob"}
+    mismatches = [name for name, (_, sha) in local.items() if after_map.get(name) != sha]
+    if mismatches:
+        print("ERROR: 提交后回验不一致：" + ", ".join(mismatches[:10]))
+        return 1
+    print(f"发布成功：{new_commit['sha']}")
+    print(f"GitHub Pages（若仓库已启用 Pages）将在 main 更新后自动构建：https://{owner}.github.io/{repo_name}/")
+    return 0
 
 
 if __name__ == "__main__":

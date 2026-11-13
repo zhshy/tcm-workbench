@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-11-13",
+  "baseline": {
+    "lessons": 168,
+    "basic_questions": 1008,
+    "stable_question_ids": 1008
+  },
+  "provenance": {
+    "questions_with_source_refs": 336,
+    "questions_without_source_refs": 672,
+    "source_status": {
+      "needs_manual_source_review": 672,
+      "verified_against_lesson_reading": 168,
+      "verified_against_lesson_outline": 168
+    }
+  },
+  "policy": "不自动编造古籍出处。source_status=needs_manual_source_review 的题目在人工核验前明确显示待核验状态。"
+}

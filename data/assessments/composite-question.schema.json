@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zhshy.github.io/tcm-workbench/data/assessments/composite-question.schema.json",
+  "title": "TCM Workbench Composite Objective Question",
+  "type": "object",
+  "required": [
+    "id",
+    "lesson_id",
+    "type",
+    "title",
+    "stimulus",
+    "items",
+    "scoring"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^D[0-9]{3}-Q07$"
+    },
+    "lesson_id": {
+      "type": "string",
+      "pattern": "^D[0-9]{3}$"
+    },
+    "type": {
+      "const": "composite_objective"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stimulus": {
+      "type": "object",
+      "required": [
+        "goal",
+        "key_points"
+      ],
+      "properties": {
+        "goal": {
+          "type": "string"
+        },
+        "key_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "source_question_id",
+          "stem",
+          "candidate_answer",
+          "candidate_label",
+          "answer",
+          "explanation",
+          "source_refs",
+          "source_status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source_question_id": {
+            "type": "string"
+          },
+          "stem": {
+            "type": "string"
+          },
+          "candidate_answer": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            ]
+          },
+          "candidate_label": {
+            "type": "string"
+          },
+          "answer": {
+            "type": "boolean"
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_status": {
+            "type": "string"
+          },
+          "knowledge_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "required": [
+        "method",
+        "partial_credit",
+        "negative_marking"
+      ],
+      "properties": {
+        "method": {
+          "const": "sum_subitems"
+        },
+        "partial_credit": {
+          "const": "per_subitem"
+        },
+        "negative_marking": {
+          "const": false
+        }
+      }
+    }
+  }
+}

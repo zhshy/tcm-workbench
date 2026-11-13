@@ -1,7 +1,7 @@
 {
  "name": "中医学习工作台",
  "short_name": "学中医",
- "description": "六阶段学习路径、公版古籍资料库、学习卡片与提问模板",
+ "description": "168天中医学习工作台：每日6道基础客观题+1道综合客观大题、古籍阅读与学习记录",
  "start_url": "./index.html",
  "scope": "./",
  "display": "standalone",
