@@ -16,6 +16,7 @@ tcm-workbench/
 ├── assets/                 图标（PWA / iOS 主屏）
 ├── data/plan.json          v1 版 96 天课程表（存档，新版课程内嵌在 index.html）
 ├── library/                31 部公有领域古籍 + index.json
+├── library/_external/      第三方资料库（TCM.Skill / 倪海厦课程资料，见其 README）
 ├── resources/              学习资源（见下）
 ├── docs/ARCHITECTURE.md    结构、数据流、部署与版权边界
 ├── library-page/index.html 资料库在线版工作台（存档）
@@ -35,6 +36,7 @@ tcm-workbench/
 | [resources/github-projects.md](resources/github-projects.md) | GitHub 中医开源项目清单，按数据/知识/模型/应用四层整理 |
 | [resources/skill-audit.md](resources/skill-audit.md) | 5 个中医 Agent Skill 的安全审计结论与三个坑 |
 | `library/` | 31 部公版古籍原文（伤寒论、金匮要略、黄帝内经、本草纲目等） |
+| [`library/_external/`](library/_external/README.md) | 第三方资料库：TCM.Skill（教材整编 50 篇 + 16 部著作全文）、倪海厦课程资料（板书截图 2986 张 + 证据索引）。版权归原作者，仅个人学习，见该目录 README |
 | `data/plan.json` | 全部课程数据：精读、泛读、问题与参考答案、两张卡的写作要点、随堂题的答案/解析/出处、20 分钟时间盒 |
 
 ## 两个交付形态
@@ -120,6 +122,7 @@ GH_TOKEN=<你的 token> python3 tools/push_to_github.py --message "feat: 更新�
 
 - **收录**：31 部公有领域古籍。
 - **排除**：六部规划教材（《中医基础理论》《中药学》七版等）仍在版权期内，不随公开仓库分发，仅保留在本地 `skills/`。
+- **例外**：`library/_external/` 下两个第三方仓库按项目所有者要求纳入本仓库，其中 `TCM.Skill/sources/` 含上述规划教材全文、`nihaisha-nishi-tcm/` 无任何许可证。这部分**只作个人学习与检索之用，不得商用、不得再分发**；如需对外分享请先取得权利人授权。权利状态详见 [`library/_external/README.md`](library/_external/README.md)。
 - 古籍电子文本可能存在 OCR 或传抄讹误，引用前请核对纸本或权威点校本。
 - 本项目仅用于中医学习与古籍研读，**不构成诊断、处方、用药或剂量建议**；身体不适请就诊于执业中医师。
 
@@ -128,3 +131,5 @@ GH_TOKEN=<你的 token> python3 tools/push_to_github.py --message "feat: 更新�
 - 代码与文档：MIT
 - `library/` 古籍文本：公有领域
 - `resources/` 原创整理：CC BY 4.0
+- `library/_external/TCM.Skill/`：原作者 YuanZHAO321，CC BY-NC 4.0（署名·非商业）；其 `sources/` 内教材全文版权属原出版方，不在该协议范围内
+- `library/_external/nihaisha-nishi-tcm/`：原作者 JuneYaooo，**未附许可证**，默认保留所有权利；板书截图源自倪海厦课程，权利不在仓库作者手上

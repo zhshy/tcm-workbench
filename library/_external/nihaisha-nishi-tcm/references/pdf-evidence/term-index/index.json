@@ -1,0 +1,38 @@
+[
+  {
+    "module": "acupuncture",
+    "file": "acupuncture.json",
+    "terms": 5473,
+    "citations": 7314
+  },
+  {
+    "module": "bencao",
+    "file": "bencao.json",
+    "terms": 1212,
+    "citations": 1431
+  },
+  {
+    "module": "huangdi",
+    "file": "huangdi.json",
+    "terms": 1577,
+    "citations": 1698
+  },
+  {
+    "module": "jingui",
+    "file": "jingui.json",
+    "terms": 4976,
+    "citations": 6305
+  },
+  {
+    "module": "shanghan",
+    "file": "shanghan.json",
+    "terms": 3865,
+    "citations": 4902
+  },
+  {
+    "module": "zhongjing-xinfa",
+    "file": "zhongjing-xinfa.json",
+    "terms": 473,
+    "citations": 544
+  }
+]
