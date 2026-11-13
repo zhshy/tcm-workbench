@@ -5,29 +5,12 @@
 纯静态、无后端、无追踪、无外部依赖。个人数据默认只存浏览器 localStorage，可选同步到自己的私有仓库。
 
 **在线使用**：https://zhshy.github.io/tcm-workbench/
-**日课册版（v2 视觉重构）**：https://zhshy.github.io/tcm-workbench/v2.html
-
-## 版本
-
-当前 `2.0.0`。每个版本都打了 git tag，可回到任意历史版本：
-
-```bash
-git tag -l                              # 看所有版本
-git checkout v1.3.0 -- index.html       # 取回某个版本的入口文件
-```
-
-变更记录见 [CHANGELOG.md](CHANGELOG.md)，当前版本号写在 `VERSION` 里。
-
-- `2.0.0` — 新增 `v2.html`「日课册」视觉重构版，内容沿用 1.3.0，`index.html` 不动
-- `1.3.0` — 首页改为「近 14 天打卡 / 本周课程重点 / 今日课程」
-- `1.2.0` — 课程补齐到 168 天
 
 ## 仓库结构
 
 ```
 tcm-workbench/
 ├── index.html              工作台入口（168 天课程版，单文件，含全部 CSS/JS）
-├── v2.html                 日课册版（2.0 视觉重构，同样单文件、同样数据）
 ├── v1-96天版.html           上一版（96 天 · 每天 20 分钟）存档
 ├── manifest.json           PWA 清单
 ├── assets/                 图标（PWA / iOS 主屏）
@@ -35,12 +18,9 @@ tcm-workbench/
 ├── library/                31 部公有领域古籍 + index.json
 ├── resources/              学习资源（见下）
 ├── docs/ARCHITECTURE.md    结构、数据流、部署与版权边界
-├── docs/DESIGN.md          日课册版的配色、字体、版式与组件规范
 ├── library-page/index.html 资料库在线版工作台（存档）
 ├── tools/push_to_github.py 推送脚本（Git Data API）
 ├── skills/                 本地技能素材（.gitignore 排除，含版权教材）
-├── CHANGELOG.md            版本变更记录
-├── VERSION                 当前版本号
 └── README.md
 ```
 
