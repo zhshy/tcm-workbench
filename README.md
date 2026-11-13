@@ -2,14 +2,27 @@
 
 一个给自己用的单页学习系统：**按知识块组织，不按天**。
 
-- 8 个域 · 27 个知识块 · 152 条，进度只记「哪条学完了」，没有「第几天」、没有逐日解锁、没有每日上限。
-- 四诊（尤其脉诊）排在第二域，第一域只留七日筑基的最小骨架。
-- 32 部公版古籍，内置阅读器支持全文分段加载与书内检索；含《诊家枢要》全文及三书节引校读附录。
+- 8 个域 · 29 个知识块 · 170 条，进度只记「哪条学完了」，没有「第几天」、没有逐日解锁、没有每日上限。
+- 第一域「中基筑基」按《中医基础理论》全程展开（5 块 25 条）；第二域直接进四诊，脉诊 8 讲以《诊家枢要》为骨架。
+- 每讲 **6 道基础题 + 1 组综合辨析**（含判断/多选混合题型）；888 段经典原文 100% 附白话、出处、校读提示与书库深链。
+- 32 部公版古籍，每部标题旁有「译」按钮直达白话译本；阅读器可一键切回原文，支持原文段落深链与书内检索高亮。
 - 纯静态、无后端、无追踪、无外部依赖。进度存在浏览器 `localStorage`（键 `mozhu-tcm-v2`），可导出备份。
 
 **在线使用**：https://zhshy.github.io/tcm-workbench/
 
-给使用者的改版说明见 [`docs/v2-知识块版说明.md`](docs/v2-知识块版说明.md)，课程结构见 [`docs/课程说明.md`](docs/课程说明.md)。
+给使用者的改版说明见 [`docs/v2-知识块版说明.md`](docs/v2-知识块版说明.md)，课程结构见 [`docs/课程说明.md`](docs/课程说明.md)，构建链见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。
+
+## v2.1 相对 v2.0 的变化
+
+| | v2.0 | v2.1 |
+| --- | --- | --- |
+| 习题 | 新写条目只有 3 道单选、无综合题 | 170 条一律 **6+1**；多选题判分修复 |
+| 筑基 | 「七日筑基」7 条，不讲中基 | **「中基筑基」25 条 / 5 块**，按《中医基础理论》全程 |
+| 原文 | 543 段，要点 3–8 条 | **888 段**，每条 ≥5 段原文、≥8 条要点，白话 100% |
+| 原文链接 | 无 | 100% 带书库深链（826 段精确命中；12 段原书未入库明确标注「参读」） |
+| 书库 | 32 部原文 | 32 部原文 + 32 部白话译本（2 全本 / 2 框架节译 / 28 导读），标题旁「译」按钮 |
+
+译本不是逐字全译，《诊家枢要》《濒湖脉学》为全本译解，《脉经》《伤寒论》为框架节译，其余为白话导读；界面按书标注类型，不冒充全译。详见 `library/index.json` 的 `translation_note`。
 
 ## v2.0 相对 v1.4.2 的变化
 
@@ -20,7 +33,7 @@
 | 四诊位置 | D40 之后 | 第二域；脉诊 8 讲以《诊家枢要》为骨架 |
 | 阴阳五行藏象 | 占主线前 39 天 | 压成「七日筑基」7 讲，只留支撑四诊的最小骨架 |
 | 书库 | 31 部 | 32 部，补入《诊家枢要》全文 |
-| 答题判分 | 6+1 客观题、10 分制、70% 通过线 | 改为随条自测与「已学完」勾选，不再计分卡进度 |
+| 答题判分 | 6+1 客观题、10 分制、70% 通过线 | 随条自测、不计分卡进度；v2.1 起 6+1 恢复为每讲标配 |
 
 旧版 168 天实现存档在 `v1.4.2-168天版.html`，旧文档在 `docs/archive/`。
 
@@ -32,14 +45,21 @@ tcm-workbench/
 ├── v1.4.2-168天版.html      v1.4.2 存档
 ├── v1-96天版.html           v1 存档
 ├── VERSION / CHANGELOG.md / manifest.json / service-worker.js
-├── library/                32 部古籍正文 + index.json + 诊家枢要.txt
+├── library/                32 部古籍正文 + 白话/ 32 部译本 + index.json
 ├── build/                  构建链（源数据 JSON → domains.json → index.html）
-│   ├── domain*.json        新写的筑基、四诊、脉诊内容
-│   ├── build_domains.py    归并旧 168 课 + 新内容 → domains.json
-│   ├── app_template.html   页面模板（含 /*__DATA__*/ 占位符）
-│   ├── build_site.py       注入数据 → 根目录 index.html
-│   └── add_book.py         生成《诊家枢要》书库文件与索引条目
-├── tools/                  数据校验、发布脚本、v1 评分引擎（历史）
+│   ├── d1_foundation_*.json  《中医基础理论》筑基域（新写）
+│   ├── domain2*.json        四诊、脉诊内容（新写）
+│   ├── classic_extra.json   通用经典原文补编语料
+│   ├── thin_supplement.json 偏薄条目的定向补编语料
+│   ├── trans_core.json      两部核心书全本译解
+│   ├── trans_guides.json    其余 30 部译本/导读
+│   ├── build_domains.py     归并旧 168 课 + 新内容 → domains.json
+│   ├── enrich.py            补 6+1 / 补原文要点 / 算书库深链（幂等）
+│   ├── build_translations.py 生成 library/白话/*.txt 并登记索引
+│   ├── app_template.html    页面模板（含 /*__DATA__*/ 占位符）
+│   ├── build_site.py        注入数据 → 根目录 index.html
+│   └── add_book.py          生成《诊家枢要》书库文件与索引条目
+├── tools/                  数据校验、无头浏览器回归、发布脚本、v1 评分引擎（历史）
 ├── tests/                  v2 结构测试；v1 测试在 tests/legacy/
 ├── docs/                   课程说明、架构、v2 改版说明、archive/
 ├── assets/ / data/ / resources/ / library-page/   图标与历史资料
@@ -51,10 +71,15 @@ tcm-workbench/
 改内容后重新生成根目录 `index.html`：
 
 ```bash
-python build/build_domains.py     # 源数据 → build/domains.json
-python build/build_site.py        # 注入模板 → index.html
-npm run validate                  # 数据、书库、旧结构残留校验
-npm test                          # 8 项结构测试
+python build/build_domains.py        # 源数据 → build/domains.json
+python build/enrich.py               # 补 6+1 / 补原文要点 / 算书库深链（幂等）
+python build/build_translations.py   # 生成 32 部白话译本并更新 library/index.json
+python build/build_site.py           # 注入模板 → index.html
+
+npm run validate                     # 数据、6+1、白话/深链、译本覆盖校验
+npm test                             # 10 项结构测试
+npm run test:python                  # 4 项发布脚本测试
+npm run check:visual                 # 可选：本机 Edge 无头浏览器 47 项回归 + 截图
 ```
 
 本地预览需起 HTTP 服务（书库用 `fetch` 读同目录文本，直接双击 `file://` 会被浏览器拦截）：
@@ -63,6 +88,8 @@ npm test                          # 8 项结构测试
 python -m http.server 8899
 # 打开 http://127.0.0.1:8899/index.html
 ```
+
+`check:visual` 依赖本机 Edge，可用 `EDGE_PATH` / `BASE_URL` / `OUT_DIR` / `CDP_PORT` 覆盖；截图落在 `shots/v21-*.png`。
 
 ## 版权与内容边界
 

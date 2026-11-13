@@ -1,13 +1,14 @@
 {
   "name": "tcm-workbench",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
-  "description": "中医学习工作台：域-块-条目知识块、四诊优先、不设每日上限、32 部古籍书库",
+  "description": "中医学习工作台：中基筑基与四诊优先、每讲 6+1 自测、888 段原文附白话与书库深链、32 部古籍白话译本、不设每日上限",
   "scripts": {
     "test": "node --test tests/*.test.js",
     "validate": "node tools/validate-workbench.js",
     "build:engine": "node tools/embed-course-engine.js",
-    "test:python": "python3 -m unittest discover -s tests -p 'test_*.py'"
+    "test:python": "python3 -m unittest discover -s tests -p \"test_*.py\"",
+    "check:visual": "node tools/visual-check.mjs"
   },
   "engines": {
     "node": ">=20"

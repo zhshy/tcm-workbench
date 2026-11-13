@@ -198,8 +198,27 @@ def build_domain8():
     }
 
 
+def build_domain1():
+    """《中医基础理论》全程：三份手写内容合成一个域。"""
+    a = load("d1_foundation_a.json")
+    b = load("d1_foundation_b.json")
+    c = load("d1_foundation_c.json")
+    a["blocks"] += b["blocks"] + c["blocks"]
+    # 手写文件里题目用 o/e 简写，统一成前端要求的 opts/why
+    for blk in a["blocks"]:
+        for it in blk["items"]:
+            it["quote"] = [
+                {"s": s, "src": src, "tr": tr, "tip": tip}
+                for src, s, tr, tip in it.pop("q")
+            ]
+            for qz in it["quiz"]:
+                qz["opts"] = qz.pop("o")
+                qz["why"] = qz.pop("e")
+    return a
+
+
 def main():
-    d1 = load("domain1.json")
+    d1 = build_domain1()
     d2 = load("domain2a.json")
     # domain2b / domain2c 是单块结构（含 id/name/note/items），直接当块用
     d2["blocks"].append(load("domain2b.json"))
@@ -214,7 +233,8 @@ def main():
         print("%-16s %2d 块 %3d 条" % (d["name"], len(d["blocks"]), n))
     print("合计 %d 条" % total)
 
-    out = {"version": "2.0.0", "domains": domains}
+    # 仅组装基础数据；6+1、原文补编、书库深链与最终版本号由 enrich.py 负责。
+    out = {"version": "2.1.0", "domains": domains}
     with open(os.path.join(HERE, "domains.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
     print("写入 build/domains.json")

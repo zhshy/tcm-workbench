@@ -1,4 +1,4 @@
-// v2.0 域-块-条目结构测试。旧版 168 天课程测试已归档到 tests/legacy/。
+// v2.1 域-块-条目结构测试。旧版 168 天课程测试已归档到 tests/legacy/。
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
@@ -7,12 +7,13 @@ const { root, readHtml, loadData, allItems } = require("../tools/load-data.js");
 
 const DATA = loadData();
 const rows = allItems(DATA);
+const html = readHtml();
 
-test("数据版本为 2.0.0，域 8 / 块 27 / 条目 152", () => {
-  assert.equal(DATA.version, "2.0.0");
+test("数据版本为 2.1.0，域 8 / 块 29 / 条目 170", () => {
+  assert.equal(DATA.version, "2.1.0");
   assert.equal(DATA.domains.length, 8);
-  assert.equal(DATA.domains.reduce((n, d) => n + d.blocks.length, 0), 27);
-  assert.equal(rows.length, 152);
+  assert.equal(DATA.domains.reduce((n, d) => n + d.blocks.length, 0), 29);
+  assert.equal(rows.length, 170);
 });
 
 test("条目 id 全局唯一", () => {
@@ -20,25 +21,55 @@ test("条目 id 全局唯一", () => {
   assert.equal(new Set(ids).size, ids.length);
 });
 
-test("每条都有目标、要点、至少一段原文（四层齐全）", () => {
+test("每条都是 6 道单选 + 1 组综合辨析（旧版规定）", () => {
   for (const { item } of rows) {
-    assert.ok(item.title && item.goal, item.id + " 缺标题或目标");
-    assert.ok(Array.isArray(item.pts) && item.pts.length >= 3, item.id + " 要点不足");
-    assert.ok(Array.isArray(item.quote) && item.quote.length >= 1, item.id + " 缺原文");
-    for (const q of item.quote) {
-      assert.ok(q.s && q.src && q.tr && q.tip, item.id + " 原文四层不齐");
+    assert.equal(item.quiz.length, 6, item.id + " 单选题不是 6 道");
+    for (const [i, q] of item.quiz.entries()) {
+      assert.ok(q.q && q.opts.length >= 2, item.id + " quiz[" + i + "] 选项不足 2 个");
+      const ans = Array.isArray(q.a) ? q.a : [q.a];
+      assert.ok(ans.length > 0, item.id + " quiz[" + i + "] 无答案");
+      for (const a of ans) assert.ok(a >= 0 && a < q.opts.length, item.id + " quiz[" + i + "] 答案越界");
+      assert.ok(q.why, item.id + " quiz[" + i + "] 缺解析");
     }
+    assert.ok(item.composite && item.composite.items.length >= 1, item.id + " 缺综合辨析题");
+    assert.ok(item.composite.stimulus.text, item.id + " 综合题缺材料");
   }
+  // 单选题答案位置不能总在 A
+  const positions = rows.flatMap((r) => r.item.quiz.filter((q) => !Array.isArray(q.a)).map((q) => q.a));
+  assert.ok(new Set(positions).size >= 3, "答案分布过于集中");
 });
 
-test("课程顺序：筑基在前，四诊第二，脉诊以《诊家枢要》为骨架", () => {
-  assert.equal(DATA.domains[0].id, "d1");
-  assert.match(DATA.domains[0].name, /筑基/);
-  assert.equal(DATA.domains[1].id, "d2");
-  assert.match(DATA.domains[1].name, /四诊/);
-  const mai = DATA.domains[1].blocks.find((b) => /诊家枢要/.test(b.name || ""));
-  assert.ok(mai, "找不到《诊家枢要》脉诊块");
-  assert.ok(mai.items.length >= 8, "脉诊讲数不足 8");
+test("每条 ≥5 段原文、≥8 条要点，原文四层与书库深链齐全", () => {
+  for (const { item } of rows) {
+    assert.ok(item.title && item.goal, item.id + " 缺标题或目标");
+    assert.ok(item.pts.length >= 8, item.id + " 要点不足 8 条");
+    assert.ok(item.quote.length >= 5, item.id + " 原文不足 5 段");
+    for (const q of item.quote) {
+      assert.ok(q.s && q.src && q.tr && q.tip, item.id + " 原文四层不齐");
+      assert.ok(q.book && q.file && q.q, item.id + " 原文缺书库跳转参数");
+      assert.equal(typeof q.hit, "boolean", item.id + " 缺命中标记");
+      if (q.outside) assert.equal(q.hit, false, item.id + " 库外引文不得冒充精确命中");
+    }
+  }
+  const total = rows.reduce((n, r) => n + r.item.quote.length, 0);
+  assert.ok(total >= 880, "原文总数不足 880，实际 " + total);
+});
+
+test("第一域按《中医基础理论》全程重写，第二域仍是四诊且以《诊家枢要》为骨架", () => {
+  const d1 = DATA.domains[0], d2 = DATA.domains[1];
+  assert.equal(d1.id, "d1");
+  assert.match(d1.name, /中基筑基/);
+  assert.match(d1.sub + d1.intro, /中医基础理论/);
+  assert.equal(d1.blocks.length, 5);
+  assert.equal(d1.blocks.reduce((n, b) => n + b.items.length, 0), 25);
+  const titles = d1.blocks.flatMap((b) => b.items.map((i) => i.title)).join(" ");
+  for (const key of ["阴阳", "五行", "藏象", "气血", "经络", "体质", "病因", "病机", "防治"]) {
+    assert.ok(titles.includes(key), "中基筑基未覆盖：" + key);
+  }
+  assert.equal(d2.id, "d2");
+  assert.match(d2.name, /四诊/);
+  const mai = d2.blocks.find((b) => /诊家枢要/.test(b.name || ""));
+  assert.ok(mai && mai.items.length >= 8, "脉诊讲数不足 8");
   const flat = JSON.stringify(mai);
   assert.ok(flat.includes("六部中俱带弦"), "脉诊块缺四时平脉原文");
   assert.ok(flat.includes("伤寒论·平脉法"), "肥瘦责脉出处未标注《伤寒论·平脉法》");
@@ -48,7 +79,6 @@ test("已彻底去掉「天」驱动：数据无 day/d 字段，页面无逐日�
   for (const { item } of rows) {
     assert.ok(!("d" in item) && !("day" in item), item.id + " 仍带天数字段");
   }
-  const html = readHtml();
   for (const legacy of ["var COURSE=[", "window.RD", "S.course.start", "weekfocus", "startDate"]) {
     assert.ok(!html.includes(legacy), "页面残留旧结构：" + legacy);
   }
@@ -56,12 +86,29 @@ test("已彻底去掉「天」驱动：数据无 day/d 字段，页面无逐日�
   assert.ok(html.includes("var DOMAINS = DATA.domains"), "缺少域-块渲染入口");
 });
 
-test("书库 32 部，索引中每个文件都存在", () => {
-  const lib = JSON.parse(fs.readFileSync(path.join(root, "library", "index.json"), "utf8"));
-  assert.ok(lib.items.length >= 32);
-  for (const b of lib.items) {
-    assert.ok(fs.existsSync(path.join(root, "library", b.file)), "缺文件：" + b.file);
+test("v2.1 前端：原文链接、译按钮、原文/白话切换、深链路由齐备", () => {
+  for (const marker of ["class=\"qlink", "data-out=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1"]) {
+    assert.ok(html.includes(marker), "页面缺少：" + marker);
   }
+  assert.ok(html.includes("原书未入书库"), "库外引文未做诚实标注");
+  assert.ok(html.includes("#/b/"), "缺少书库深链路由");
+});
+
+test("书库 32 部，每部都有白话译本文件与译本类型", () => {
+  const lib = JSON.parse(fs.readFileSync(path.join(root, "library", "index.json"), "utf8"));
+  assert.equal(lib.items.length, 32);
+  const types = {};
+  for (const b of lib.items) {
+    assert.ok(fs.existsSync(path.join(root, "library", b.file)), "缺原书：" + b.file);
+    assert.ok(b.tr && b.trType, "《" + b.title + "》缺译本登记");
+    assert.ok(fs.existsSync(path.join(root, "library", b.tr)), "缺译本：" + b.tr);
+    types[b.trType] = (types[b.trType] || 0) + 1;
+  }
+  assert.equal(types["全本逐篇译解"], 1);
+  assert.equal(types["全本逐脉译解"], 1);
+  assert.equal(types["框架节译"], 2);
+  assert.equal(types["白话导读"], 28);
+  assert.match(lib.translation_note, /不冒充全译/);
 });
 
 test("《诊家枢要》全文与三书节引校读附录齐备", () => {
@@ -76,7 +123,6 @@ test("《诊家枢要》全文与三书节引校读附录齐备", () => {
 });
 
 test("页面语法可解析，进度存储键为 v2", () => {
-  const html = readHtml();
   assert.ok(html.includes('var KEY = "mozhu-tcm-v2"'), "localStorage 键未升级到 v2");
   assert.ok(html.includes("var DATA = "), "DATA 未注入");
 });

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>墨 · 中医自学工作台</title>
-<meta name="description" content="按域组织的中医自学工作台：七日筑基、四诊、辨证、本草、方剂、经典、临证、输出。不设每日上限，随学随停。">
+<meta name="description" content="按知识块组织的中医自学工作台：中基筑基、四诊、辨证、本草、方剂、经典、临证、输出。每讲 6+1 自测，经典原文附白话与书库跳转，不设每日上限。">
 <meta name="theme-color" content="#F6F5F1">
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./assets/icon-192.png">
@@ -161,6 +161,14 @@ main{max-width:1040px;margin:0 auto;padding:26px 20px 40px}
   border-radius:8px;padding:9px 12px;border:1px solid #F0E6C8;
 }
 .quote .tip b{color:var(--warn);font-weight:600;font-size:12px;letter-spacing:.1em;margin-right:7px}
+.qlink{
+  display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:12.5px;line-height:1.4;
+  color:#3b6a94;text-decoration:none;background:#F4F8FC;border:1px solid #DCE7F1;
+  border-radius:8px;padding:5px 10px;transition:border-color .14s,background .14s;
+}
+.qlink:hover{border-color:#A9C4DE;background:#EAF3FA}
+.qlink.nohit{color:#8a8172;background:#FAF8F3;border-color:#E8E2D5}
+.qlink.nohit:hover{border-color:#D6CDBB;background:#F5F1E8}
 
 .pts{list-style:none;padding:0;margin:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
 .pts li{padding:11px 16px 11px 34px;border-top:1px solid var(--line2);font-size:14px;position:relative;line-height:1.68}
@@ -233,9 +241,21 @@ main{max-width:1040px;margin:0 auto;padding:26px 20px 40px}
   text-align:left;transition:transform .15s,border-color .15s;display:flex;flex-direction:column;gap:4px;min-width:0;white-space:normal;
 }
 .book:hover{transform:translateY(-2px);border-color:#D5CFC1}
-.book .bt{font-family:var(--serif);font-size:16px;font-weight:600}
+.book .bt{font-family:var(--serif);font-size:16px;font-weight:600;min-width:0}
 .book .bm{font-size:11.5px;color:var(--ink3)}
 .book .bd{font-size:12.5px;color:var(--ink2);line-height:1.6;margin-top:3px;word-break:break-word}
+.bhead{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.trbtn{
+  flex:none;border:1px solid #D7E3EE;background:#F2F7FC;color:#3b6a94;border-radius:7px;
+  font-size:11.5px;line-height:1;padding:5px 8px;white-space:nowrap;transition:all .14s;
+}
+.trbtn:hover{background:#E3EFF9;border-color:#A9C4DE}
+.ttag{
+  display:inline-block;margin-left:6px;padding:1px 6px;border-radius:5px;font-size:10.5px;
+  background:#F4F1E8;color:#8a7a55;border:1px solid #EAE2CD;line-height:1.55;
+}
+.ttag.full{background:#EFF6F1;color:#4e7a5e;border-color:#D8E8DE}
+.ttag.part{background:#F3F6FB;color:#4f6a8f;border-color:#DEE7F2}
 
 .reader{
   position:fixed;inset:0;z-index:100;background:var(--bg);display:none;flex-direction:column;
@@ -243,6 +263,11 @@ main{max-width:1040px;margin:0 auto;padding:26px 20px 40px}
 .reader.on{display:flex}
 .rbar{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);background:#fff}
 .rbar .rt{font-family:var(--serif);font-size:16px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rbar .rtag{flex:none;font-size:11px;color:#8a7a55;background:#F4F1E8;border:1px solid #EAE2CD;border-radius:6px;padding:4px 8px;white-space:nowrap}
+.rbar .sw{ flex:none;font-size:12px;color:var(--ink2);border:1px solid var(--line);background:#fff;
+  border-radius:8px;padding:6px 10px;white-space:nowrap;transition:all .14s;}
+.rbar .sw:hover{border-color:#C9C2B2;background:#FBFAF7}
+.rbar .sw.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .rbar input{border:1px solid var(--line);border-radius:8px;padding:6px 11px;font-size:13px;width:190px;outline:none}
 .rbar input:focus{border-color:#BFB7A5}
 .rbody{flex:1;overflow:auto;padding:26px 20px 80px}
@@ -310,12 +335,13 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   <!-- 首页 -->
   <section class="view on" id="v-home">
     <div class="hero">
-      <h1>八个域，一条线：从筑基到四诊</h1>
-      <p>按知识块组织，不按天。一个域可以一天看完，也可以分十次看；没有「今日课程」，没有解锁，没有上限。要停就停，接着看就行。</p>
+      <h1>八个域，一条线：从中基到四诊</h1>
+      <p>按知识块组织，不按天。第一域按《中医基础理论》全章讲一遍，第二域直接进四诊；每讲都有加长的经典原文（附白话、可跳回原书这一段）、要点与 6+1 自测。没有「今日课程」，没有解锁，没有上限。</p>
       <div class="meta">
         <span><b id="mDomains">8</b> 个域</span>
         <span><b id="mBlocks">0</b> 个知识块</span>
         <span><b id="mItems">0</b> 个条目</span>
+        <span><b id="mQ">0</b> 段原文</span>
         <span>已完成 <b id="mDone">0</b></span>
       </div>
     </div>
@@ -347,7 +373,7 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   <section class="view" id="v-shelf">
     <div class="hero" style="margin-bottom:18px">
       <h1 style="font-size:23px">古籍书库</h1>
-      <p><span id="libCount">…</span> 部公版古籍，可与条目对照阅读。按分类归架，点书名打开阅读器，支持书内检索。</p>
+      <p><span id="libCount">…</span> 部公版古籍，可与条目对照阅读。点书名打开原文，点标题旁的「译」进入白话译本；标签标明译本深度（全本译解／框架节译／白话导读），未全译处不冒充全译。阅读器内可一键切回原文，支持书内检索。</p>
     </div>
     <div class="chips" id="libChips"></div>
     <div class="shelf" id="shelf"></div>
@@ -382,6 +408,8 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     <div class="rt" id="rdTitle"></div>
+    <span class="rtag" id="rdTag" style="display:none"></span>
+    <button class="sw" id="rdSwitch" style="display:none" aria-label="切换原文与白话译本">白话译本</button>
     <input id="rdFind" placeholder="书内检索…" aria-label="书内检索">
     <button class="btn" id="rdMore" style="display:none">继续加载</button>
   </div>
@@ -500,6 +528,9 @@ function renderHome(){
   document.getElementById("mDomains").textContent = DOMAINS.length;
   document.getElementById("mBlocks").textContent = DOMAINS.reduce(function(a, d){ return a + d.blocks.length; }, 0);
   document.getElementById("mItems").textContent = TOTAL;
+  document.getElementById("mQ").textContent = ALL_ITEMS.reduce(function(a, x){
+    return a + (x.item.quote || []).length;
+  }, 0);
   document.getElementById("mDone").textContent = DONE_N;
   document.title = "墨 · 中医自学工作台" + (DONE_N ? "（" + p + "%）" : "");
 
@@ -603,9 +634,17 @@ function openItem(iid){
     h += '<div class="sec"><h4>经典原文</h4>';
     it.quote.forEach(function(q){
       h += '<div class="quote"><div class="raw">' + esc(q.s) + '</div>';
-      if(q.src) h += '<div class="src">' + esc(q.src) + '</div>';
+      if(q.src) h += '<div class="src">' + esc(q.src) + (q.ext ? '　·　本讲增补' : '') + '</div>';
       if(q.tr) h += '<div class="tr"><b>白话</b>' + esc(q.tr) + '</div>';
       if(q.tip) h += '<div class="tip"><b>看这里</b>' + esc(q.tip) + '</div>';
+      if(q.file){
+        var label = q.outside ? '原书未入书库 · 到《' + q.book + '》参读 →'
+          : q.hit ? '在《' + q.book + '》中查看此段 →' : '打开《' + q.book + '》并检索 →';
+        h += '<a class="qlink' + (q.hit ? '' : ' nohit') + '" href="#/b/' + encodeURIComponent(q.file) +
+             '?q=' + encodeURIComponent(q.q || '') + '" data-f="' + esc(q.file) +
+             '" data-b="' + esc(q.book) + '" data-q="' + esc(q.q || '') + '" data-hit="' + (q.hit ? '1' : '0') +
+             '" data-out="' + (q.outside ? '1' : '0') + '">' + esc(label) + '</a>';
+      }
       h += '</div>';
     });
     h += '</div>';
@@ -625,10 +664,12 @@ function openItem(iid){
   }
 
   if(it.quiz && it.quiz.length){
+    var hasMulti = it.quiz.some(function(q){ return Array.isArray(q.a); });
     h += '<div class="sec"><h4>自测</h4><div class="qz" id="quizBox">' +
-      '<div class="qhead"><span>共 ' + it.quiz.length + ' 题，选完点「提交」判分</span><span class="score" id="qScore"></span></div>' +
+      '<div class="qhead"><span>共 ' + it.quiz.length + ' 题' +
+      (hasMulti ? '（含多选，多选须选全）' : '') + '，选完点「提交」判分</span><span class="score" id="qScore"></span></div>' +
       it.quiz.map(function(q, qi){
-        return '<div class="q" data-q="' + qi + '">' +
+        return '<div class="q" data-q="' + qi + '"' + (Array.isArray(q.a) ? ' data-multi="1"' : '') + '>' +
           '<div class="qt"><i>' + (qi + 1) + '.</i>' + esc(q.q) + '</div>' +
           q.opts.map(function(o, oi){
             return '<button class="opt" data-q="' + qi + '" data-o="' + oi + '">' +
@@ -685,9 +726,19 @@ function bindItem(it, iid){
       var q = btn.dataset.q, c = btn.dataset.c;
       if(btn.closest(".q").classList.contains("shown")) return;
       if(q != null){
-        answers[q] = +btn.dataset.o;
-        btn.closest(".q").querySelectorAll(".opt").forEach(function(x){ x.classList.remove("sel"); });
-        btn.classList.add("sel");
+        var qEl = btn.closest(".q");
+        if(qEl.dataset.multi === "1"){
+          // 多选题：同一题可多选，再点一次取消；答案用数组保存
+          var cur = Array.isArray(answers[q]) ? answers[q] : [];
+          var oi = +btn.dataset.o, at = cur.indexOf(oi);
+          if(at >= 0){ cur.splice(at, 1); btn.classList.remove("sel"); }
+          else { cur.push(oi); btn.classList.add("sel"); }
+          answers[q] = cur;
+        } else {
+          answers[q] = +btn.dataset.o;
+          qEl.querySelectorAll(".opt").forEach(function(x){ x.classList.remove("sel"); });
+          btn.classList.add("sel");
+        }
       } else if(c != null){
         cAnswers[c] = +btn.dataset.o;
         btn.closest(".q").querySelectorAll(".opt").forEach(function(x){ x.classList.remove("sel"); });
@@ -708,19 +759,28 @@ function bindItem(it, iid){
   var bs = document.getElementById("btnSubmit");
   if(bs) bs.onclick = function(){
     var qs = it.quiz || [];
-    var ansN = Object.keys(answers).length;
+    var ansN = qs.filter(function(_, i){
+      var a = answers[i];
+      return Array.isArray(a) ? a.length > 0 : a != null;
+    }).length;
     if(ansN < qs.length){ toast("还有 " + (qs.length - ansN) + " 题没选"); return; }
     var right = 0;
     body.querySelectorAll('.q[data-q]').forEach(function(qEl){
       var qi = +qEl.dataset.q, q = qs[qi];
+      var correct = Array.isArray(q.a) ? q.a : [q.a];
+      var given = Array.isArray(q.a)
+        ? (Array.isArray(answers[qi]) ? answers[qi] : [])
+        : (answers[qi] != null ? [answers[qi]] : []);
       qEl.querySelectorAll(".opt").forEach(function(b){
         var oi = +b.dataset.o;
         b.classList.remove("sel");
-        if(oi === q.a) b.classList.add("right");
-        else if(answers[qi] === oi) b.classList.add("wrong");
+        if(correct.indexOf(oi) >= 0) b.classList.add("right");
+        else if(given.indexOf(oi) >= 0) b.classList.add("wrong");
       });
       qEl.classList.add("shown");
-      if(answers[qi] === q.a) right++;
+      var hit = correct.length === given.length &&
+        correct.every(function(x){ return given.indexOf(x) >= 0; });
+      if(hit) right++;
     });
     var sc = right + "/" + qs.length;
     var el = document.getElementById("qScore");
@@ -789,35 +849,92 @@ function renderShelf(){
     };
     var list = LIB.items.filter(function(x){ return LIB_CAT === "全部" || x.cat === LIB_CAT; });
     document.getElementById("shelf").innerHTML = list.map(function(x){
+      var cls = /全本/.test(x.trType || "") ? "full" : (/节译|框架/.test(x.trType || "") ? "part" : "");
       return '<button class="book" data-f="' + esc(x.file) + '" data-t="' + esc(x.title) + '">' +
-        '<span class="bt">' + esc(x.title) + '</span>' +
-        '<span class="bm">' + esc(x.era) + " · " + esc(x.author || "佚名") + " · " + x.kb + " KB</span>" +
+        '<span class="bhead"><span class="bt">' + esc(x.title) + '</span>' +
+        (x.tr ? '<span class="trbtn" data-tr="1" role="button" tabindex="0" title="打开《' + esc(x.title) + '》白话译本">译</span>' : '') +
+        '</span>' +
+        '<span class="bm">' + esc(x.era) + " · " + esc(x.author || "佚名") + " · " + x.kb + " KB" +
+        (x.trType ? '<span class="ttag ' + cls + '">' + esc(x.trType) + '</span>' : '') + '</span>' +
         '<span class="bd">' + esc(x.desc || "") + '</span></button>';
     }).join("");
     document.getElementById("shelf").onclick = function(e){
-      var b = e.target.closest(".book"); if(b) openBook(b.dataset.f, b.dataset.t);
+      var tr = e.target.closest("[data-tr]");
+      if(tr){
+        var cb = tr.closest(".book");
+        openBook(cb.dataset.f, cb.dataset.t, { tr: true });
+        setHash("#/b/" + encodeURIComponent(cb.dataset.f) + "?tr=1");
+        return;
+      }
+      var b = e.target.closest(".book");
+      if(b){
+        openBook(b.dataset.f, b.dataset.t, {});
+        setHash("#/b/" + encodeURIComponent(b.dataset.f));
+      }
     };
   });
 }
-var RDPOS = 0, RDTEXT = "", RDFILE = "";
-function openBook(file, title){
-  document.getElementById("rdTitle").textContent = title;
+var RDPOS = 0, RDTEXT = "", RDFILE = "", RDTITLE = "", RDMODE = "raw";
+function libRec(file){
+  if(!LIB) return null;
+  for(var i = 0; i < LIB.items.length; i++){ if(LIB.items[i].file === file) return LIB.items[i]; }
+  return null;
+}
+function rdUrl(mode, file){
+  if(mode === "tr"){
+    var r = libRec(file);
+    var tr = r && r.tr;
+    if(!tr) return null;
+    return "./library/" + tr.split("/").map(encodeURIComponent).join("/");
+  }
+  return "./library/" + encodeURIComponent(file);
+}
+function renderRdBar(){
+  var rec = libRec(RDFILE), hasTr = !!(rec && rec.tr);
+  var sw = document.getElementById("rdSwitch"), tag = document.getElementById("rdTag");
+  sw.style.display = hasTr ? "inline-block" : "none";
+  sw.textContent = RDMODE === "tr" ? "回原文" : "白话译本";
+  sw.classList.toggle("on", RDMODE === "tr");
+  tag.style.display = RDMODE === "tr" && hasTr ? "inline-block" : "none";
+  tag.textContent = (rec && rec.trType) || "白话译本";
+  document.getElementById("rdTitle").textContent =
+    RDTITLE + (RDMODE === "tr" ? " · 白话译本" : " · 原文");
+}
+var RD_PREV_HASH = "";
+function openBook(file, title, opts){
+  opts = opts || {};
+  // 必须在任何 setHash 之前记录来源页：loadLib 可能异步，等回调时 hash 已改写。
+  if(!/^#\/b\//.test(location.hash)) RD_PREV_HASH = location.hash || "#/";
+  loadLib(function(){ openBookReady(file, title, opts); });
+}
+function openBookReady(file, title, opts){
+  RDFILE = file; RDTITLE = title; RDPOS = 0; RDTEXT = "";
+  RDMODE = opts.tr ? "tr" : "raw";
+  var url = rdUrl(RDMODE, file);
   document.getElementById("rdText").textContent = "加载中…";
   document.getElementById("rdFoot").textContent = "";
   document.getElementById("rdMore").style.display = "none";
+  document.getElementById("rdFind").value = opts.q || "";
   document.getElementById("reader").classList.add("on");
-  RDFILE = file; RDPOS = 0; RDTEXT = "";
-  fetch("./library/" + encodeURIComponent(file)).then(function(r){
+  document.querySelector(".rbody").scrollTop = 0;
+  renderRdBar();
+  if(!url){
+    document.getElementById("rdText").textContent = "这本书暂无白话译本，请点「回原文」。";
+    return;
+  }
+  fetch(url).then(function(r){
     if(!r.ok) throw new Error("not found");
     return r.text();
   }).then(function(t){
+    if(file !== RDFILE) return;
     RDTEXT = t;
     RDPOS = Math.min(40000, t.length);
     document.getElementById("rdText").textContent = t.slice(0, RDPOS);
     updateRdFoot();
+    if(opts.q){ doFind(opts.q, true); }
   }).catch(function(){
     document.getElementById("rdText").textContent =
-      "这本书在本地读不到。用 file:// 打开时浏览器会拦截同目录读取，请改用线上地址或本地服务。";
+      "这份文本在本地读不到。用 file:// 打开时浏览器会拦截同目录读取，请改用线上地址或本地服务。";
   });
 }
 function updateRdFoot(){
@@ -829,30 +946,75 @@ function updateRdFoot(){
 }
 document.getElementById("rdClose").onclick = function(){
   document.getElementById("reader").classList.remove("on");
+  if(/^#\/b\//.test(location.hash)) setHash(RD_PREV_HASH || "#/");
 };
 document.getElementById("rdMore").onclick = function(){
   RDPOS = Math.min(RDPOS + 40000, RDTEXT.length);
   document.getElementById("rdText").textContent = RDTEXT.slice(0, RDPOS);
   updateRdFoot();
 };
+document.getElementById("rdSwitch").onclick = function(){
+  var next = RDMODE === "tr" ? "raw" : "tr";
+  var keep = document.getElementById("rdFind").value.trim();
+  openBook(RDFILE, RDTITLE, { tr: next === "tr", q: keep });
+  if(next === "tr") setHash("#/b/" + encodeURIComponent(RDFILE) + "?tr=1");
+  else setHash("#/b/" + encodeURIComponent(RDFILE));
+};
 document.getElementById("rdFind").addEventListener("input", function(){
-  var kw = this.value.trim();
+  doFind(this.value.trim(), false);
+});
+function doFind(kw, jump){
   if(!RDTEXT) return;
-  if(kw.length < 1){ document.getElementById("rdText").textContent = RDTEXT.slice(0, RDPOS); updateRdFoot(); return; }
+  var box = document.getElementById("rdText");
+  if(kw.length < 1){ box.textContent = RDTEXT.slice(0, RDPOS); updateRdFoot(); return; }
   var idx = RDTEXT.indexOf(kw);
   if(idx < 0){
-    document.getElementById("rdFoot").textContent = "未找到「" + kw + "」";
+    document.getElementById("rdFoot").textContent = "未找到「" + kw + "」" + (RDMODE === "tr" ? "（白话译本中无此原句，可切回原文检索）" : "，请用较短的词或篇名再试");
     return;
   }
   var from = Math.max(0, idx - 400);
   var seg = RDTEXT.slice(from, from + 8000);
-  document.getElementById("rdText").innerHTML = esc(seg).replace(new RegExp(escReg(kw), "g"), "<mark>$&</mark>");
+  box.innerHTML = esc(seg).replace(new RegExp(escReg(kw), "g"), "<mark>$&</mark>");
   var raws = 0, pos = 0;
   while((pos = RDTEXT.indexOf(kw, pos)) >= 0){ raws++; pos += kw.length; }
-  document.getElementById("rdFoot").textContent = "共 " + raws + " 处，已跳到第 1 处";
+  document.getElementById("rdFoot").textContent = "共 " + raws + " 处，已跳到第 1 处" +
+    (RDMODE === "tr" ? "（白话译本）" : "");
   document.getElementById("rdMore").style.display = "none";
-});
+  if(jump){
+    var mk = box.querySelector("mark");
+    if(mk){
+      var rb = document.querySelector(".rbody");
+      rb.scrollTop = mk.getBoundingClientRect().top - rb.getBoundingClientRect().top + rb.scrollTop - rb.clientHeight / 3;
+    }
+  }
+}
 function escReg(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+/* 条目页原文卡片：跳到书库中的这一段 / 白话译本 */
+document.addEventListener("click", function(e){
+  var a = e.target.closest(".qlink");
+  if(!a) return;
+  e.preventDefault();
+  var f = a.dataset.f, t = a.dataset.b, q = a.dataset.q;
+  openBook(f, t, { q: q });
+  setHash("#/b/" + encodeURIComponent(f) + (q ? "?q=" + encodeURIComponent(q) : ""));
+  if(a.dataset.out === "1") toast("这段出自书库未收的书，已打开相关典籍并检索，供对照参读");
+  else if(a.dataset.hit === "0") toast("本段未在该版本原文中检出，已按篇名检索");
+});
+function openBookHash(h){
+  var body = h.slice(4), qi = body.indexOf("?");
+  var file = decodeURIComponent(qi < 0 ? body : body.slice(0, qi));
+  var qs = qi < 0 ? "" : body.slice(qi + 1);
+  var kw = "", tr = false;
+  qs.split("&").forEach(function(p){
+    if(p.indexOf("q=") === 0) kw = decodeURIComponent(p.slice(2).replace(/\+/g, " "));
+    if(p === "tr=1") tr = true;
+  });
+  loadLib(function(){
+    var rec = libRec(file);
+    openBook(file, rec ? rec.title : file, { q: kw, tr: tr });
+  });
+}
 
 /* ---------- 我的 ---------- */
 function renderMe(){
@@ -956,6 +1118,7 @@ recalc();
   var h = location.hash || "";
   if(/^#\/i\//.test(h)){ openItem(h.slice(4)); }
   else if(/^#\/d\//.test(h)){ openDomain(h.slice(4)); }
+  else if(/^#\/b\//.test(h)){ RD_PREV_HASH = "#/shelf"; renderShelf(); show("v-shelf"); openBookHash(h); }
   else if(h === "#/shelf"){ renderShelf(); show("v-shelf"); }
   else if(h === "#/me"){ renderMe(); show("v-me"); }
 })();
@@ -963,6 +1126,7 @@ window.addEventListener("hashchange", function(){
   var h = location.hash || "";
   if(/^#\/i\//.test(h)){ openItem(h.slice(4)); }
   else if(/^#\/d\//.test(h)){ openDomain(h.slice(4)); }
+  else if(/^#\/b\//.test(h)){ openBookHash(h); }
   else if(h === "#/shelf"){ renderShelf(); show("v-shelf"); }
   else if(h === "#/me"){ renderMe(); show("v-me"); }
   else if(h === "#/" || h === ""){ renderHome(); show("v-home"); }
