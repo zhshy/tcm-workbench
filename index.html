@@ -139,6 +139,7 @@ pre{background:#2E2B26;color:#F1EDE4;padding:14px 16px;border-radius:8px;overflo
   <button class="tab" data-p="library">古籍资料库</button>
   <button class="tab" data-p="skills">Skill 接入</button>
   <button class="tab" data-p="cards">我的卡片</button>
+  <button class="tab" data-p="sync">笔记库</button>
   <button class="tab" data-p="prompts">提问模板</button>
 </nav>
 
@@ -148,6 +149,7 @@ pre{background:#2E2B26;color:#F1EDE4;padding:14px 16px;border-radius:8px;overflo
 <section class="panel" id="p-library"></section>
 <section class="panel" id="p-skills"></section>
 <section class="panel" id="p-cards"></section>
+<section class="panel" id="p-sync"></section>
 <section class="panel" id="p-prompts"></section>
 
 <div class="foot">
@@ -296,9 +298,102 @@ const KEY='tcm-workbench-v1';
 const CARD_TYPES=['概念卡','辨证卡','药对卡','方证卡','条文卡','医案卡'];
 function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function yesterday(){const d=new Date();d.setDate(d.getDate()-1);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')return Object.assign({done:{},checks:{},cards:[],streak:0,lastCheck:'',readIdx:0},s)}catch(e){}return {done:{},checks:{},cards:[],streak:0,lastCheck:'',readIdx:0}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&typeof s==='object')return Object.assign({done:{},checks:{},cards:[],deleted:{},streak:0,lastCheck:'',readIdx:0},s)}catch(e){}return {done:{},checks:{},cards:[],deleted:{},streak:0,lastCheck:'',readIdx:0}}
 let state=load();
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){alert('本地存储写入失败，建议导出备份')}}
+function save(skipSync){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){alert('本地存储写入失败，建议导出备份')}if(!skipSync)markDirty()}
+
+const SYNC_KEY='tcm-sync-v1';
+let syncCfg=(function(){try{return JSON.parse(localStorage.getItem(SYNC_KEY))||null}catch(e){return null}})();
+let syncMeta={status:'idle',msg:'',at:'',sha:null,busy:false,timer:null};
+function nowStr(){const d=new Date();return d.toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}
+function setSync(patch){syncMeta=Object.assign(syncMeta,patch);renderSyncMeta()}
+function syncStatusHtml(){
+  const map={idle:['b-gray','未启用'],ok:['b-green','已同步'],busy:['b-blue','同步中'],dirty:['b-amber','待同步'],error:['b-red','同步失败']};
+  const it=map[syncMeta.status]||map.idle;
+  return '<span class="badge '+it[0]+'">'+it[1]+'</span>'+(syncMeta.at?' <span class="muted" style="font-size:12px">'+esc(syncMeta.at)+'</span>':'')+(syncMeta.msg?' <span class="muted" style="font-size:12px">'+esc(syncMeta.msg)+'</span>':'');
+}
+function renderSyncMeta(){const el=document.getElementById('syncstatus');if(el)el.innerHTML=syncStatusHtml();const b=document.getElementById('syncbadge');if(b)b.innerHTML=syncStatusHtml()}
+async function ghApi(method,path,body){
+  const r=await fetch('https://api.github.com'+path,{method:method,headers:{'Authorization':'Bearer '+syncCfg.token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  const data=await r.json().catch(()=>({}));
+  if(r.status===404)return {ok:false,status:404,data:data};
+  if(!r.ok)throw new Error((data&&data.message)||('HTTP '+r.status));
+  return {ok:true,data:data};
+}
+function mergeStates(local,remote){
+  const out=Object.assign({},remote);
+  out.deleted=Object.assign({},remote.deleted||{},local.deleted||{});
+  const map=new Map();
+  (remote.cards||[]).forEach(c=>map.set(c.id,c));
+  (local.cards||[]).forEach(c=>{
+    const r=map.get(c.id);
+    if(!r||(c.updatedAt||c.created||'')>=(r.updatedAt||r.created||''))map.set(c.id,c);
+  });
+  out.cards=Array.from(map.values()).filter(c=>{
+    const t=out.deleted[c.id];
+    return !t||(c.updatedAt||0)>t;
+  });
+  out.done=Object.assign({},remote.done||{});
+  Object.keys(local.done||{}).forEach(k=>{if(local.done[k])out.done[k]=true});
+  out.checks=Object.assign({},remote.checks||{});
+  Object.keys(local.checks||{}).forEach(k=>{
+    const a=out.checks[k]||[false,false,false],b=local.checks[k]||[];
+    out.checks[k]=[0,1,2].map(i=>!!(a[i]||b[i]));
+  });
+  out.streak=Math.max(remote.streak||0,local.streak||0);
+  out.lastCheck=[remote.lastCheck||'',local.lastCheck||''].sort().pop();
+  out.readIdx=(local.readIdx||0);
+  return out;
+}
+async function syncPull(silent){
+  if(!syncCfg)return;
+  setSync({status:'busy',msg:'读取云端…'});
+  try{
+    const res=await ghApi('GET','/repos/'+syncCfg.owner+'/'+syncCfg.repo+'/contents/'+syncCfg.path);
+    if(!res.ok){setSync({status:'ok',msg:'云端尚无数据，首次保存时创建',at:nowStr(),sha:null});return}
+    const raw=res.data.content.replace(/\s/g,'');
+    const remote=JSON.parse(new TextDecoder().decode(b64ToBin(raw)));
+    const before=state.cards.length;
+    state=mergeStates(state,remote);
+    save(true);
+    setSync({status:'ok',msg:'已合并云端数据（本地 '+before+' → '+state.cards.length+' 张）',at:nowStr(),sha:res.data.sha});
+    renderAll();
+  }catch(e){setSync({status:'error',msg:'拉取失败：'+e.message})}
+}
+async function syncPush(){
+  if(!syncCfg||syncMeta.busy)return;
+  syncMeta.timer=null;syncMeta.busy=true;setSync({status:'busy',msg:'写入云端…'});
+  try{
+    const body={message:'notes: '+new Date().toLocaleString('zh-CN'),content:binToB64(new TextEncoder().encode(JSON.stringify(state)))};
+    if(syncMeta.sha)body.sha=syncMeta.sha;
+    let res=await ghApi('PUT','/repos/'+syncCfg.owner+'/'+syncCfg.repo+'/contents/'+syncCfg.path,body);
+    if(!res.ok)throw new Error('路径不存在或无权限（HTTP 404）');
+    syncMeta.sha=res.data.content.sha;
+    setSync({status:'ok',msg:'已提交 '+state.cards.length+' 张卡片',at:nowStr()});
+  }catch(e){
+    const msg=String(e.message||e);
+    if(/409|sha|conflict/i.test(msg)){
+      try{
+        const g=await ghApi('GET','/repos/'+syncCfg.owner+'/'+syncCfg.repo+'/contents/'+syncCfg.path);
+        if(g.ok){
+          state=mergeStates(state,JSON.parse(new TextDecoder().decode(b64ToBin(g.data.content.replace(/\s/g,'')))));
+          save(true);syncMeta.sha=g.data.sha;
+          const body={message:'notes: merge '+new Date().toLocaleString('zh-CN'),content:binToB64(new TextEncoder().encode(JSON.stringify(state))),sha:syncMeta.sha};
+          const r2=await ghApi('PUT','/repos/'+syncCfg.owner+'/'+syncCfg.repo+'/contents/'+syncCfg.path,body);
+          if(r2.ok){syncMeta.sha=r2.data.content.sha;setSync({status:'ok',msg:'冲突已合并',at:nowStr()});syncMeta.busy=false;return}
+        }
+      }catch(e2){}
+    }
+    setSync({status:'error',msg:'写入失败：'+msg});
+  }
+  syncMeta.busy=false;
+}
+function markDirty(){
+  if(!syncCfg)return;
+  clearTimeout(syncMeta.timer);
+  setSync({status:'dirty',msg:'6 秒后自动提交'});
+  syncMeta.timer=setTimeout(syncPush,6000);
+}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function copyText(t){
   if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(()=>toast('已复制')).catch(()=>fallback(t));return}
@@ -554,6 +649,77 @@ function renderCards(){
     </div>`).join(''):'<div class="empty">还没有卡片。从今天的一条原文开始，写第一张吧。</div>'}</div>`;
 }
 
+function renderSync(){
+  const r=syncCfg?syncCfg.owner+'/'+syncCfg.repo:'zhshy/tcm-notes';
+  const p=syncCfg?syncCfg.path:'state.json';
+  document.getElementById('p-sync').innerHTML=`
+  <h3 class="sec-title">笔记库 · 长期沉淀</h3>
+  <p class="sec-desc">把数据存进你自己的 GitHub 私有仓库，用 Git 做版本历史。换设备、换浏览器、三年后回头看，笔记都还在，而且随时能整库迁走。</p>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>连接状态 <span id="syncstatus">${syncStatusHtml()}</span></h3>
+    <p class="muted" style="margin:6px 0 12px">${syncCfg?'当前写入 <b>'+esc(r)+'</b> 的 <code>'+esc(p)+'</code>':'尚未连接。启用后，卡片与打卡进度会自动提交到私有仓库；不启用也能正常用，只是数据仅在本机。'}</p>
+    <div class="form-row">
+      <button class="btn" data-act="pullnow" ${syncCfg?'':'disabled'}>立即拉取</button>
+      <button class="btn" data-act="pushnow" ${syncCfg?'':'disabled'}>立即提交</button>
+      <button class="btn" data-act="exportmd">导出为 Markdown</button>
+      ${syncCfg?'<button class="btn" data-act="clearsync">断开连接</button>':''}
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>配置</h3>
+    <div class="form-row">
+      <input id="sync-repo" class="f1" value="${esc(r)}" placeholder="owner/repo" style="min-width:220px">
+      <input id="sync-path" class="f1" value="${esc(p)}" placeholder="state.json" style="min-width:150px">
+    </div>
+    <div class="form-row">
+      <input id="sync-token" class="f1" type="password" placeholder="${syncCfg?'已保存令牌，留空表示不修改':'粘贴 fine-grained token（仅该仓库 Contents 读写）'}" style="min-width:320px">
+      <button class="btn primary" data-act="savecfg">保存并连接</button>
+    </div>
+    <p class="muted" style="font-size:12px;margin:4px 0 0">令牌只写入本机 localStorage，只发往 api.github.com，不经过任何第三方。公用电脑请勿保存。</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>为什么不放在站点仓库里</h3>
+      <p class="muted">GitHub Pages 站点仓库是公开的，笔记若放进去等于公开日记。所以数据单独走一个<b>私有仓库</b>：站点公开、笔记私有，两条线分开。</p>
+      <p class="muted">写入方式是 GitHub Contents API，每次保存生成一个 commit。三年下来就是一部可回溯的笔记史——哪张卡哪天改的，都查得到。</p>
+    </div>
+    <div class="card">
+      <h3>令牌怎么建（建议 fine-grained）</h3>
+      <p class="muted" style="margin:0 0 8px">GitHub → Settings → Developer settings → <b>Personal access tokens → Fine-grained tokens</b> → Generate new token：</p>
+      <ul class="muted" style="margin:0;padding-left:18px;font-size:13px">
+        <li>Repository access：Only select repositories → 勾 <code>tcm-notes</code></li>
+        <li>Permissions → Repository permissions → <b>Contents: Read and write</b></li>
+        <li>过期时间按需设，到期换一个即可，不影响数据</li>
+      </ul>
+      <p class="muted" style="margin:8px 0 0;font-size:12px">这样即使令牌泄露，也只能动这一个笔记仓库，碰不到你的代码。</p>
+    </div>
+  </div>
+
+  <div class="ok" style="margin-top:16px"><b>数据归你：</b>state.json 是纯文本，Git 历史完整保留每一次修改。想搬走时，克隆仓库即可；想换成别的工具，用「导出为 Markdown」得到一份按卡片类型分组的可读笔记。</div>`;
+}
+
+function exportMarkdown(){
+  if(!state.cards.length){alert('还没有卡片');return}
+  const by={};state.cards.forEach(c=>{(by[c.type]=by[c.type]||[]).push(c)});
+  let md='# 中医学习笔记\n\n导出时间：'+today()+'　共 '+state.cards.length+' 张卡片\n\n';
+  CARD_TYPES.forEach(t=>{
+    if(!by[t])return;
+    md+='## '+t+'\n\n';
+    by[t].forEach(c=>{
+      md+='### '+c.title+'\n\n'+c.body+'\n\n';
+      if(c.source)md+='- 出处：'+c.source+'\n';
+      if((c.tags||[]).length)md+='- 标签：'+c.tags.join('、')+'\n';
+      md+='- 建立：'+(c.created||'')+'　更新：'+(c.updatedAt||'').slice(0,10)+'\n\n';
+    });
+  });
+  const blob=new Blob([md],{type:'text/markdown;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='中医学习笔记-'+today()+'.md';a.click();
+  URL.revokeObjectURL(a.href);toast('已导出 Markdown');
+}
+
 function renderPrompts(){
   document.getElementById('p-prompts').innerHTML=`
   <h3 class="sec-title">提问模板</h3>
@@ -562,7 +728,7 @@ function renderPrompts(){
     <div class="prompt"><p>${esc(p.p)}</p><button class="btn sm" data-copy="${esc(p.p)}">复制</button> <span class="muted" style="font-size:12px">${esc(p.t)}</span></div>`).join('')}</div>`).join('')}`;
 }
 
-function renderAll(){renderOverview();renderPath();renderResources();renderLibrary();renderSkills();renderCards();renderPrompts()}
+function renderAll(){renderOverview();renderPath();renderResources();renderLibrary();renderSkills();renderCards();renderSync();renderPrompts()}
 
 document.getElementById('tabs').addEventListener('click',e=>{
   const b=e.target.closest('.tab');if(!b)return;
@@ -593,14 +759,14 @@ document.addEventListener('click',e=>{
     save();renderOverview();return;
   }
   const del=t.dataset.del;
-  if(del){if(confirm('删除这张卡片？')){state.cards=state.cards.filter(c=>c.id!==del);save();renderCards();renderOverview()}return}
+  if(del){if(confirm('删除这张卡片？')){state.deleted=state.deleted||{};state.deleted[del]=Date.now();state.cards=state.cards.filter(c=>c.id!==del);save();renderCards();renderOverview()}return}
   const ed=t.dataset.edit;
   if(ed){const c=state.cards.find(x=>x.id===ed);if(!c)return;
-    state.cards=state.cards.filter(x=>x.id!==ed);save();renderCards();renderOverview();
+    window._editingId=ed;
     document.getElementById('c-type').value=c.type;document.getElementById('c-title').value=c.title;
     document.getElementById('c-source').value=c.source||'';document.getElementById('c-body').value=c.body;
     document.getElementById('c-tags').value=(c.tags||[]).join(',');
-    document.getElementById('c-title').focus();toast('已载入编辑，改完点保存');return}
+    document.getElementById('c-title').focus();toast('编辑中，改完点保存');return}
   const act=t.dataset.act;
   if(!act)return;
   if(act==='nextread'){state.readIdx=(state.readIdx+1)%READINGS.length;save();renderOverview()}
@@ -616,14 +782,45 @@ document.addEventListener('click',e=>{
     const title=document.getElementById('c-title').value.trim();
     const body=document.getElementById('c-body').value.trim();
     if(!title||!body){alert('标题和正文都要写');return}
-    state.cards.push({id:'c'+Date.now()+Math.random().toString(36).slice(2,6),type:document.getElementById('c-type').value,
-      title:title,body:body,source:document.getElementById('c-source').value.trim(),
-      tags:document.getElementById('c-tags').value.split(/[,，]/).map(s=>s.trim()).filter(Boolean),created:today()});
-    save();renderCards();renderOverview();toast('卡片已保存')}
+    const payload={type:document.getElementById('c-type').value,title:title,body:body,
+      source:document.getElementById('c-source').value.trim(),
+      tags:document.getElementById('c-tags').value.split(/[,，]/).map(s=>s.trim()).filter(Boolean),
+      updatedAt:new Date().toISOString()};
+    if(window._editingId){
+      const c=state.cards.find(x=>x.id===window._editingId);
+      if(c)Object.assign(c,payload);
+      window._editingId=null;
+      toast('已更新');
+    }else{
+      state.cards.push(Object.assign({id:'c'+Date.now()+Math.random().toString(36).slice(2,6),created:today()},payload));
+      toast('卡片已保存');
+    }
+    save();renderCards();renderOverview()}
   if(act==='export'){
     const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='中医学习工作台-备份-'+today()+'.json';a.click();URL.revokeObjectURL(a.href);toast('已导出')}
   if(act==='import'){document.getElementById('importfile').click()}
+  if(act==='savecfg'){
+    const repoV=document.getElementById('sync-repo').value.trim();
+    const pathV=document.getElementById('sync-path').value.trim()||'state.json';
+    const tokV=document.getElementById('sync-token').value.trim();
+    const parts=repoV.split('/');
+    if(parts.length!==2||!parts[0]||!parts[1]){alert('仓库格式应为 owner/repo，例如 zhshy/tcm-notes');return}
+    const token=tokV||(syncCfg&&syncCfg.token)||'';
+    if(!token){alert('请填写令牌');return}
+    syncCfg={owner:parts[0],repo:parts[1],path:pathV,token:token};
+    try{localStorage.setItem(SYNC_KEY,JSON.stringify(syncCfg))}catch(e){}
+    syncMeta.sha=null;renderSync();syncPull();
+  }
+  if(act==='pullnow'){syncPull()}
+  if(act==='pushnow'){syncPush()}
+  if(act==='exportmd'){exportMarkdown()}
+  if(act==='clearsync'){
+    if(confirm('断开后本机数据保留，但不再自动同步。确定？')){
+      syncCfg=null;try{localStorage.removeItem(SYNC_KEY)}catch(e){}
+      syncMeta={status:'idle',msg:'',at:'',sha:null,busy:false,timer:null};renderSync();
+    }
+  }
   if(act==='gencode'){
     makeSyncCode().then(c=>{const el=document.getElementById('synccode');if(el){el.value=c;el.focus();el.select()}copyText(c)}).catch(()=>alert('生成失败，请改用「导出备份」'))}
   if(act==='usecode'){
@@ -647,6 +844,7 @@ document.addEventListener('change',e=>{
 });
 
 renderAll();
+if(syncCfg){setTimeout(()=>syncPull(),900)}
 </script>
 </body>
 </html>
