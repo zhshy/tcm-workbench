@@ -62,7 +62,7 @@ button{cursor:pointer}
 
 /* panels */
 .row{display:grid;gap:20px;margin-bottom:20px}
-.row.a{grid-template-columns:1.5fr 1fr}
+.row.a{grid-template-columns:1fr 1.15fr;align-items:start}
 .row.d{grid-template-columns:1.6fr 1fr}
 .row.e{grid-template-columns:1fr 1fr}
 .panel{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
@@ -220,6 +220,47 @@ details.c .body{padding:8px 0 2px 18px;font-size:13.5px;color:var(--ink2);line-h
 .daycell.ok b{color:var(--green)} .daycell.ok i{color:var(--green)}
 .daycell.part{background:var(--orange-soft);border-color:#F0DFC5}
 .daycell.part b{color:var(--orange)} .daycell.part i{color:var(--orange)}
+/* ===== 近 14 天打卡 ===== */
+.hgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-top:12px}
+.hcell{position:relative;border:1px solid var(--line);border-radius:9px;padding:9px 3px 7px;
+  background:#FBFCFB;text-align:center;line-height:1.2;transition:.15s}
+.hcell .hd{display:block;font-size:10.5px;color:var(--ink3);letter-spacing:.01em}
+.hcell .hn{display:block;font-family:Georgia,serif;font-size:16px;font-weight:600;color:var(--ink2);margin:3px 0 2px}
+.hcell .hw{display:block;font-size:10px;color:var(--ink3)}
+.hcell.ok{background:var(--green-soft);border-color:#BFDCCF}
+.hcell.ok .hd,.hcell.ok .hn,.hcell.ok .hw{color:var(--green)}
+.hcell.part{background:var(--orange-soft);border-color:#F0DFC5}
+.hcell.part .hd,.hcell.part .hn,.hcell.part .hw{color:var(--orange)}
+.hcell.none .hn{color:#C6CFCC}
+.hcell.now{box-shadow:0 0 0 2px rgba(29,110,90,.16);border-color:var(--green)}
+.hsum{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:13px;font-size:13px;color:var(--ink2)}
+.hsum b{font-family:Georgia,serif;font-size:15px;color:var(--green);font-weight:600}
+.hlegend{font-size:12px;color:var(--ink3);margin:9px 0 0;line-height:1.75}
+/* ===== 本周课程重点 ===== */
+.wfhead{display:flex;flex-wrap:wrap;gap:5px 15px;align-items:baseline;font-size:12.5px;color:var(--ink2);
+  padding-bottom:11px;margin-bottom:4px;border-bottom:1px solid var(--line2)}
+.wfhead b{color:var(--ink);font-size:13.5px}
+.wf{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line2)}
+.wf:last-child{border-bottom:0;padding-bottom:2px}
+.wf .wn{flex:0 0 44px;font-family:Georgia,serif;font-size:11.5px;color:var(--ink3);padding-top:2px}
+.wf .wb{flex:1;min-width:0}
+.wf .wt{font-size:13.5px;font-weight:600;line-height:1.5;color:var(--ink)}
+.wf .wm{font-size:12px;color:var(--ink2);line-height:1.65;margin-top:3px}
+.wf .ws{flex:none;font-size:11px;padding:2px 8px;border-radius:20px;white-space:nowrap;margin-top:2px}
+.ws.ok{background:var(--green-soft);color:var(--green)}
+.ws.cur{background:var(--orange-soft);color:var(--orange)}
+.ws.lock{background:#F1F4F2;color:#9AA8A4}
+.wfrec{margin-top:6px}
+.wfrec .chk{margin-top:14px;flex-wrap:wrap;row-gap:10px}
+@media(max-width:520px){
+  .wfrec .chk .score{margin-left:0;width:100%;justify-content:flex-end}
+}
+@media(max-width:420px){
+  .hgrid{gap:5px}
+  .hcell{padding:7px 2px 5px;border-radius:8px}
+  .hcell .hd{font-size:9.5px} .hcell .hn{font-size:14px} .hcell .hw{font-size:9px}
+  .wf .wn{flex:0 0 38px}
+}
 
 /* 学情检查 */
 .checkrow{border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:9px;background:#FDFEFD}
@@ -398,10 +439,10 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 <div class="hero">
   <div class="seal">学</div>
   <h1>墨 · 中医自学工作台</h1>
-  <p class="sub">25 个周次 · 四阶段 · 每日 ≥20 分钟 · 达标 3–5 日后客观题学情检查 · 数据只存在这台电脑</p>
+  <p class="sub">25 个周次 · 四阶段 · 168 天课程 · 每天一课 45 分钟 · 达标 3–5 日后客观题学情检查 · 数据只存在这台电脑</p>
   <div class="tags">
     <span class="tag">先建骨架，再溯源</span>
-    <span class="tag">每天 20 分钟，先跑起来</span>
+    <span class="tag">每天一课，先跑起来</span>
     <span class="tag">3–5 天后用客观题验一遍</span>
     <span class="tag">读懂文本 ≠ 会看病</span>
   </div>
@@ -421,8 +462,9 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 </div>
 
 <nav class="nav">
-  <a href="#cockpit">本周驾驶舱</a>
-  <a href="#today">今日 20 分钟</a>
+  <a href="#heat">近 14 天打卡</a>
+  <a href="#weekfocus">本周重点</a>
+  <a href="#today">今日课程</a>
   <a href="#course">每日课程</a>
   <a href="#check">学情检查</a>
   <a href="#track">进度轨</a>
@@ -436,65 +478,34 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 <div class="notice" id="notice"></div>
 
 <div class="row a">
-  <section class="panel" id="cockpit">
-    <div class="panel-h"><span class="no">01</span><h2>本周驾驶舱</h2></div>
-    <p class="desc">一屏看清这周做什么、用什么、交什么、怎么算过关。所有勾选与备注自动存到本地。</p>
-    <div class="weekbar">
-      <select id="weekSel"></select>
-      <span class="stagepill" id="stagePill">准备期</span>
-      <span style="font-size:12.5px;color:var(--ink3)" id="weekHint"></span>
-    </div>
-    <div id="cockpitBody"></div>
-    <div class="chk">
-      <input type="checkbox" id="doneChk"><label for="doneChk" style="cursor:pointer">本周已完成</label>
-      <div class="score"><span style="font-size:12.5px;color:var(--ink2)">自评</span><span id="scoreBtns"></span></div>
-    </div>
-    <div class="notebox">
-      <label class="f">本周复盘 / 卡在哪了</label>
-      <textarea id="weekNote" placeholder="只记问题不急着答；没产出的一周记 0，下周补。"></textarea>
-    </div>
+  <section class="panel" id="heat">
+    <div class="panel-h"><span class="no">01</span><h2>近 14 天打卡</h2></div>
+    <p class="desc">一格一天：上面日期，中间是当天学习分钟数，下面星期。绿色＝已完成当日课程（≥20 分钟），橙色＝有记录未达标，灰色＝没记录。</p>
+    <div class="hgrid" id="heatGrid"></div>
+    <div class="hsum" id="heatSum"></div>
+    <p class="hlegend">做完当日课程的练习才会记成绿色，时长为该课自然时长。连续上课按「课程完成」算，今天没做完就从昨天往回数。</p>
   </section>
 
-  <section class="panel o" id="today">
-    <div class="panel-h"><span class="no">02</span><h2>今日 20 分钟</h2></div>
-    <p class="desc">每天不低于 20 分钟，拆成「回顾 4′ + 主体 + 落卡 6′」。纸质阅读用 +5 分钟手动记。达标当日会自动排一次 3–5 日后的学情检查。</p>
-    <div class="timerrow">
-      <div class="timer" id="tClock">00:00<small> / 20:00</small></div>
-      <div class="tbtn">
-        <button class="btn sm" id="tToggle">开始计时</button>
-        <button class="btn ghost sm" id="tAdd">+5 分钟</button>
-        <button class="btn ghost sm" id="tClear" title="记错了就清零重来">清零</button>
-      </div>
-    </div>
-    <div class="bar" style="margin-top:10px"><i id="tBar" style="width:0%"></i></div>
-    <div class="timerrow" style="margin-top:10px">
-      <span class="tstate" id="tState">今日 0 分钟 · 还差 20 分钟达标</span>
-      <span style="font-size:12.5px;color:var(--ink3)" id="tStreak">连续达标 0 天</span>
-      <span style="display:flex;align-items:center;gap:6px;margin-left:auto;min-width:0">
-        <span style="font-size:12.5px;color:var(--ink3);white-space:nowrap">目标</span>
-        <select id="targetSel" title="每日目标时长；20 分钟是达标底线，低于它不生成学情检查"
-          style="width:auto;max-width:96px;padding:3px 6px;font-size:12.5px;border-radius:7px">
-          <option value="20">20 分</option>
-          <option value="40">40 分</option>
-          <option value="60">60 分</option>
-        </select>
-      </span>
-    </div>
-    <h3 id="todayTitle" style="margin-top:20px">今日任务</h3>
-    <div class="blocks" id="todayBlocks"></div>
-    <h3>近 14 天打卡</h3>
-    <div class="daybar" id="dayBar"></div>
-    <p style="font-size:12px;color:var(--ink3);margin:9px 0 0">
-      格内数字是当天分钟数，下方是日期。<b style="color:var(--green)">绿</b>＝达标（≥20）　<b style="color:var(--orange)">橙</b>＝有记录未达标　灰＝无记录。
-    </p>
-    <p id="paceHint" style="font-size:12px;color:var(--ink3);margin:6px 0 0;line-height:1.7"></p>
-    <div id="todayCourse" style="margin-top:16px"></div>
+  <section class="panel o" id="weekfocus">
+    <div class="panel-h"><span class="no">02</span><h2>本周课程重点</h2></div>
+    <p class="desc">按课程进度排的 7 天。每课标题下面那一行，就是要抓的那句话。</p>
+    <div class="wfhead" id="wfHead"></div>
+    <div id="wfList"></div>
+    <div class="wfrec" id="wfRec"></div>
+  </section>
+</div>
+
+<div class="row">
+  <section class="panel" id="today">
+    <div class="panel-h"><span class="no">03</span><h2>今日课程</h2></div>
+    <p class="desc">当天这一课的全部内容：原文、要点、任务。做完练习即完成打卡，45–48 分钟自动计入今日学习。要翻别天，去下面的「每日课程」。</p>
+    <div id="todayBody"></div>
   </section>
 </div>
 
 <div class="row">
   <section class="panel" id="course">
-    <div class="panel-h"><span class="no">03</span><h2>每日课程 · 168 天</h2></div>
+    <div class="panel-h"><span class="no">04</span><h2>每日课程 · 168 天</h2></div>
     <p class="desc">阶段 1–4 的完整课表，共 168 天：每课 3–4 段经典原文（原文 + 出处 + 白话 + 校读提示）、4–5 条要点、一个动手任务、四道客观题。单课 45–48 分钟，做完练习即计入当日学习时长。第 N 天只在第 N 天解锁，未来日期点不开。</p>
     <div id="cBody"></div>
   </section>
@@ -502,7 +513,7 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
 <div class="row a">
   <section class="panel b" id="check">
-    <div class="panel-h"><span class="no">04</span><h2>学情检查 · 客观题</h2></div>
+    <div class="panel-h"><span class="no">05</span><h2>学情检查 · 客观题</h2></div>
     <p class="desc">每次达标学习后第 3 天开放、第 5 天截止，抽 3 道客观题（单选 / 多选 / 判断）。提交即自动判分，没有主观题；错题自动进错题本。</p>
     <div id="checkQueue"></div>
     <div id="checkPanel"></div>
@@ -511,7 +522,7 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
   </section>
 
   <section class="panel g">
-    <div class="panel-h"><span class="no">05</span><h2>红线与验歪</h2></div>
+    <div class="panel-h"><span class="no">06</span><h2>红线与验歪</h2></div>
     <p class="desc">常驻可见。学偏了比学慢了更麻烦，第 4 周末拿下面三条自查。</p>
     <h3>红线</h3>
     <div id="redlines"></div>
@@ -522,7 +533,7 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
 <div class="row">
   <section class="panel b" id="track">
-    <div class="panel-h"><span class="no">06</span><h2>25 周进度轨</h2></div>
+    <div class="panel-h"><span class="no">07</span><h2>25 周进度轨</h2></div>
     <p class="desc">点格子直接跳到那一周。底色是阶段，空心是未完成，实心带勾是已完成，橙框是当前周。</p>
     <div class="track" id="trackBox"></div>
     <div class="bar"><i id="barFill" style="width:0%"></i></div>
@@ -539,7 +550,7 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
 <div class="row">
   <section class="panel g" id="repos">
-    <div class="panel-h"><span class="no">07</span><h2>资料入口 · 按阶段归位</h2></div>
+    <div class="panel-h"><span class="no">08</span><h2>资料入口 · 按阶段归位</h2></div>
     <p class="desc" id="repoDesc">43 份资料里挑出的 26 个常用入口。按当前周自动筛到对应阶段，避免一上来把 700 部古籍全打开。</p>
     <div class="chips" id="repoChips"></div>
     <div class="repo-grid" id="repoList"></div>
@@ -548,7 +559,7 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
 <div class="row d">
   <section class="panel p" id="cards">
-    <div class="panel-h"><span class="no">08</span><h2>卡片工作台</h2></div>
+    <div class="panel-h"><span class="no">09</span><h2>卡片工作台</h2></div>
     <p class="desc">概念 / 药 / 方 / 条文校读四类。掌握度 ≤2 会自动进入右侧「今日复习」。药卡与方卡不记剂量。</p>
     <div class="chips" id="cardChips"></div>
     <div id="cardList"></div>
@@ -574,12 +585,12 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
   <div>
     <section class="panel o" style="margin-bottom:20px">
-      <div class="panel-h"><span class="no">09</span><h2>今日复习</h2></div>
+      <div class="panel-h"><span class="no">10</span><h2>今日复习</h2></div>
       <p class="desc">掌握度 ≤2 或已到复习日的卡片自动聚到这里。</p>
       <div id="reviewList"></div>
     </section>
     <section class="panel g">
-      <div class="panel-h"><span class="no">10</span><h2>疑问清单</h2></div>
+      <div class="panel-h"><span class="no">11</span><h2>疑问清单</h2></div>
       <p class="desc">只记问题不急着答。清单在变短，说明骨架在成形。</p>
       <div id="questionList"></div>
       <div class="inline-add">
@@ -592,13 +603,13 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
 <div class="row e">
   <section class="panel" id="quiz">
-    <div class="panel-h"><span class="no">11</span><h2>阶段过关自测</h2></div>
+    <div class="panel-h"><span class="no">12</span><h2>阶段过关自测</h2></div>
     <p class="desc">每阶段 3 题，先自己答，再点开要点核对。答不出就别往下推。</p>
     <div class="chips" id="quizChips"></div>
     <div id="quizList"></div>
   </section>
   <section class="panel b">
-    <div class="panel-h"><span class="no">12</span><h2>概念速查与常见错误</h2></div>
+    <div class="panel-h"><span class="no">13</span><h2>概念速查与常见错误</h2></div>
     <p class="desc">术语定义以教材为准，训诂只助记忆。每条错误后面都跟着改法。</p>
     <div id="concepts"></div>
     <h3>常见错误 → 改法</h3>
@@ -608,7 +619,7 @@ button.opt:hover{border-color:var(--green);background:var(--green-soft)}
 
 <div class="row">
   <section class="panel g">
-    <div class="panel-h"><span class="no">13</span><h2>数据与设置</h2></div>
+    <div class="panel-h"><span class="no">14</span><h2>数据与设置</h2></div>
     <p class="desc">全部数据（周进度、卡片、每日时长、检查记录、错题）存在浏览器 localStorage，不上传、不需要账号。换电脑或清缓存前请先导出备份。</p>
     <div class="grid3">
       <div><label class="f">学习起始日（用于自动推算当前周）</label><input type="date" id="startDate"></div>
@@ -849,18 +860,45 @@ function renderCourse(){
   bindCourse();
 }
 function renderTodayCourse(){
-  var el = $("todayCourse");
-  if(!el) return;
-  var d = cCurDay(), c = COURSE[d-1], un = cUnlocked(d);
-  el.innerHTML = '<button class="c-today' + (un ? "" : " lock") + '" id="todayCourseCard">'
-    + '<div class="k">今日课程 · DAY ' + c2(d) + '</div><h3>' + esc(c.t) + '</h3>'
-    + '<div class="meta">' + esc(c.u) + ' · ' + c.min + ' 分钟 · ' + (RD[d] || []).length + ' 段原文 · '
-    + c.q.length + ' 题' + (cDone(d) ? ' · 已完成' : '') + '</div>'
-    + '<span class="arr">' + (cDone(d) ? "✓" : "→") + '</span></button>';
-  $("todayCourseCard").onclick = function(){
-    if(!un){ toast("这一课还没到日期，明天再来"); return; }
-    cOpen(d, true);
-  };
+  var box = $("todayBody"); if(!box) return;
+  var d = cCurDay(), c = COURSE[d - 1], rd = RD[d] || [], st = cState(), sp = cSplit(c.min);
+  var done = cDone(d);
+  var h = '<div class="c-subhead" style="margin-bottom:4px"><span class="c-badge">DAY ' + c2(d) + '</span>'
+        + '<span class="c-unit">' + esc(c.u) + '</span>'
+        + '<span class="c-badge g" style="margin-left:auto">' + c.min + ' 分钟</span></div>';
+  h += '<div class="c-ttl">' + esc(c.t) + '</div>';
+  h += '<div class="c-goal"><b>本课目标</b>' + esc(c.goal) + '</div>';
+  h += '<div class="c-split"><span>原文 ' + sp.read + '′</span><span>要点 ' + sp.pts + '′</span>'
+     + '<span>任务 ' + sp.task + '′</span><span>练习 ' + sp.q + '′</span></div>';
+
+  h += '<div class="c-sec">一 · 经典原文<span class="cnt">' + rd.length + ' 段 · 先读原文，再看白话</span></div>';
+  rd.forEach(function(x, i){
+    h += '<div class="c-para"><p class="src">' + (i + 1) + ' / ' + esc(x.src) + '</p>'
+      + '<p class="orig">' + esc(x.s) + '</p>'
+      + '<p class="tr"><b>白话</b>' + esc(x.tr) + '</p>'
+      + '<p class="tip"><b>看这里</b>' + esc(x.tip) + '</p></div>';
+  });
+
+  h += '<div class="c-sec">二 · 课程要点<span class="cnt">合上原文，用自己的话讲一遍</span></div>';
+  h += '<ol class="c-pts">' + c.pts.map(function(p){ return '<li>' + esc(p) + '</li>'; }).join("") + '</ol>';
+
+  h += '<div class="c-sec">三 · 动手任务<span class="cnt">' + sp.task + ' 分钟</span></div>';
+  h += '<div class="c-task">' + esc(c.task) + '</div>';
+  h += '<p class="c-note">今日主句 · ' + esc(c.quote[1]) + '（' + esc(c.quote[0]) + '）</p>';
+
+  if(done){
+    h += '<p class="c-note" style="color:var(--green)">已于 ' + esc(st.done[d].date) + ' 完成，成绩 '
+       + st.done[d].score + '/' + st.done[d].total + '。重做不会重复计时长。</p>';
+  }
+  h += '<div class="c-actions"><button class="btn" data-tquiz="1">'
+     + (done ? "重做今日练习 · " : "做今日练习 · ") + c.q.length + ' 题</button>'
+     + '<button class="btn ghost sm" data-topen="1">看完整课程页</button><span class="sp"></span>'
+     + '<span style="font-size:12.5px;color:var(--ink3)">'
+     + (d < COURSE.length ? '明日：' + esc(COURSE[d].t) : '这是最后一课') + '</span></div>';
+  box.innerHTML = h;
+  var bq = box.querySelector("[data-tquiz]"), bo = box.querySelector("[data-topen]");
+  if(bq) bq.onclick = function(){ cOpenQuiz(d); };
+  if(bo) bo.onclick = function(){ cOpen(d, true); };
 }
 
 /* ---------- 动作 ---------- */
@@ -1289,28 +1327,85 @@ function renderMetrics(){
   } else n.classList.remove("show");
 }
 
-/* ---------- cockpit ---------- */
-function renderWeekSel(){
-  $("weekSel").innerHTML = PLAN.map((p,i)=>`<option value="${i}" ${i===S.cur?"selected":""}>${wk(i)} · ${esc(p.topic)}</option>`).join("");
-  $("stagePill").textContent = stageName(S.cur);
-  $("weekHint").textContent = S.cur === 0 ? "准备周：只建坐标系，不读正文" : (S.cur % 4 === 3 ? "本月复盘周，不进新单元" : "");
+/* ---------- 近 14 天打卡 ---------- */
+function renderHeat(){
+  var box = $("heatGrid"); if(!box) return;
+  var WD = ["周日","周一","周二","周三","周四","周五","周六"];
+  var cells = [], ok = 0, total = 0;
+  for(var i = 13; i >= 0; i--){
+    var d = addD(today(), -i), r = S.days[d], sec = r ? (r.sec || 0) : 0, m = Math.floor(sec / 60);
+    var cls = sec >= 1200 ? "ok" : (sec > 0 ? "part" : "none");
+    if(sec >= 1200) ok++;
+    total += m;
+    var wd = WD[new Date(d + "T00:00:00").getDay()];
+    cells.push('<div class="hcell ' + cls + (i === 0 ? " now" : "") + '" title="' + d + ' · ' + (sec ? (m + " 分钟") : "无记录") + '">'
+      + '<span class="hd">' + d.slice(5).replace("-", "/") + '</span>'
+      + '<span class="hn">' + (sec ? m : "·") + '</span>'
+      + '<span class="hw">' + wd + '</span></div>');
+  }
+  box.innerHTML = cells.join("");
+  $("heatSum").innerHTML = '<span>近 14 天完成 <b>' + ok + '</b> 天</span>'
+    + '<span>累计 <b>' + total + '</b> 分钟</span>'
+    + '<span>连续上课 <b>' + cStreak() + '</b> 天</span>'
+    + '<span>课程进度 <b>' + cCurDay() + '</b>/' + COURSE.length + '</span>';
 }
-function renderCockpit(){
-  const p = PLAN[S.cur], st = S.weeks[wk(S.cur)] || {done:false,score:0,note:""};
-  const rows = [
-    ["本周主题", p.topic, true], ["主材料", p.mat, false], ["本周动作", p.act, false],
-    ["产出物", p.out, false], ["过关标准", p.pass, false], ["提醒", p.note || "—", false]
-  ];
-  $("cockpitBody").innerHTML = rows.map(r =>
-    `<div class="kv"><span class="k">${r[0]}</span><span class="v ${r[2]?"strong":""}">${esc(r[1])}</span></div>`).join("");
-  $("doneChk").checked = !!st.done;
-  $("weekNote").value = st.note || "";
-  $("scoreBtns").innerHTML = [1,2,3,4,5].map(i =>
-    `<button data-s="${i}" class="${+st.score>=i?"on":""}" title="自评 ${i}">${i}</button>`).join("");
-  $("scoreBtns").querySelectorAll("button").forEach(b => b.onclick = () => {
-    S.weeks[wk(S.cur)] = Object.assign({}, st, {score:+b.dataset.s}); save(); renderCockpit();
+
+/* ---------- 本周课程重点 ---------- */
+function renderWeekFocus(){
+  var box = $("wfList"); if(!box) return;
+  var cur = cCurDay(), start = Math.floor((cur - 1) / 7) * 7 + 1;
+  var end = Math.min(COURSE.length, start + 6);
+  var days = [], units = [], mins = 0, dn = 0;
+  for(var d = start; d <= end; d++){
+    days.push(d); mins += COURSE[d - 1].min;
+    if(units.indexOf(COURSE[d - 1].u) < 0) units.push(COURSE[d - 1].u);
+    if(cDone(d)) dn++;
+  }
+  var wno = Math.floor((start - 1) / 7) + 1;
+  var st0 = cState();
+  var doneAll = Object.keys(st0.done).filter(function(k){ return st0.done[k] && st0.done[k].date; }).length;
+  $("wfHead").innerHTML = '<span><b>课程第 ' + wno + ' 周</b>　D' + c2(start) + '–D' + c2(end) + '</span>'
+    + '<span>' + esc(units.join(" → ")) + '</span>'
+    + '<span>' + days.length + ' 课 · ' + mins + ' 分钟</span>'
+    + '<span>本周完成 <b>' + dn + '/' + days.length + '</b></span>'
+    + '<span>累计 ' + doneAll + '/' + COURSE.length + '</span>';
+  box.innerHTML = days.map(function(d){
+    var c = COURSE[d - 1], done = cDone(d), un = cUnlocked(d);
+    var cls = done ? "ok" : (d === cur ? "cur" : "lock");
+    var txt = done ? "已完成" : (d === cur ? "今日" : (un ? "可学" : "未解锁"));
+    return '<div class="wf"><span class="wn">D' + c2(d) + '</span><div class="wb">'
+      + '<div class="wt">' + esc(c.t) + '</div>'
+      + '<div class="wm">' + esc(c.pts[0]) + '</div></div>'
+      + '<span class="ws ' + cls + '">' + txt + '</span></div>';
+  }).join("");
+
+  var st = S.weeks[wk(S.cur)] || {done:false, score:0, note:""};
+  $("wfRec").innerHTML = '<div class="chk"><input type="checkbox" id="doneChk"' + (st.done ? " checked" : "")
+    + '><label for="doneChk" style="cursor:pointer;white-space:nowrap">' + wk(S.cur) + ' 已完成</label>'
+    + '<span style="font-size:11.5px;color:var(--ink3);white-space:nowrap">→ 07</span>'
+    + '<div class="score"><span style="font-size:12.5px;color:var(--ink2)">自评</span><span id="scoreBtns" style="display:flex;gap:5px"></span></div></div>'
+    + '<div class="notebox"><label class="f">本周复盘 / 卡在哪了</label>'
+    + '<textarea id="weekNote" placeholder="只记问题不急着答；没产出的一周记 0，下周补。">' + esc(st.note || "") + '</textarea></div>';
+  $("scoreBtns").innerHTML = [1,2,3,4,5].map(function(i){
+    return '<button data-s="' + i + '" class="' + (+st.score >= i ? "on" : "") + '" title="自评 ' + i + '">' + i + '</button>';
+  }).join("");
+  $("scoreBtns").querySelectorAll("button").forEach(function(b){
+    b.onclick = function(){
+      S.weeks[wk(S.cur)] = Object.assign({}, S.weeks[wk(S.cur)] || {}, {score:+b.dataset.s});
+      save(); renderWeekFocus();
+    };
   });
+  $("doneChk").onchange = function(e){
+    S.weeks[wk(S.cur)] = Object.assign({}, S.weeks[wk(S.cur)] || {}, {done:e.target.checked});
+    save(); renderMetrics(); renderTrack(); renderWeekFocus();
+    toast(e.target.checked ? wk(S.cur) + " 已完成" : "已取消完成标记");
+  };
+  $("weekNote").onblur = function(e){
+    S.weeks[wk(S.cur)] = Object.assign({}, S.weeks[wk(S.cur)] || {}, {note:e.target.value});
+    save();
+  };
 }
+
 function renderTrack(){
   $("trackBox").innerHTML = PLAN.map((p,i)=>{
     const d = S.weeks[wk(i)] && S.weeks[wk(i)].done;
@@ -1425,22 +1520,12 @@ function renderStatic(){
   $("fixes").innerHTML = FIXES.map(f=>`<details class="c"><summary>${esc(f[0])}</summary><div class="body">改成：${esc(f[1])}</div></details>`).join("");
 }
 function renderAll(){
-  renderMetrics(); renderWeekSel(); renderCockpit(); renderTrack();
+  renderMetrics(); renderWeekFocus(); renderTrack(); renderHeat();
   renderRepos(); renderCards(); renderReview(); renderQuestions(); renderQuiz();
   renderToday(); renderChecks(); renderCheckPanel(); renderMistakes(); renderCourse();
 }
 
 /* ---------- events ---------- */
-$("weekSel").onchange = e => setWeek(+e.target.value);
-$("doneChk").onchange = e => {
-  S.weeks[wk(S.cur)] = Object.assign({}, S.weeks[wk(S.cur)] || {}, {done:e.target.checked});
-  save(); renderMetrics(); renderTrack();
-  toast(e.target.checked ? wk(S.cur) + " 已完成" : "已取消完成标记");
-};
-$("weekNote").onblur = e => {
-  S.weeks[wk(S.cur)] = Object.assign({}, S.weeks[wk(S.cur)] || {}, {note:e.target.value});
-  save();
-};
 $("addCard").onclick = () => {
   const item = $("cItem").value.trim();
   if(!item){ toast("先填条目或原文"); $("cItem").focus(); return; }
@@ -1495,7 +1580,7 @@ $("resetAll").onclick = () => {
   S = fresh(); save(); renderAll(); toast("已重置");
 };
 
-/* ============ 今日 20 分钟 ============ */
+/* ============ 今日面板 ============ */
 const DAY_NAMES = ["周一","周二","周三","周四","周五","周六","周日"];
 const CARD_TASK = [
  "把今天遇到的 3 个不懂的术语写进疑问清单，不查答案。",
@@ -1565,67 +1650,18 @@ function fmtClock(s){
 }
 function wdIndex(){ return (new Date().getDay()+6)%7; }
 
-function todayPlan(){
-  const wd = wdIndex(), st = stageOf(S.cur), p = PLAN[S.cur] || {topic:""};
-  const isReview = (S.cur % 4 === 3) && wd >= 5;
-  const item = isReview ? ["整周复盘", REVIEW_DAY[st]] : DAILY[st][wd];
-  const mainMin = wd === 6 ? 10 : 12;
-  const main = p.topic ? ("本周：" + p.topic + "。" + item[1]) : item[1];
-  return [
-    {min:4, t:"回顾 4 分钟", m:"闭卷自述昨日 3 张卡片，再答 1 道旧题；说不出的标记回补。"},
-    {min:mainMin, t:item[0], m:main},
-    {min:6, t:"落卡 6 分钟", m:CARD_TASK[st]}
-  ];
-}
-
-function targetMin(){ return Math.max(20, +S.target || 20); }
 function renderToday(){
-  const rec = dayRec(), plan = todayPlan(), wd = wdIndex();
-  const total = plan.reduce((a,b)=>a+b.min, 0);
-  $("todayTitle").textContent = DAY_NAMES[wd] + " · " + wk(S.cur) + " · 今日合计 " + total + " 分钟";
-  $("targetSel").value = String(targetMin());
-  $("todayBlocks").innerHTML = plan.map((b,i) =>
-    `<div class="block"><input type="checkbox" data-b="${i}" ${rec.blocks[i]?"checked":""}>
-     <div class="bd"><span class="bt">${esc(b.t)}</span><br><span class="bm">${esc(b.m)}</span></div>
-     <span class="mn">${b.min}′</span></div>`).join("");
-  $("todayBlocks").querySelectorAll("[data-b]").forEach(el => el.onchange = () => {
-    rec.blocks[+el.dataset.b] = el.checked; saveQuiet();
-  });
-  const tg = targetMin();
-  const weeks = Math.round(160 * 60 / (tg * 7));
-  $("paceHint").textContent = "配速估算：25 周计划约 160 小时。按每天 " + tg + " 分钟，约需 " + weeks
-    + " 周走完；想在 25 周内走完，日均需约 " + Math.round(160*60/(25*7)) + " 分钟。20 分钟是底线，低于它不出学情检查。";
-  paintToday(); renderDayBar(); renderTodayCourse();
-}
-function paintToday(){
-  const rec = dayRec(), ok = rec.sec >= 1200, tg = targetMin()*60;
-  $("tClock").innerHTML = fmtClock(rec.sec) + "<small> / " + targetMin() + ":00</small>";
-  $("tBar").style.width = Math.min(100, rec.sec/tg*100) + "%";
-  const el = $("tState");
-  el.className = "tstate" + (ok ? " ok" : "");
-  el.textContent = ok
-    ? "已达标 · " + Math.floor(rec.sec/60) + " 分钟" + (rec.sec < tg ? " · 目标 " + targetMin() + " 分钟" : "")
-    : "今日 " + Math.floor(rec.sec/60) + " 分钟 · 还差 " + Math.max(1, Math.ceil((1200-rec.sec)/60)) + " 分钟达标";
-  const st = streak();
-  $("tStreak").textContent = "连续达标 " + st + " 天";
-  $("mMin").innerHTML = Math.floor(rec.sec/60) + "<small>分钟</small>";
-  $("mStreak").innerHTML = st + "<small>天</small>";
+  var rec = dayRec();
+  $("mMin").innerHTML = Math.floor((rec.sec || 0) / 60) + "<small>分钟</small>";
+  $("mStreak").innerHTML = streak() + "<small>天</small>";
+  renderHeat();
+  renderTodayCourse();
 }
 function streak(){
   let n = 0, d = today();
   if(!qual(d)) d = addD(d,-1);
   while(qual(d) && n < 400){ n++; d = addD(d,-1); }
   return n;
-}
-function renderDayBar(){
-  const cells = [];
-  for(let i=13; i>=0; i--){
-    const d = addD(today(), -i), r = S.days[d], m = r ? Math.floor((r.sec||0)/60) : 0;
-    const cls = !r ? "none" : (r.sec >= 1200 ? "ok" : "part");
-    cells.push(`<div class="daycell ${cls}" title="${d} · ${r ? (m + " 分钟" + (r.sec>=1200?" · 已达标":"")) : "无记录"}">
-      <b>${r ? m : "—"}</b><i>${d.slice(8)}</i></div>`);
-  }
-  $("dayBar").innerHTML = cells.join("");
 }
 
 /* ============ 客观题库：乱序 + 索引 ============ */
@@ -1703,7 +1739,7 @@ function renderChecks(){
       <b>${c.learn.slice(5)} 学习 · ${wk(c.week)}</b>
       <span class="statuspill ${st.cls}">${st.label}</span>${btn}</div>
       <div class="meta">${esc(p.topic)} · 窗口 ${c.s.slice(5)} – ${c.e.slice(5)} · ${c.q.length} 道客观题</div></div>`;
-  }).join("") : `<div class="empty">还没有待检查项。先完成一次 20 分钟学习，第 3 天会自动出现在这里。</div>`;
+  }).join("") : `<div class="empty">还没有待检查项。先完成一次当日课程，第 3 天会自动出现在这里。</div>`;
   if(done.length) html += `<div style="margin-top:12px;font-size:12.5px;color:var(--ink3);margin-bottom:6px">最近判分</div>` +
     done.map(c => `<div class="checkrow" style="background:#FAFCFA;padding:9px 13px">
       <div class="top"><span style="font-size:13.5px">${c.learn.slice(5)} 学习 · ${wk(c.week)}</span>
@@ -1752,7 +1788,7 @@ function renderCheckPanel(){
   if(c.done){
     box.innerHTML = head + `<div class="scorebig"><b>${c.score}/${c.total}</b>
       <span>${esc(p.topic)} · ${c.learn} 学习 · ${c.doneDate} 判分<br>
-      错 ${c.wrong.length} 题${c.wrong.length?"，已进错题本，今天补 20 分钟专攻这几处":""}</span></div>
+      错 ${c.wrong.length} 题${c.wrong.length?"，已进错题本，今天专门补这几处":""}</span></div>
       ${c.q.map((id,i) => qReview(QIDX[id], i, (c.ans||{})[id] || [])).join("")}
       <button class="btn ghost" id="closeCheck" style="margin-top:4px">收起</button>`;
     $("closeCheck").onclick = () => { S.activeCheck = ""; renderCheckPanel(); };
@@ -1820,52 +1856,6 @@ function renderMistakes(){
   });
 }
 
-/* ============ 计时器 ============ */
-let tHandle = null, tRunning = false, tLast = 0;
-function tick(){
-  const now = Date.now();
-  const add = Math.max(1, Math.min(60, Math.round((now - tLast)/1000)));
-  tLast = now;
-  const rec = dayRec();
-  const was = rec.sec;
-  rec.sec += add;
-  if(rec.sec % 10 < add) saveQuiet();
-  paintToday();
-  if(was < 1200 && rec.sec >= 1200){
-    const c = ensureCheck(today());
-    save(); renderMetrics(); renderChecks();
-    toast(c ? "今日满 20 分钟，3 天后进入学情检查" : "今日已满 20 分钟");
-  }
-}
-function toggleTimer(){
-  if(tRunning){
-    clearInterval(tHandle); tHandle = null; tRunning = false;
-    $("tToggle").textContent = "继续计时"; save();
-  } else {
-    tRunning = true; tLast = Date.now();
-    tHandle = setInterval(tick, 1000);
-    $("tToggle").textContent = "暂停计时";
-  }
-}
-function addMinutes(n){
-  const rec = dayRec(), was = rec.sec;
-  rec.sec += n*60;
-  if(was < 1200 && rec.sec >= 1200) ensureCheck(today());
-  save(); paintToday(); renderMetrics(); renderChecks(); renderDayBar();
-  toast("已记 " + n + " 分钟");
-}
-
-/* ---------- new events: 计时 / 打卡 / 检查 ---------- */
-$("tToggle").onclick = toggleTimer;
-$("tAdd").onclick = () => addMinutes(5);
-$("targetSel").onchange = e => {
-  S.target = Math.max(20, +e.target.value || 20);
-  save(); renderToday(); toast("每日目标改为 " + S.target + " 分钟（达标线仍是 20 分钟）");
-};
-$("tClear").onclick = () => {
-  if(!confirm("把今天的学习时长清零？已生成的学情检查不会删除。")) return;
-  dayRec().sec = 0; save(); paintToday(); renderMetrics(); renderDayBar();
-};
 window.addEventListener("beforeunload", () => { saveQuiet(); });
 
 /* ---------- boot ---------- */
