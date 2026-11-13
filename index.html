@@ -398,6 +398,9 @@ details.recall[open] summary::before{content:"▾ "}
 .pi-foot{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
 .pi-foot .mini{margin-right:auto}
 
+@media (max-width:1150px){
+  .nav a i{display:none}
+}
 @media (max-width:900px){
   .nav{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .nav::-webkit-scrollbar{display:none}
@@ -1046,7 +1049,8 @@ function cHomeHTML(){
     list.forEach(function(x){
       var cls = cDone(x.d) ? "done" : (x.d === cur ? "cur" : "");
       var sub = cDone(x.d)
-        ? ("已完成 " + st.done[x.d].score + "/" + st.done[x.d].total + " · 最佳 " + (st.done[x.d].best_score || st.done[x.d].score))
+        ? ("已完成 " + st.done[x.d].score + "/" + st.done[x.d].total
+            + ((st.done[x.d].best_score || 0) > st.done[x.d].score ? " · 最佳 " + st.done[x.d].best_score : ""))
         : (x.d === cur ? "今日" : "可学");
       h += '<button class="c-day ' + cls + '" data-cd="' + x.d + '"'
          + ' title="D' + c2(x.d) + ' · ' + esc(x.t) + '">'
