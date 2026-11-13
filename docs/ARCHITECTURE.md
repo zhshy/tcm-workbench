@@ -1,86 +1,122 @@
 # 项目结构与数据流
 
-## 目录
+## 一、当前仓库结构
 
-```
+```text
 tcm-workbench/
-├── index.html              工作台入口（单文件，含全部 CSS/JS）
+├── index.html              当前 168 天工作台；课程数据与页面逻辑内嵌
+├── v1-96天版.html           旧版 96 天课程存档
 ├── manifest.json           PWA 清单
-├── assets/
-│   ├── icon-192.png
-│   ├── icon-512.png
-│   └── apple-touch-icon.png
+├── assets/                 PWA 图标
 ├── data/
-│   └── plan.json           96 天课程表（20 分钟/天，含题目、解析与全部参考答案）
-├── library/                31 部公有领域古籍 + index.json
-├── resources/              学习资源
-│   ├── github-projects.md  GitHub 中医项目清单（分层）
-│   ├── skill-audit.md      5 个 Agent Skill 的安全审计结论
-│   └── learning-path.md    六阶段路径与课程规则
-├── docs/
-│   └── ARCHITECTURE.md     本文件
+│   └── plan.json           旧版 96 天课程数据，不是当前 168 天课程数据源
+├── library/
+│   ├── index.json          古籍索引
+│   ├── *.txt               古籍正文
+│   └── _external/          第三方资料，权利状态见其 README
 ├── library-page/
-│   └── index.html          资料库在线版工作台（存档，见下方说明）
+│   └── index.html          资料库在线版存档
+├── resources/
+│   └── learning-path.md    当前 168 天课程现状与目标六阶段知识架构
+├── docs/
+│   ├── 课程说明.md         当前 168 天课程实现说明
+│   ├── ARCHITECTURE.md     本文件
+│   └── TCM-CURRICULUM-IMPROVEMENT.md
+│                            课程体系改进实施方案（仓库根目录）
 ├── tools/
-│   └── push_to_github.py   Git Data API 推送脚本（本机 git 协议不可用时使用）
-├── skills/                 本地技能素材（.gitignore 排除，含版权教材）
-├── README.md
-└── .gitignore
+│   └── push_to_github.py   Git Data API 推送脚本
+└── README.md
 ```
 
-## 三个交付形态
+## 二、当前课程实现基线
 
-| 形态 | 位置 | 数据存哪 | 说明 |
-| --- | --- | --- | --- |
-| 静态站（GitHub Pages） | 仓库根 + `index.html` | 浏览器 localStorage，可选同步到私有仓库 | 离线可用，PWA 可装到主屏 |
-| 资料库数据页 | `library-page/index.html` | 资料库三张表 | 需在资料库环境打开；脱离环境只显示静态壳 |
-| 本地素材库 | `skills/` | 本地文件 | 供 AI 直接读取；含版权教材，**不随仓库发布** |
+当前正式工作台是根目录 `index.html`：
 
-## 数据流
+- 课程周期：168 天；
+- 页面展示：四个大阶段、40 个单元；
+- 课程内容：约 543 段经典原文；
+- 每日题量：4 道客观题，合计 672 道；
+- 单课时长：45–48 分钟；
+- 课程数据：`var COURSE` 与 `window.RD` 等数据内嵌在 HTML；
+- 学习进度和卡片：默认保存在浏览器 localStorage，可按页面功能同步到个人私有仓库。
 
-**静态站**：
+`data/plan.json` 与 `v1-96天版.html` 属于旧版 96 天、20 分钟课程资产。不要把它们误认为当前 168 天工作台的数据源。
+
+## 三、目标课程架构
+
+课程内容治理目标采用六阶段知识架构：
+
+1. 中医理论基础；
+2. 中医诊断学；
+3. 中药学；
+4. 方剂学；
+5. 中医经典研读；
+6. 综合研读与知识输出。
+
+当前线上页面仍按四个大阶段展示。六阶段是目标知识分类框架，必须完成 40 个单元和 168 天逐课映射后，才能决定是否同步调整页面分组。不可仅更新文档就宣称六阶段页面已上线。
+
+每日题量的目标为 **6 道基础客观题 + 1 道综合客观大题**，综合大题内部可含多个客观子题，所有题目均须具备标准答案、自动评分规则和解析。当前线上题量仍为 4 道/天；目标题量未完成题库和页面开发前，不作为当前功能描述。
+
+## 四、课程数据解耦目标
+
+建议逐步将课程数据从 `index.html` 中抽离：
+
+```text
+data/
+├── curriculum/
+│   ├── curriculum.json
+│   ├── phases.json
+│   └── units.json
+├── courses/
+│   └── lessons-*.json
+├── assessments/
+│   ├── daily-objective-questions.json
+│   ├── daily-composite-questions.json
+│   └── phase-exams.json
+├── reviews/
+│   └── review-rules.json
+└── schema/
+    ├── lesson.schema.json
+    ├── objective-question.schema.json
+    ├── composite-question.schema.json
+    └── source.schema.json
 ```
-页面 (index.html)
-  ├─ 内嵌 PLAN（96 天课程 + 参考答案 + 20 分钟时间盒）→ 无需网络即可显示每日内容
-  ├─ localStorage（进度/卡片）→ 可选「笔记库」同步
-  └─ GitHub Contents API → 私有仓库 tcm-notes/state.json（Git 版本历史）
-```
 
-**资料库版**：
-```
-页面 → __SMART_PAGE__.database
-        ├─ 任务节点表（96 条）：任务/天数/阶段/周次/重点/状态/完成日期/预计分钟（统一 20）
-        ├─ 每日打卡表：日期/学习天数/打卡状态/实际分钟/学习标签/心得
-        └─ 专注记录表：日期/开始时间/时长分钟/番茄类型/关联任务
-```
+该目录为目标结构，当前仓库尚未完成数据解耦。实施时应保留现有页面和交互，先提取数据，再逐步调整加载方式。若部署需要单文件，可通过构建脚本生成发布 HTML。
 
-两套形态共享同一份 `data/plan.json`，改课程只需改这一处并重新生成。
+## 五、数据迁移原则
 
-## 课程表 v3 约定
+迁移前备份 localStorage 与历史数据；保持已有课程 ID、题目 ID、已完成状态、历史答题记录、卡片、笔记和同步数据的兼容。阶段归属调整不应导致历史课程重置。
 
-- 每天 `duration: 20`，`box` 五板块（学习日）或两板块（检查日）分钟数合计必须为 20；资料库节点表「预计分钟」同步为 20。
-- 学习日的 `answers.focus`（2 条）与 `answers.cards`（2 条）必填；选择题一律带 `a` / `why` / `src`。
-- 页面渲染时参考答案默认折叠（`<details>`），避免边读边剧透；选择题未作答时也能直接查答案与解析。
-- 总览页只有「今日课程 · 20 分钟」一个打卡入口，不设待办清单；`markDayDone()` 统一维护 `doneDays` 与按自然日累计的 `streak`。
+旧版 96 天数据与当前 168 天课程应明确区分，不能在构建过程中互相覆盖。
 
-## 部署
+## 六、三种交付形态
+
+| 形态 | 位置 | 数据位置 | 说明 |
+|---|---|---|---|
+| 当前静态工作台 | 根目录 `index.html` | 浏览器 localStorage；课程数据内嵌 HTML | 当前 168 天版本，支持离线打开 |
+| 旧版课程存档 | `v1-96天版.html`、`data/plan.json` | 旧版 JSON 与 HTML | 96 天、20 分钟/天，仅供历史参考 |
+| 资料库数据页 | `library-page/index.html` | 资料库运行环境 | 存档形态，脱离相应环境可能只显示静态壳 |
+
+## 七、部署与本地预览
 
 ```bash
-# 静态站：推送到 GitHub Pages
-GH_TOKEN=<token> python3 tools/push_to_github.py
-
-# 本地预览
 python3 -m http.server 8000
+# 打开 http://localhost:8000
 ```
 
-Pages 地址：https://zhshy.github.io/tcm-workbench/
+GitHub Pages 地址：https://zhshy.github.io/tcm-workbench/
 
-## 版权边界
+仓库更新脚本：
 
-- **收录**：31 部公有领域古籍（作者逝世已久，作品进入公共领域）。
-- **排除**：六部规划教材（《中医基础理论》《中药学》七版等）仍在版权期内，不随公开仓库分发，仅保留在本地 `skills/`。
-- 古籍电子文本可能存在 OCR 或传抄讹误，引用前请核对纸本或权威点校本。
+```bash
+GH_TOKEN=<你的 fine-grained token> python3 tools/push_to_github.py
+```
 
-## 内容边界
+Token 应只使用在本机安全环境中，限定到目标私有仓库所需的最小权限，不得提交到仓库或写入日志。
 
-本项目及所引资源仅用于中医学习与古籍研读，不构成诊断、处方、用药或剂量建议。身体不适请就诊于执业中医师。
+## 八、版权与内容边界
+
+- `library/` 中古籍文本应保留来源和文本准确性提示。
+- `library/_external/` 中第三方资料的授权边界见 `library/_external/README.md`；不得因为文件位于本仓库就将其视为本项目原创或可自由再分发。
+- 本项目用于中医理论学习与古籍研读，不构成诊断、处方、用药或剂量建议。不得将课程改造为自行诊疗训练。
