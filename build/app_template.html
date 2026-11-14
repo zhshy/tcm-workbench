@@ -184,6 +184,63 @@ main{max-width:1040px;margin:0 auto;padding:26px 20px 40px}
 }
 .task b{color:#8a6a3a;font-weight:600;font-size:12px;letter-spacing:.14em;display:block;margin-bottom:5px}
 
+/* ---------- 配图 / 典藏图谱 ---------- */
+.figentry{display:flex;align-items:center;gap:13px;background:#111E3C;border:1px solid #C9A55A;
+  border-radius:var(--r);padding:13px 16px;margin:0 0 18px;color:#F0DFAE;box-shadow:var(--sh)}
+.figentry:hover{border-color:#E6C77E}
+.fe-ic{font-size:20px;color:#D8B265;flex:none}
+.fe-txt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.5}
+.fe-txt b{font-family:var(--serif);font-size:15px;letter-spacing:.04em;font-weight:600}
+.fe-txt small{font-size:12px;color:#C7B483}
+.fe-go{font-size:12.5px;color:#E6C77E;white-space:nowrap}
+
+.figbox{display:grid;grid-template-columns:1fr;gap:14px}
+.figcard{margin:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;box-shadow:var(--sh)}
+.figimg{display:block;background:#0A1633;line-height:0}
+.figimg img{display:block;width:100%;height:auto;max-width:100%}
+.figcard figcaption{padding:11px 15px;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;
+  font-size:12.5px;color:var(--ink2)}
+.figcard figcaption b{font-family:var(--serif);font-size:14px;color:var(--ink);font-weight:600}
+.fignote,.figalts{color:var(--ink3)}
+.figalts a,.figopen{color:#3b6a94}
+.figopen{margin-left:auto;white-space:nowrap}
+.figdisclaimer{font-size:12px;color:var(--ink3);margin:9px 0 0;line-height:1.65}
+
+.tplbox{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.tplbox summary{cursor:pointer;padding:11px 15px;font-size:13px;color:var(--ink2);list-style:none}
+.tplbox summary::-webkit-details-marker{display:none}
+.tplbox summary:before{content:"▸ ";color:var(--amber)}
+.tplbox[open] summary:before{content:"▾ "}
+.tplbox[open] summary{border-bottom:1px solid var(--line2)}
+.tplimg{display:block;background:#0A1633;line-height:0}
+.tplimg img{display:block;width:100%;height:auto;max-width:100%}
+.tplfoot{padding:9px 15px;font-size:12px;color:var(--ink3)}
+.tplfoot a{color:#3b6a94}
+
+.galhero p{max-width:780px}
+.galsub{font-size:12.5px;color:var(--ink3);margin-top:10px;line-height:1.7}
+.galgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(330px,100%),1fr));gap:16px}
+.galcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--sh);display:flex;flex-direction:column}
+.galimg{display:block;background:#0A1633;line-height:0}
+.galimg img{display:block;width:100%;height:auto;max-width:100%;transition:opacity .16s}
+.galimg:hover img{opacity:.88}
+.galbody{padding:13px 15px 15px;display:flex;flex-direction:column;flex:1}
+.galno{font-size:11px;letter-spacing:.14em;color:var(--ink3)}
+.galcard h3{font-family:var(--serif);font-size:16px;margin:4px 0 6px;font-weight:600}
+.galnote{font-size:12.5px;color:var(--ink3);margin:0 0 10px;line-height:1.65}
+.galitems{font-size:12px;color:var(--ink2);line-height:1.9;margin-top:auto}
+.galitems>span{color:var(--ink3)}
+.galitem{display:inline-block;margin-right:8px;color:#3b6a94;border-bottom:1px dotted #B9CEE1}
+.galitem:hover{color:var(--rose)}
+.galmore{color:var(--ink3)}
+.galalts,.galacts{font-size:12px;margin-top:9px;color:var(--ink3)}
+.galalts a{color:#3b6a94}
+.galacts{display:flex;gap:8px;flex-wrap:wrap}
+.galacts .btn{border:1px solid var(--line);padding:5px 10px;border-radius:8px;font-size:12px}
+.galsectitle{margin:30px 0 12px;font-family:var(--serif);font-size:18px;font-weight:600}
+
 /* 自测 */
 .qz{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
 .q{padding:16px 18px;border-top:1px solid var(--line2)}
@@ -313,8 +370,11 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   .ihead h2{font-size:21px}
   .quote .raw{font-size:16.5px}
   .rbar input{width:120px}
+  .figentry{padding:11px 13px}
+  .fe-go{display:none}
+  .galgrid{grid-template-columns:1fr}
 }
-@media print{header,.nav,.actions,.pager,.iconbtn{display:none}}
+@media print{header,.nav,.actions,.pager,.iconbtn,.figentry,.figopen,.galacts{display:none}}
  .qstatus{display:inline-block;margin-left:8px;padding:1px 6px;border:1px solid #e6dfd2;border-radius:999px;color:#8b6b32;font-size:10px;line-height:1.6;vertical-align:middle;font-weight:500}.qlink.nohit{color:#8a6d3b}.qlink[data-match="exact"]{color:var(--green)}
 </style>
 </head>
@@ -347,6 +407,11 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
       </div>
     </div>
     <div id="resumeSlot"></div>
+    <a class="figentry" href="#/gallery" id="figEntry">
+      <span class="fe-ic">◈</span>
+      <span class="fe-txt"><b>典藏图谱</b><small id="figEntrySub">13 张认知插图 · 2 张空白模板</small></span>
+      <span class="fe-go">打开图谱 →</span>
+    </a>
     <div class="grid" id="domains"></div>
   </section>
 
@@ -380,6 +445,19 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
     <div class="shelf" id="shelf"></div>
   </section>
 
+  <!-- 典藏图谱 -->
+  <section class="view" id="v-gallery">
+    <div class="hero galhero" style="margin-bottom:18px">
+      <h1 style="font-size:23px">典藏图谱</h1>
+      <p><b id="galCount">13</b> 张 P0 认知型插图 + <b id="galTplCount">2</b> 张可打印空白模板，统一为藏蓝鎏金深底金字。母图按知识点复用，点图看原图，点条目名跳回课程。</p>
+      <p class="galsub">图是概念示意，不是知识点文字来源：AI 生成的小字标注可能笔画模糊或有个别错字，一律以正文与原书为准。脉象波形非真实脉搏波，舌象面色为标准化彩绘示意、非诊断依据。P1/P2 只给空白模板，请自己默画填写——工作台不提前给成品答案。</p>
+    </div>
+    <h2 class="galsectitle">P0 认知型插图</h2>
+    <div class="galgrid" id="galMothers"></div>
+    <h2 class="galsectitle">可打印空白模板</h2>
+    <div class="galgrid" id="galTpl"></div>
+  </section>
+
   <!-- 我的 -->
   <section class="view" id="v-me">
     <div class="hero" style="margin-bottom:18px">
@@ -400,7 +478,7 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   </section>
 </main>
 
-<footer>墨 · 中医学习工作台 v2.2　|　数据存于本机 localStorage，换设备请先导出备份</footer>
+<footer>墨 · 中医学习工作台 v2.3　|　数据存于本机 localStorage，换设备请先导出备份</footer>
 
 <!-- 阅读器 -->
 <div class="reader" id="reader">
@@ -459,6 +537,13 @@ function toast(msg){
 
 /* ---------- 索引 ---------- */
 var DOMAINS = DATA.domains;
+/* 配图总表：13 张母图 + 2 张空白模板；条目只存 id，文件与 alt 从这里查 */
+var FIGS = DATA.figures || { base:"./assets/illustrations/", style_note:"", mothers:[], templates:[] };
+var FIG_MAP = {};
+FIGS.mothers.concat(FIGS.templates).forEach(function(f){ FIG_MAP[f.id] = f; });
+function figUrl(f){
+  return (FIGS.base || "./assets/illustrations/") + encodeURIComponent(f.file || f);
+}
 var ITEM_INDEX = {};
 var BLOCK_OF = {};
 DOMAINS.forEach(function(d){
@@ -481,7 +566,7 @@ function recalc(){
 
 /* ---------- 视图切换 ---------- */
 function show(id){
-  ["v-home","v-domain","v-item","v-shelf","v-me"].forEach(function(v){
+  ["v-home","v-domain","v-item","v-shelf","v-gallery","v-me"].forEach(function(v){
     document.getElementById(v).classList.toggle("on", v === id);
   });
   window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
@@ -505,13 +590,14 @@ function buildNav(){
   DOMAINS.forEach(function(d, i){
     html += '<button data-view="v-domain" data-d="' + d.id + '">' + (i + 1) + " " + esc(d.name.split(" · ")[0]) + "</button>";
   });
-  html += '<button data-view="v-shelf">书库</button><button data-view="v-me">我的</button>';
+  html += '<button data-view="v-shelf">书库</button><button data-view="v-gallery">图谱</button><button data-view="v-me">我的</button>';
   nav.innerHTML = html;
   nav.addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
     if(b.dataset.view === "v-domain"){ openDomain(b.dataset.d); }
     else if(b.dataset.view === "v-home"){ renderHome(); show("v-home"); }
     else if(b.dataset.view === "v-shelf"){ renderShelf(); show("v-shelf"); }
+    else if(b.dataset.view === "v-gallery"){ renderGallery(); show("v-gallery"); }
     else if(b.dataset.view === "v-me"){ renderMe(); show("v-me"); }
   });
 }
@@ -569,6 +655,43 @@ function renderHome(){
     var c = e.target.closest(".dcard"); if(c) openDomain(c.dataset.d);
   };
   if(!location.hash) setHash("#/");
+}
+
+/* ---------- 典藏图谱 ---------- */
+function renderGallery(){
+  document.title = "典藏图谱 · 墨 · 中医自学工作台";
+  document.getElementById("galCount").textContent = FIGS.mothers.length;
+  document.getElementById("galTplCount").textContent = FIGS.templates.length;
+  document.getElementById("figEntrySub").textContent =
+    FIGS.mothers.length + " 张认知插图 · " + FIGS.templates.length + " 张空白模板";
+  document.getElementById("galMothers").innerHTML = FIGS.mothers.map(function(m){
+    var links = m.items.slice(0, 6).map(function(id){
+      var r = ITEM_INDEX[id];
+      return '<a class="galitem" href="#/i/' + esc(id) + '">' + esc(r ? r.item.title : id) + '</a>';
+    }).join("");
+    return '<article class="galcard" data-fig="' + esc(m.id) + '">' +
+      '<a class="galimg" href="' + esc(figUrl(m)) + '" target="_blank" rel="noopener" aria-label="查看原图：' + esc(m.title) + '">' +
+      '<img src="' + esc(figUrl(m)) + '" alt="' + esc(m.alt) + '" loading="lazy" decoding="async"></a>' +
+      '<div class="galbody"><div class="galno">' + esc(m.id) + ' · P0</div>' +
+      '<h3>' + esc(m.title) + '</h3><p class="galnote">' + esc(m.note) + '</p>' +
+      '<div class="galitems"><span>挂靠 ' + m.items.length + ' 条：</span>' + links +
+      (m.items.length > 6 ? '<span class="galmore">等 ' + m.items.length + ' 条</span>' : '') + '</div>' +
+      (m.alts && m.alts.length ? '<div class="galalts">另版构图：' + m.alts.map(function(a){
+        return '<a href="' + esc(figUrl(a)) + '" target="_blank" rel="noopener">查看原图</a>';
+      }).join("、") + '</div>' : '') +
+      '</div></article>';
+  }).join("");
+  document.getElementById("galTpl").innerHTML = FIGS.templates.map(function(t){
+    return '<article class="galcard tplcard" data-tpl="' + esc(t.id) + '">' +
+      '<a class="galimg" href="' + esc(figUrl(t)) + '" target="_blank" rel="noopener">' +
+      '<img src="' + esc(figUrl(t)) + '" alt="' + esc(t.alt) + '" loading="lazy" decoding="async"></a>' +
+      '<div class="galbody"><div class="galno">' + esc(t.id) + ' · 空白模板</div>' +
+      '<h3>' + esc(t.title) + '</h3><p class="galnote">' + esc(t.note) + '</p>' +
+      '<div class="galacts"><a class="btn" href="' + esc(figUrl(t)) + '" target="_blank" rel="noopener">打开原图 / 打印</a>' +
+      '<a class="btn" href="' + esc(figUrl(t)) + '" download>下载空白模板</a></div>' +
+      '</div></article>';
+  }).join("");
+  if(!/^#\/gallery/.test(location.hash)) setHash("#/gallery");
 }
 
 /* ---------- 域视图 ---------- */
@@ -664,8 +787,37 @@ function openItem(iid){
       it.pts.map(function(p){ return '<li>' + esc(p) + '</li>'; }).join("") + '</ul></div>';
   }
 
+  /* P0 认知型插图：正文直接呈现，供建立整体结构印象 */
+  if(it.figs && it.figs.length){
+    h += '<div class="sec"><h4>图解</h4><div class="figbox">';
+    it.figs.forEach(function(fid){
+      var f = FIG_MAP[fid];
+      if(!f) return;
+      h += '<figure class="figcard" data-fig="' + esc(fid) + '">' +
+        '<a class="figimg" href="' + esc(figUrl(f)) + '" target="_blank" rel="noopener" aria-label="查看原图：' + esc(f.title) + '">' +
+        '<img src="' + esc(figUrl(f)) + '" alt="' + esc(f.alt) + '" loading="lazy" decoding="async"></a>' +
+        '<figcaption><b>' + esc(f.title) + '</b><span class="fignote">' + esc(f.note) + '</span>' +
+        (f.alts && f.alts.length ? '<span class="figalts">另一版构图：' + f.alts.map(function(a){
+          return '<a href="' + esc(figUrl(a)) + '" target="_blank" rel="noopener">查看</a>';
+        }).join("、") + '</span>' : '') +
+        '<a class="figopen" href="' + esc(figUrl(f)) + '" target="_blank" rel="noopener">查看原图 →</a>' +
+        '</figcaption></figure>';
+    });
+    h += '</div><p class="figdisclaimer">图为概念示意，标注小字可能不清；知识点一律以本讲正文与原书为准。</p></div>';
+  }
+
   if(it.task){
-    h += '<div class="sec"><h4>动手</h4><div class="task"><b>任务</b>' + esc(it.task) + '</div></div>';
+    h += '<div class="sec"><h4>动手</h4><div class="task"><b>任务</b>' + esc(it.task) + '</div>';
+    var tpl = it.tpl ? FIG_MAP[it.tpl] : null;
+    if(tpl){
+      h += '<details class="tplbox" data-tpl="' + esc(it.tpl) + '"><summary>展开空白模板（自己填，不提前给答案）</summary>' +
+        '<a class="tplimg" href="' + esc(figUrl(tpl)) + '" target="_blank" rel="noopener">' +
+        '<img src="' + esc(figUrl(tpl)) + '" alt="' + esc(tpl.alt) + '" loading="lazy" decoding="async"></a>' +
+        '<div class="tplfoot">' + esc(tpl.note) +
+        '　<a href="' + esc(figUrl(tpl)) + '" target="_blank" rel="noopener">打开原图 / 打印</a>' +
+        '　<a href="' + esc(figUrl(tpl)) + '" download>下载</a></div></details>';
+    }
+    h += '</div>';
   }
 
   if(it.read){
@@ -1140,6 +1292,7 @@ recalc();
   else if(/^#\/d\//.test(h)){ openDomain(h.slice(4)); }
   else if(/^#\/b\//.test(h)){ RD_PREV_HASH = "#/shelf"; renderShelf(); show("v-shelf"); openBookHash(h); }
   else if(h === "#/shelf"){ renderShelf(); show("v-shelf"); }
+  else if(h === "#/gallery"){ renderGallery(); show("v-gallery"); }
   else if(h === "#/me"){ renderMe(); show("v-me"); }
 })();
 window.addEventListener("hashchange", function(){
@@ -1148,6 +1301,7 @@ window.addEventListener("hashchange", function(){
   else if(/^#\/d\//.test(h)){ openDomain(h.slice(4)); }
   else if(/^#\/b\//.test(h)){ openBookHash(h); }
   else if(h === "#/shelf"){ renderShelf(); show("v-shelf"); }
+  else if(h === "#/gallery"){ renderGallery(); show("v-gallery"); }
   else if(h === "#/me"){ renderMe(); show("v-me"); }
   else if(h === "#/" || h === ""){ renderHome(); show("v-home"); }
 });

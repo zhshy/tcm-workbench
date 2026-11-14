@@ -30,7 +30,9 @@ def main():
     if out == tpl:
         raise SystemExit("数据占位符未找到，注入失败")
 
-    with open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8") as f:
+    # 固定 LF：Windows 默认会把 \n 转成 \r\n，导致本地与 CI 产物字节不一致，
+    # 也会让 check-generated.js 的 ";\n(function (root, factory)" 边界失配。
+    with open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8", newline="\n") as f:
         f.write(out)
 
     size = len(out.encode("utf-8"))

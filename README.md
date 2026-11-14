@@ -12,6 +12,14 @@
 
 给使用者的改版说明见 [`docs/v2-知识块版说明.md`](docs/v2-知识块版说明.md)，课程结构见 [`docs/课程说明.md`](docs/课程说明.md)，构建链见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。
 
+## v2.3 配图接入
+
+- 16 张藏蓝鎏金插图收录在 `assets/illustrations/`：13 张 P0 认知型母图按知识点复用（覆盖 61 条）、M1 另版构图、2 张可打印空白模板底纹。
+- 条目页有「图解」（正文直接看，带 `alt` 与示意边界说明）和「动手」区默认折叠的空白模板；**P1/P2 不提前给成品答案**，自己默画仍是课程的一部分。
+- 顶栏「图谱」或首页「典藏图谱」进入 `#/gallery`，可按图复习、跳回挂靠条目、打开原图或打印空白模板。
+- 图是概念示意，不是知识点文字来源：AI 小字标注可能模糊或有错字，脉象波形非真实脉搏波，舌象面色非诊断依据；一律以正文与原书为准。
+- 构建链 `build/enrich.py` 的 `attach_figures()` 从 `build/image_prompts.json` + 实际图片目录生成 `DATA.figures`，缺图即报错；`npm run validate` 会检查 16 张图全部被引用。
+
 ## v2.2 质量升级
 
 - 原文匹配采用 `exact / fragment / chapter / outside / unmatched` 五种状态；只有整段规范化匹配才标为精确命中。

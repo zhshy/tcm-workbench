@@ -17,12 +17,14 @@ const start = html.indexOf(startMarker);
 assert.notEqual(start, -1, "index.html 缺少 DATA 注入入口");
 
 const jsonStart = start + startMarker.length;
-const endMarker = ";\n(function (root, factory)";
-const end = html.indexOf(endMarker, jsonStart);
+// 兼容 LF / CRLF：Windows 本地重建的产物可能带 \r\n。
+const tail = html.slice(jsonStart);
+const boundary = /;\r?\n\(function \(root, factory\)/.exec(tail);
+const end = boundary ? jsonStart + boundary.index : -1;
 assert.notEqual(end, -1, "index.html 缺少状态辅助模块注入边界");
 const embeddedData = JSON.parse(html.slice(jsonStart, end));
 
-assert.equal(sourceData.version, "2.2.0", "build/domains.json 版本不正确");
+assert.equal(sourceData.version, "2.3.0", "build/domains.json 版本不正确");
 assert.deepEqual(embeddedData, sourceData, "index.html 内嵌课程数据与 build/domains.json 不一致");
 assert.ok(!html.includes("/*__DATA__*/ null"), "DATA 占位符未替换");
 assert.ok(!html.includes("/*__STATE_HELPERS__*/"), "学习记录辅助模块占位符未替换");
@@ -34,7 +36,7 @@ for (const book of library.items) {
   assert.ok(book.work_id && book.license_status, book.title + " 缺少文献/授权元数据");
 }
 const sw = fs.readFileSync(swPath, "utf8");
-assert.ok(sw.includes('tcm-workbench-static-v3'), "Service Worker 缓存版本未升级");
+assert.ok(sw.includes('tcm-workbench-static-v4'), "Service Worker 缓存版本未升级");
 assert.ok(sw.includes("networkFirst(request)"), "书库索引缺少 Network First 策略");
 assert.ok(sw.includes("staleWhileRevalidate(request, event)"), "书库正文缺少后台更新策略");
 

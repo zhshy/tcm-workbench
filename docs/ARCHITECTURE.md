@@ -1,4 +1,4 @@
-# 项目结构与数据流（v2.2）
+# 项目结构与数据流（v2.3）
 
 ## 一、当前结构
 
@@ -9,6 +9,7 @@ tcm-workbench/
 ├── v1-96天版.html          更早版本存档
 ├── VERSION / CHANGELOG.md / README.md / package.json
 ├── manifest.json / service-worker.js / assets/   PWA 与图标
+├── assets/illustrations/   16 张藏蓝鎏金配图（13 母图 + 1 另版 + 2 空白模板底纹）
 ├── build/
 │   ├── d1_foundation_a/b/c.json  《中医基础理论》筑基域 25 条（新写，紧凑格式）
 │   ├── domain2a/b/c.json   四诊与脉诊 8 讲（新写，含三书校读）
@@ -21,9 +22,10 @@ tcm-workbench/
 │   ├── old_course.json     从 v1.4.2 index.html 提取的 168 课（中间产物）
 │   ├── old_rd.json         提取的原文数据（中间产物）
 │   ├── build_domains.py    归并旧 168 课 + 新内容 → domains.json
-│   ├── enrich.py           补 6+1 / 主题相关补编 / 引文匹配状态 / 题目审核元数据（幂等）
+│   ├── image_prompts.json  13 张母图 + 2 张底纹的提示词与挂靠条目映射
+│   ├── enrich.py           补 6+1 / 主题补编 / 匹配状态 / 题目审核 / 配图挂载（幂等）
 │   ├── build_translations.py 生成 library/白话/*.txt 并登记 index.json
-│   ├── app_template.html   页面模板，含 /*__DATA__*/ null 占位符
+│   ├── app_template.html   页面模板（条目图解 / 动手模板 / 图谱视图），含 /*__DATA__*/ null
 │   ├── build_site.py       把 domains.json 注入模板 → 根目录 index.html
 │   ├── add_book.py         生成《诊家枢要》全文与校读附录，登记 index.json
 │   └── zjsy_text.txt       《诊家枢要》整理本抓取文本（中间产物）
@@ -32,12 +34,12 @@ tcm-workbench/
 │   ├── load-data.js        从 index.html 抽出 var DATA（校验与测试共用）
 │   ├── user-state.js       v3 备份序列化、旧版本导入与数据白名单校验
 │   ├── check-generated.js  检查 domains.json 与 index.html 内嵌数据一致
-│   ├── validate-workbench.js  v2.2 数据 / 6+1 / 文献匹配状态 / 译本覆盖校验
-│   ├── visual-check.mjs    Edge CDP 无头浏览器回归（47 项，真实点击与截图）
+│   ├── validate-workbench.js  v2.3 数据 / 6+1 / 匹配状态 / 译本 / 配图资源完整性校验
+│   ├── visual-check.mjs    Edge CDP 无头浏览器回归（真实点击、图片加载与截图）
 │   ├── course-engine.js    v1 评分引擎（历史，v2 不再使用）
 │   ├── embed-course-engine.js / push_to_github.py  历史工具
 ├── tests/
-│   ├── domains.test.js     v2.2 课程、溯源与审核元数据测试
+│   ├── domains.test.js     v2.3 课程、溯源与审核元数据测试
 │   ├── user-state.test.js  v1/v2/v3 学习备份兼容测试
 │   ├── test_push_to_github.py  4 项发布脚本测试
 │   └── legacy/             v1 的 course-engine.test.js（归档）
@@ -53,12 +55,13 @@ tcm-workbench/
 build/d1_foundation_*.json + domain2*.json + new_extra.json + old_course.json
         │  build_domains.py（按主题归并；build_domain1() 把紧凑格式转成 quote/quiz）
         ▼
-build/domains.json  { version, domains: [{ id, name, blocks: [{ items: [...] }] }] }
+build/domains.json  { version, domains: [{ id, name, blocks: [{ items: [...] }] }], figures: {...} }
         │  enrich.py  ← classic_extra.json / thin_supplement.json / library/*.txt
         │    · 每条保留 6 道基础客观题 + 1 组综合辨析；生成题标记 draft
         │    · 旧课原文按主题标签/条目上下文补充，逐条补足至少 5 段；补编保留关联标签
         │    · 每段原文算 match_status / match_method / match_text / work_id；exact 仅限整段规范化匹配
-        │    · 断言 6+1、白话、定位状态与引用字段；设 version = 2.2.0
+        │    · attach_figures()：从 image_prompts.json + assets/illustrations/ 生成 figures 总表，条目挂 figs / tpl
+        │    · 断言 6+1、白话、定位状态与引用字段；设 version = 2.3.0
         ▼   （enrich.py 幂等：sup 标记 + ext 配额 + pts 去重，重跑不叠加）
         ├──────────────► build_translations.py ← trans_core/trans_guides.json
         │                  · 生成 library/白话/<书名>.txt（32 部）

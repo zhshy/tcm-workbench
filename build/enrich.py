@@ -452,7 +452,137 @@ assert not bad_link, "仍有需定位的原文缺书库文件：" + str(bad_link
 assert not bad_match, "原文匹配状态无效：" + str(bad_match[:8])
 assert not bad_hit, "hit 字段与匹配状态不一致：" + str(bad_hit[:8])
 
-DATA["version"] = "2.2.0"
+# ---------- 5. 配图挂载（P0 母图 + P1/P2 空白模板） ----------
+# 映射来源：build/image_prompts.json 的 mothers[].items（13 张母图的挂靠条目）。
+# 文件名一律从 assets/illustrations/ 实际扫描；缺图直接报错，绝不写出悬空引用。
+# 设计红线：P0 认知型插图才在正文直接呈现；P1/P2 只给空白模板，
+# 让学员自己默画/列表，不把成品答案提前摆进正文（课程用主动回忆做训练）。
+FIG_DIR = os.path.join(ROOT, "assets", "illustrations")
+FIG_ALT = {
+    "M1": "寸口六部脏腑定位示意图：左右手寸关尺六部与浮中沉三候对应，藏蓝底鎏金标注",
+    "M2": "脉象波形组图：六脉提纲、四时脉与有神无神的概念波形，藏蓝底鎏金线",
+    "M3": "水谷水液代谢流程图：饮入于胃到输布排泄的环节箭头，藏蓝底鎏金线",
+    "M4": "五行生克制化乘侮环：木火土金水相生相克与相乘相侮的环形关系",
+    "M5": "十二经脉与奇经八脉循行流注图：经脉流注次序的环形图谱",
+    "M6": "八纲与寒热虚实坐标矩阵：表里寒热虚实阴阳的二维坐标矩阵",
+    "M7": "气机升降十字轴：升降出入与五脏气机的十字坐标示意",
+    "M8": "卫气营血、三焦、六经层级轴：三套辨证层级的纵向阶梯对照",
+    "M9": "望神、面色、舌象图谱：神色形态与舌象的标准化彩绘示意分格",
+    "M10": "君臣佐使方剂结构图：方剂配伍主次层级的结构示意",
+    "M11": "整体观念同心圈：天人一体与人体各层整体联系的同心圈",
+    "M12": "人体分区横线图：上下、表里、三焦分区的横线示意",
+    "M13": "《伤寒论》版本谱系树：从古本到通行本的版本流传分支树",
+    "L1": "空白对照表模板：藏蓝底鎏金空框，无任何文字，供自行填写",
+    "L2": "空白原文卡片底纹：藏蓝鎏金边框，无具体文字，供自行抄写",
+}
+FIG_NOTE = {
+    "M1": "概念示意 · 寸口分部以本讲正文与《诊家枢要》为准",
+    "M2": "脉象波形为概念示意，非真实脉搏波；文字以正文为准",
+    "M9": "标准化彩绘示意，非诊断依据；文字以正文为准",
+    "L1": "空白模板 · 请自己填写，工作台不提前提供成品答案",
+    "L2": "空白底纹 · 请自己抄写原文与按语",
+}
+FIG_DEFAULT_NOTE = "概念示意 · 文字以正文为准"
+
+# 与 tools/illustration_audit.py 同口径：动作 + 产物名词收尾，
+# 不用裸字「表/图/线」，否则「表里」「表现」「一条线」会被误判。
+FIG_MAKE = re.compile(
+    r"(?:画|做|列|写|默|抄|建|描)[^，。；：!?]{0,24}"
+    r"(?:表|卡|图|坐标|轴|格|线|清单|流程|阶梯|矩阵|刻度|路线|链)|"
+    r"[一张个条只][表卡图]|"
+    r"(?:对照表|对照卡|分布表|归类表|方卡|药卡|术语卡|义项卡|流程图|流程线|"
+    r"阶梯图|刻度条|十字轴|竖轴|横轴|纵轴|同心圈|流水线|三岔|分岔)"
+)
+FIG_CARD = re.compile(r"卡片|方卡|药卡|术语卡|义项卡|卡：|对照卡")
+FIG_TABLE = re.compile(r"对照|表[:：]|表格|表头|小表|清单|分布表|归类表|列.{0,6}表")
+
+
+def attach_figures():
+    """生成 DATA.figures 总表，并把母图 id / 模板 id 挂到条目上。幂等。"""
+    prompts = load("image_prompts.json")
+    if not os.path.isdir(FIG_DIR):
+        raise SystemExit("配图目录不存在：" + FIG_DIR)
+    by_id = {}
+    for name in sorted(os.listdir(FIG_DIR)):
+        if not name.lower().endswith(".webp"):
+            continue
+        m = re.match(r"^(M\d+|L\d+)-", name)
+        if m:
+            by_id.setdefault(m.group(1), []).append(name)
+
+    def primary(fid):
+        fs = by_id.get(fid, [])
+        if not fs:
+            raise SystemExit("配图清单引用了不存在的文件：" + fid)
+        return fs[0]  # M1-1 排在 M1-2 前；其余每张只有一个文件
+
+    def rest(fid):
+        return by_id.get(fid, [])[1:]
+
+    mothers = []
+    for m in prompts["mothers"]:
+        fid = m["id"]
+        mothers.append({
+            "id": fid,
+            "file": primary(fid),
+            "alts": rest(fid),
+            "title": m["name"],
+            "alt": FIG_ALT[fid],
+            "note": FIG_NOTE.get(fid, FIG_DEFAULT_NOTE),
+            "items": list(m["items"]),
+        })
+    templates = []
+    for m in prompts["lite"]:
+        fid = m["id"]
+        templates.append({
+            "id": fid,
+            "file": primary(fid),
+            "title": m["name"],
+            "alt": FIG_ALT[fid],
+            "note": FIG_NOTE.get(fid, FIG_DEFAULT_NOTE),
+        })
+
+    idx = {it["id"]: it for it in all_items}
+    for it in all_items:
+        it.pop("figs", None)
+        it.pop("tpl", None)
+
+    n_link = 0
+    for m in mothers:
+        for iid in m["items"]:
+            if iid not in idx:
+                raise SystemExit("母图 %s 挂靠了不存在的条目：%s" % (m["id"], iid))
+            idx[iid].setdefault("figs", []).append(m["id"])
+            n_link += 1
+
+    n_tpl = 0
+    for it in all_items:
+        if it.get("figs"):
+            continue  # 已有 P0 成品图，不再塞空白模板
+        task = str(it.get("task", ""))
+        if not FIG_MAKE.search(task):
+            continue
+        if FIG_CARD.search(task):
+            it["tpl"] = "L2"
+        elif FIG_TABLE.search(task):
+            it["tpl"] = "L1"
+        if it.get("tpl"):
+            n_tpl += 1
+
+    DATA["figures"] = {
+        "base": "./assets/illustrations/",
+        "style_note": "藏蓝鎏金深底金字 · 典藏级图谱",
+        "mothers": mothers,
+        "templates": templates,
+    }
+    print("配图：母图 %d 张（挂靠 %d 条）/ 空白模板 %d 条 / 底纹 %d 张" % (
+        len(mothers), n_link, n_tpl, len(templates)))
+    return len(mothers), n_link, n_tpl
+
+
+attach_figures()
+
+DATA["version"] = "2.3.0"
 with open(os.path.join(HERE, "domains.json"), "w", encoding="utf-8") as f:
     json.dump(DATA, f, ensure_ascii=False, separators=(",", ":"))
 

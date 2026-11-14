@@ -13,7 +13,7 @@ const html = readHtml();
 const DATA = loadData();
 const rows = allItems(DATA);
 
-check(DATA.version === "2.2.0", "数据版本不是 2.2.0，实际 " + DATA.version);
+check(DATA.version === "2.3.0", "数据版本不是 2.3.0，实际 " + DATA.version);
 check(Array.isArray(DATA.domains), "domains 必须是数组");
 check(DATA.domains.length === 8, "域数不是 8，实际 " + DATA.domains.length);
 
@@ -126,10 +126,60 @@ check(html.includes("没有「今日课程」，没有解锁，没有上限"), "
 check(html.includes("mozhu-tcm-v2"), "本机学习记录键变更，可能导致旧进度丢失");
 check(html.includes("当前备份版本") || html.includes("TCMState.CURRENT_BACKUP_VERSION"), "页面未集成备份版本控制");
 
-// ---------- 4. v2.1 前端能力标记 ----------
-for (const marker of ["class=\"qlink", "data-out=", "data-match=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1", "原书未入书库", "未找到可靠定位", "自动生成 · 未审核草稿", "TCMState.parseBackup"]) {
-  check(html.includes(marker), "页面缺少 v2.1 前端能力：" + marker);
+// ---------- 4. v2.1 / v2.3 前端能力标记 ----------
+for (const marker of ["class=\"qlink", "data-out=", "data-match=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1", "原书未入书库", "未找到可靠定位", "自动生成 · 未审核草稿", "TCMState.parseBackup", "figUrl(", "renderGallery", "v-gallery", "figdisclaimer", "tplbox"]) {
+  check(html.includes(marker), "页面缺少前端能力：" + marker);
 }
+
+// ---------- 4b. 配图挂载与资源完整性 ----------
+const figures = DATA.figures || {};
+check(Array.isArray(figures.mothers) && figures.mothers.length === 13,
+  "P0 母图不是 13 张");
+check(Array.isArray(figures.templates) && figures.templates.length === 2,
+  "空白模板底纹不是 2 张");
+const figDir = path.join(root, "assets", "illustrations");
+check(fs.existsSync(figDir), "缺配图目录 assets/illustrations/");
+const referenced = new Set();
+function checkFig(f, label) {
+  check(typeof f.id === "string" && f.id, label + " 缺 id");
+  check(typeof f.file === "string" && f.file.endsWith(".webp"), label + " 缺 webp 文件名");
+  check(fs.existsSync(path.join(figDir, f.file)), label + " 图片不存在：" + f.file);
+  check(typeof f.title === "string" && f.title, label + " 缺图名");
+  check(typeof f.alt === "string" && f.alt.length >= 8, label + " 缺有效的 alt 无障碍文本");
+  check(typeof f.note === "string" && f.note, label + " 缺示意边界说明");
+  referenced.add(f.file);
+  for (const a of f.alts || []) {
+    check(fs.existsSync(path.join(figDir, a)), label + " 另版图片不存在：" + a);
+    referenced.add(a);
+  }
+}
+for (const m of figures.mothers) {
+  checkFig(m, m.id);
+  check(Array.isArray(m.items) && m.items.length > 0, m.id + " 未挂靠任何条目");
+  for (const iid of m.items) check(ids.has(iid), m.id + " 挂靠了不存在的条目：" + iid);
+}
+for (const t of figures.templates) checkFig(t, t.id);
+const onDisk = fs.readdirSync(figDir).filter((f) => f.toLowerCase().endsWith(".webp")).sort();
+check(onDisk.length === 16, "配图文件不是 16 张，实际 " + onDisk.length);
+const unused = onDisk.filter((f) => !referenced.has(f));
+check(unused.length === 0, "有图片未被任何视图引用：" + unused.join("、"));
+
+let figItems = 0, tplItems = 0;
+const motherIds = new Set(figures.mothers.map((m) => m.id));
+for (const { item } of rows) {
+  if (item.figs) {
+    check(Array.isArray(item.figs) && item.figs.every((id) => motherIds.has(id)),
+      item.id + " figs 引用了未知母图");
+    figItems++;
+  }
+  if (item.tpl) {
+    check(["L1", "L2"].includes(item.tpl), item.id + " tpl 引用未知：" + item.tpl);
+    check(!item.figs, item.id + " 已有 P0 成品图，不应再挂空白模板");
+    tplItems++;
+  }
+}
+check(figItems >= 50, "挂载 P0 插图的条目过少：" + figItems);
+check(tplItems >= 50, "挂载空白模板的条目过少：" + tplItems);
 
 // ---------- 5. 书库与白话译本 ----------
 const lib = JSON.parse(fs.readFileSync(path.join(root, "library", "index.json"), "utf8"));
@@ -169,5 +219,6 @@ check(/全本逐篇白话译解/.test(zjsyTr) && /译本说明/.test(zjsyTr), "�
 console.log(
   "校验通过：8 域 / 29 块 / 170 条；" +
   "6+1 全覆盖，原文 " + quoteTotal + " 段（白话齐全、精确命中 " + exact +
-  "、库外参读 " + outside + "）；书库 " + lib.items.length + " 部译本齐备。"
+  "、库外参读 " + outside + "）；书库 " + lib.items.length + " 部译本齐备；" +
+  "配图 16 张全部引用（母图挂 " + figItems + " 条 / 空白模板 " + tplItems + " 条）。"
 );

@@ -1,0 +1,133 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>学习内容配图需求统计 · 中医学习工作台</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--ink:#1f2430;--sub:#5c6472;--line:#e3e7ed;--accent:#2f6f5e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:36px 22px 64px}h1{font-size:27px;margin:0 0 6px;letter-spacing:.3px}
+.lead{color:var(--sub);margin:0 0 26px;font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.stat b{display:block;font-size:30px;line-height:1.2;color:var(--accent)}.stat span{color:var(--sub);font-size:12.5px}
+.stat.warn b{color:#c0392b}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+h2{font-size:17px;margin:0 0 4px}h2 small{font-weight:400;color:var(--sub);font-size:12.5px;margin-left:8px}
+.note{color:var(--sub);font-size:13px;margin:0 0 16px}
+.bar{display:flex;height:16px;border-radius:5px;overflow:hidden;background:#eef0f3;margin:8px 0 4px}
+.bar i{display:block;height:100%}
+.row{display:grid;grid-template-columns:150px 1fr 92px;align-items:center;gap:12px;margin:9px 0;font-size:13px}
+.row .nm{color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .pc{text-align:right;color:var(--sub);font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--sub);font-weight:600;font-size:12.5px;background:#fafbfc}td.id{font-family:ui-monospace,Consolas,monospace;color:var(--accent);white-space:nowrap}
+.tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11.5px;color:#fff;white-space:nowrap}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--sub);margin-top:12px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+.scroll{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.scroll table th{position:sticky;top:0;z-index:1}
+.foot{color:var(--sub);font-size:12.5px;margin-top:22px}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:110px 1fr 74px}}
+
+</style></head><body><div class="wrap">
+<h1>学习内容配图需求统计</h1>
+<p class="lead">中医学习工作台 v2.1.0 · 8 域 / 29 块 / 170 条 / 888 段原文 · 只读审查，2026-11-14</p>
+<div class="stats">
+<div class="stat"><b>170</b><span>审查条目</span></div>
+<div class="stat"><b>153</b><span>任务已内置作图</span></div>
+<div class="stat"><b>31</b><span>P0 必需配图</span></div>
+<div class="stat warn"><b>0</b><span>现有教学插图</span></div>
+</div>
+<section><h2>各域需求分布<small>按条目数堆叠</small></h2>
+<p class="note">P0 为不配图容易学错；P1 为任务已要求作图、建议给空白模板 + 折叠答案。</p>
+<div class="row"><div class="nm">中基筑基（25）</div><div class="bar"><i style="width:32.00%;background:#c0392b" title="P0 必需 8 条"></i><i style="width:60.00%;background:#d98324" title="P1 建议 15 条"></i><i style="width:8.00%;background:#4a7fb5" title="P2 可选 2 条"></i></div>
+<div class="pc">P0 8 · P1 15</div></div>
+<div class="row"><div class="nm">四诊 · 望闻问切（15）</div><div class="bar"><i style="width:66.67%;background:#c0392b" title="P0 必需 10 条"></i><i style="width:26.67%;background:#d98324" title="P1 建议 4 条"></i><i style="width:6.67%;background:#4a7fb5" title="P2 可选 1 条"></i></div>
+<div class="pc">P0 10 · P1 4</div></div>
+<div class="row"><div class="nm">辨证（9）</div><div class="bar"><i style="width:11.11%;background:#c0392b" title="P0 必需 1 条"></i><i style="width:88.89%;background:#d98324" title="P1 建议 8 条"></i></div>
+<div class="pc">P0 1 · P1 8</div></div>
+<div class="row"><div class="nm">本草（30）</div><div class="bar"><i style="width:10.00%;background:#c0392b" title="P0 必需 3 条"></i><i style="width:90.00%;background:#d98324" title="P1 建议 27 条"></i></div>
+<div class="pc">P0 3 · P1 27</div></div>
+<div class="row"><div class="nm">方剂（26）</div><div class="bar"><i style="width:7.69%;background:#c0392b" title="P0 必需 2 条"></i><i style="width:84.62%;background:#d98324" title="P1 建议 22 条"></i><i style="width:7.69%;background:#4a7fb5" title="P2 可选 2 条"></i></div>
+<div class="pc">P0 2 · P1 22</div></div>
+<div class="row"><div class="nm">经典（42）</div><div class="bar"><i style="width:14.29%;background:#c0392b" title="P0 必需 6 条"></i><i style="width:52.38%;background:#d98324" title="P1 建议 22 条"></i><i style="width:7.14%;background:#4a7fb5" title="P2 可选 3 条"></i><i style="width:26.19%;background:#9aa4ae" title="P3 不宜 11 条"></i></div>
+<div class="pc">P0 6 · P1 22</div></div>
+<div class="row"><div class="nm">临证（7）</div><div class="bar"><i style="width:14.29%;background:#c0392b" title="P0 必需 1 条"></i><i style="width:42.86%;background:#d98324" title="P1 建议 3 条"></i><i style="width:42.86%;background:#4a7fb5" title="P2 可选 3 条"></i></div>
+<div class="pc">P0 1 · P1 3</div></div>
+<div class="row"><div class="nm">专题与输出（16）</div><div class="bar"><i style="width:25.00%;background:#d98324" title="P1 建议 4 条"></i><i style="width:6.25%;background:#4a7fb5" title="P2 可选 1 条"></i><i style="width:68.75%;background:#9aa4ae" title="P3 不宜 11 条"></i></div>
+<div class="pc">P0 0 · P1 4</div></div>
+<div class="legend">
+<span><i style="background:#c0392b"></i>P0 必需 31 条</span>
+<span><i style="background:#d98324"></i>P1 建议 105 条</span>
+<span><i style="background:#4a7fb5"></i>P2 可选 12 条</span>
+<span><i style="background:#9aa4ae"></i>P3 不宜 22 条</span>
+</div></section>
+<section><h2>建议图型分布</h2><table><tr><th>图型</th><th>条目数</th><th>占比</th></tr>
+<tr><td>对照表模板</td><td>84</td><td>49.4%</td></tr>
+<tr><td>不宜配图</td><td>22</td><td>12.9%</td></tr>
+<tr><td>卡片模板</td><td>16</td><td>9.4%</td></tr>
+<tr><td>坐标矩阵</td><td>9</td><td>5.3%</td></tr>
+<tr><td>流程图</td><td>8</td><td>4.7%</td></tr>
+<tr><td>空间定位图</td><td>7</td><td>4.1%</td></tr>
+<tr><td>层级轴阶梯</td><td>7</td><td>4.1%</td></tr>
+<tr><td>关系结构图</td><td>6</td><td>3.5%</td></tr>
+<tr><td>波形动态示意</td><td>4</td><td>2.4%</td></tr>
+<tr><td>形态色卡图谱</td><td>3</td><td>1.8%</td></tr>
+<tr><td>结构示意图</td><td>2</td><td>1.2%</td></tr>
+<tr><td>时间轴路线图</td><td>2</td><td>1.2%</td></tr>
+</table></section>
+<section><h2>母图复用<small>13 张母图覆盖 72 条需求</small></h2>
+<table><tr><th>组</th><th>母图名称</th><th>挂靠条目</th><th>主要条目</th></tr>
+<tr><td class="id">M6</td><td>八纲与寒热虚实坐标矩阵</td><td>21</td><td>1-4、1-17、1-21、2-4、2-5、2-6、3-1、3-2…</td></tr>
+<tr><td class="id">M3</td><td>水谷水液代谢流程图</td><td>13</td><td>1-9、1-12、1-13、1-14、1-22、3-7、4-14、4-19…</td></tr>
+<tr><td class="id">M8</td><td>卫气营血·三焦·六经层级轴</td><td>9</td><td>1-11、3-9、4-9、4-10、5-11、5-12、6-3、6-19…</td></tr>
+<tr><td class="id">M1</td><td>寸口六部脏腑定位图（含浮中沉三候）</td><td>6</td><td>1-25、2-8、2-9、2-11、2-13、6-14</td></tr>
+<tr><td class="id">M4</td><td>五行生克制化乘侮环</td><td>6</td><td>1-5、1-6、3-3、5-3、6-32、8-16</td></tr>
+<tr><td class="id">M7</td><td>气机升降十字轴</td><td>4</td><td>4-2、4-17、5-19、6-38</td></tr>
+<tr><td class="id">M2</td><td>脉象波形组图（六脉提纲／四时／有神无神）</td><td>3</td><td>2-10、2-12、2-14</td></tr>
+<tr><td class="id">M9</td><td>望神·面色·舌象图谱</td><td>3</td><td>2-1、2-2、2-3</td></tr>
+<tr><td class="id">M5</td><td>十二经脉与奇经八脉循行流注图</td><td>2</td><td>1-15、1-16</td></tr>
+<tr><td class="id">M12</td><td>人体分区横线图</td><td>2</td><td>4-16、6-36</td></tr>
+<tr><td class="id">M10</td><td>君臣佐使方剂结构图</td><td>1</td><td>5-1</td></tr>
+<tr><td class="id">M11</td><td>整体观念同心圈</td><td>1</td><td>1-1</td></tr>
+<tr><td class="id">M13</td><td>《伤寒论》版本谱系树</td><td>1</td><td>6-1</td></tr>
+</table></section>
+<section><h2>P0 必配清单<small>31 条</small></h2>
+<div class="scroll"><table><tr><th>条目</th><th>标题</th><th>图型</th><th>理由</th><th>母图</th></tr>
+<tr><td class="id">1-1</td><td>中医学理论体系：整体观念与辨证论治</td><td>关系结构图</td><td>整体观念的同心圈：内核五脏气血、外圈四时昼夜地域，层次关系纯文字说不清</td><td class="id">M11</td></tr>
+<tr><td class="id">1-5</td><td>五行学说（上）：特性、归类与生克制化</td><td>关系结构图</td><td>五行生克环与归类表，相生相克的顺序靠箭头才不会混</td><td class="id">M4</td></tr>
+<tr><td class="id">1-6</td><td>五行学说（下）：相乘相侮与传变治法</td><td>关系结构图</td><td>相乘相侮、母病及子、子病犯母都是方向问题，必须有传变箭头</td><td class="id">M4</td></tr>
+<tr><td class="id">1-9</td><td>脾与胃：后天之本、气血生化之源</td><td>流程图</td><td>《经脉别论》饮入于胃→脾→肺→膀胱→三焦，五节点流程用文字极绕</td><td class="id">M3</td></tr>
+<tr><td class="id">1-12</td><td>气：生成、运动、功能与分类</td><td>流程图</td><td>气生成—分类流水线：肾精/水谷/清气 → 元气/宗气/营气/卫气</td><td class="id">M3</td></tr>
+<tr><td class="id">1-13</td><td>血与津液：生成、运行、功能与代谢</td><td>流程图</td><td>津液输布排泄八节点（胃脾肺三焦肾膀胱肝大肠），与 1-9 同源</td><td class="id">M3</td></tr>
+<tr><td class="id">1-15</td><td>经络总论与十二经脉</td><td>空间定位图</td><td>十二经脉循行走向、交接与流注次序，是纯空间知识</td><td class="id">M5</td></tr>
+<tr><td class="id">1-16</td><td>奇经八脉、经别络脉与经络的应用</td><td>空间定位图</td><td>奇经八脉循行；「十二经如江河、奇经如湖泽」需要图才立得住</td><td class="id">M5</td></tr>
+<tr><td class="id">2-1</td><td>望神：得神、少神、失神、假神</td><td>形态色卡图谱</td><td>得神/少神/失神/假神是面部神态差异，文字无法替代视觉对照</td><td class="id">M9</td></tr>
+<tr><td class="id">2-2</td><td>五色主病：面色的五条判断线</td><td>形态色卡图谱</td><td>五色主病必须彩色色卡，且要把「色」与「泽」分开呈现</td><td class="id">M9</td></tr>
+<tr><td class="id">2-3</td><td>望舌：舌质与舌苔必须分开看</td><td>形态色卡图谱</td><td>舌质与舌苔图谱（舌色 5 种、苔色 3 种、形质各 4 种），全库最刚需</td><td class="id">M9</td></tr>
+<tr><td class="id">2-8</td><td>二 · 寸口六部：手腕上的一张脏腑地图</td><td>空间定位图</td><td>寸关尺六部配脏腑 + 浮中沉三候，手腕上的空间定位</td><td class="id">M1</td></tr>
+<tr><td class="id">2-9</td><td>三 · 五脏平脉与菽重：正常长什么样</td><td>波形动态示意</td><td>五脏平脉的菽重深度梯度与指下质地，是深浅手感不是文字</td><td class="id">M1</td></tr>
+<tr><td class="id">2-10</td><td>四 · 时脉与体质：同一部脉，四季不同、肥瘦不同</td><td>波形动态示意</td><td>四时脉弦洪浮沉的波形变化 + 肥瘦体型对照</td><td class="id">M2</td></tr>
+<tr><td class="id">2-11</td><td>五 · 指法：举按寻，与臂之长短</td><td>空间定位图</td><td>布指疏密（臂长疏下指）、举按寻三种指力，是手势动作</td><td class="id">M1</td></tr>
+<tr><td class="id">2-12</td><td>六 · 六脉提纲：三十部脉其实只有六个根</td><td>波形动态示意</td><td>浮沉迟数滑涩六脉波形组图，脉学提纲的核心可视化</td><td class="id">M2</td></tr>
+<tr><td class="id">2-13</td><td>七 · 病脉定位：上病下病，左病右病</td><td>空间定位图</td><td>上病下病、左病右病，需直接标在六部定位图上</td><td class="id">M1</td></tr>
+<tr><td class="id">2-14</td><td>八 · 脉贵有神：怎么判断一部脉还有没有救</td><td>波形动态示意</td><td>有神/无神、数极迟败而中取无力的脉力对比</td><td class="id">M2</td></tr>
+<tr><td class="id">3-1</td><td>八纲：四对坐标</td><td>坐标矩阵</td><td>八纲 2×2×2 立方：表里 × 寒热 × 虚实，空间结构</td><td class="id">M6</td></tr>
+<tr><td class="id">4-2</td><td>归经与升降浮沉：药往哪走</td><td>坐标矩阵</td><td>归经与升降浮沉的十字坐标，药性趋向是空间隐喻</td><td class="id">M7</td></tr>
+<tr><td class="id">4-14</td><td>利水渗湿：给水找出路</td><td>流程图</td><td>利水渗湿的水液代谢图：脾、肺、肾三个关口</td><td class="id">M3</td></tr>
+<tr><td class="id">4-16</td><td>理气药：五味的定位</td><td>空间定位图</td><td>胸、胁、脘腹、少腹四段人体横线与理气药定位</td><td class="id">M12</td></tr>
+<tr><td class="id">5-1</td><td>君臣佐使：一张方的分工</td><td>关系结构图</td><td>君臣佐使在一首方里的分工结构（以麻黄汤为例）</td><td class="id">M10</td></tr>
+<tr><td class="id">5-22</td><td>祛湿四方：燥、化、利、清</td><td>流程图</td><td>胃—脾—肺—膀胱水液路线，四方各对应一站</td><td class="id">M3</td></tr>
+<tr><td class="id">6-1</td><td>版本谱系：为什么先读宋本</td><td>关系结构图</td><td>宋本、成无己注本、桂林古本、康平本的版本谱系树</td><td class="id">M13</td></tr>
+<tr><td class="id">6-3</td><td>六经的病与证，不是六个器官</td><td>层级轴阶梯</td><td>六经提纲与传变层次；图能直观说明「是证不是六个器官」</td><td class="id">M8</td></tr>
+<tr><td class="id">6-36</td><td>腰以下肿当利小便</td><td>空间定位图</td><td>腰以上汗、腰以下利小便的人体横线图</td><td class="id">M12</td></tr>
+<tr><td class="id">6-38</td><td>清阳浊阴与壮火少火</td><td>关系结构图</td><td>清阳出上窍、浊阴出下窍等三组升降走向</td><td class="id">M7</td></tr>
+<tr><td class="id">6-40</td><td>经脉别论：生病起于过用</td><td>流程图</td><td>饮与食两条并行代谢流程线，需并排才看得出差异</td><td class="id">M3</td></tr>
+<tr><td class="id">6-42</td><td>三焦治则：羽、衡、权</td><td>层级轴阶梯</td><td>上中下三焦羽、衡、权竖轴与传变次序</td><td class="id">M8</td></tr>
+<tr><td class="id">7-4</td><td>桂枝汤与麻黄汤的分界</td><td>坐标矩阵</td><td>有汗—无汗横轴 + 第 63 条「有汗却不用桂枝汤」的例外点</td><td class="id">M6</td></tr>
+</table></div></section>
+<section><h2>判断与边界</h2><p class="note" style="margin:0">
+隐性缺口：P0 中有 <b>4 条</b>（2-9、2-11、2-13、2-14）内容必须配图，但课后任务完全没要求作图，只能靠内容审读挑出来，多是脉诊手感与波形。<br><br>
+课后任务刻意用「自己默画 / 自己列表」做主动回忆，不能把成品图全部提前摆进正文。P0 才在正文直接给认知型插图；P1 给空白模板 + 默认折叠的答案图。舌象、面色用标准化彩绘示意而非真实照片，脉象波形须标注「示意，非真实脉搏波」。本草域教的是药性与方证，不是中药鉴定，饮片照片本轮不建议补。
+</p></section>
+<p class="foot">明细见 <code>docs/配图需求清单.csv</code>，完整报告见 <code>docs/配图需求统计.md</code>，生成脚本 <code>tools/illustration_audit.py</code>。</p>
+</div></body></html>
