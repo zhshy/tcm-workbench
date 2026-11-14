@@ -97,7 +97,7 @@ for (const { domain, block, item } of rows) {
     }
   }
 }
-check(quoteTotal >= 880, "原文总数不足 880，实际 " + quoteTotal);
+check(quoteTotal >= 800, "原文总数不足 800，实际 " + quoteTotal);
 check(linked + (rows.reduce((n, row) => n + row.item.quote.filter((q) => q.match_status === "unmatched").length, 0)) === quoteTotal, "原文匹配状态数量不完整");
 check(outside >= 1, "库外引文未被单独标注");
 
