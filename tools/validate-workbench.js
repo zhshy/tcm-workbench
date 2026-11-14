@@ -13,7 +13,7 @@ const html = readHtml();
 const DATA = loadData();
 const rows = allItems(DATA);
 
-check(DATA.version === "2.1.0", "数据版本不是 2.1.0，实际 " + DATA.version);
+check(DATA.version === "2.2.0", "数据版本不是 2.2.0，实际 " + DATA.version);
 check(Array.isArray(DATA.domains), "domains 必须是数组");
 check(DATA.domains.length === 8, "域数不是 8，实际 " + DATA.domains.length);
 
@@ -43,14 +43,27 @@ for (const { domain, block, item } of rows) {
     check(ans.length > 0 && ans.every((a) => Number.isInteger(a) && a >= 0 && a < q.opts.length),
       where + " quiz[" + i + "] 答案下标越界或为空");
     check(typeof q.why === "string" && q.why, where + " quiz[" + i + "] 缺解析");
+    check(typeof q.id === "string" && q.id, where + " quiz[" + i + "] 缺稳定 ID");
+    check(["manual", "generated"].includes(q.question_origin), where + " quiz[" + i + "] 来源类型无效");
+    check(["draft", "pending_review", "reviewed", "approved", "rejected"].includes(q.review_status), where + " quiz[" + i + "] 审核状态无效");
+    check(q.question_origin !== "generated" || q.review_status === "draft", where + " 自动生成题不得默认通过审核");
+    check(Array.isArray(q.knowledge_ids) && q.knowledge_ids.length > 0, where + " quiz[" + i + "] 缺知识点关联");
+    check(Array.isArray(q.source_refs), where + " quiz[" + i + "] 缺来源引用数组");
   }
   const comp = item.composite || {};
   check(Array.isArray(comp.items) && comp.items.length >= 1, where + " 缺综合辨析题");
   check(comp.stimulus && typeof comp.stimulus.text === "string" && comp.stimulus.text,
     where + " 综合题缺材料");
+  check(typeof comp.id === "string" && comp.id, where + " 综合题缺稳定 ID");
+  check(["manual", "generated"].includes(comp.question_origin), where + " 综合题来源类型无效");
+  check(["draft", "pending_review", "reviewed", "approved", "rejected"].includes(comp.review_status), where + " 综合题审核状态无效");
+  check(comp.question_origin !== "generated" || comp.review_status === "draft", where + " 自动生成综合题不得默认通过审核");
   for (const [i, s] of comp.items.entries()) {
     check(s.q && Array.isArray(s.o) && s.o.length >= 2 && Number.isInteger(s.a),
       where + " 综合题子判断 " + i + " 不完整");
+    check(typeof s.id === "string" && s.id, where + " 综合题子项缺稳定 ID");
+    check(Array.isArray(s.knowledge_ids) && s.knowledge_ids.length > 0, where + " 综合题子项缺知识点关联");
+    check(Array.isArray(s.source_refs), where + " 综合题子项缺来源引用数组");
   }
 
   // 加大篇幅：每条 ≥5 段原文、≥8 条要点
@@ -63,21 +76,29 @@ for (const { domain, block, item } of rows) {
     check(q.s && q.src, at + " 缺原文或出处");
     check(typeof q.tr === "string" && q.tr, at + " 缺白话翻译");
     check(typeof q.tip === "string" && q.tip, at + " 缺校读提示");
-    check(typeof q.book === "string" && q.book, at + " 缺书库书名");
-    check(typeof q.file === "string" && q.file, at + " 缺书库跳转文件");
-    check(typeof q.q === "string" && q.q, at + " 缺书库检索词");
-    check(typeof q.hit === "boolean", at + " 缺命中标记");
+    check(["exact", "fragment", "chapter", "outside", "unmatched"].includes(q.match_status), at + " 匹配状态无效");
+    check(typeof q.match_method === "string" && q.match_method, at + " 缺匹配方法");
+    check(typeof q.hit === "boolean" && q.hit === (q.match_status === "exact"), at + " 精确命中标记不一致");
+    check(typeof q.work_id === "string", at + " 缺文献稳定 ID 字段");
+    if (q.match_status === "unmatched") {
+      check(!q.file && !q.q && !q.hit, at + " 未匹配原文不得保留虚假定位链接");
+    } else {
+      check(typeof q.book === "string" && q.book, at + " 缺书库书名");
+      check(typeof q.file === "string" && q.file, at + " 缺书库跳转文件");
+      check(typeof q.q === "string" && q.q, at + " 缺书库检索词");
+      check(q.work_id, at + " 缺文献稳定 ID 值");
+      linked++;
+    }
     quoteTotal++;
-    linked++;
     if (q.hit) exact++;
-    if (q.outside) {
+    if (q.match_status === "outside") {
       outside++;
-      check(q.hit === false, at + " 库外引文不得标记为精确命中");
+      check(q.outside === true && q.hit === false, at + " 库外引文状态不一致");
     }
   }
 }
 check(quoteTotal >= 880, "原文总数不足 880，实际 " + quoteTotal);
-check(linked === quoteTotal, "仍有原文缺书库链接");
+check(linked + (rows.reduce((n, row) => n + row.item.quote.filter((q) => q.match_status === "unmatched").length, 0)) === quoteTotal, "原文匹配状态数量不完整");
 check(outside >= 1, "库外引文未被单独标注");
 
 // ---------- 2. 域结构与学术校读 ----------
@@ -102,6 +123,8 @@ for (const legacy of ["var COURSE=[", "window.RD", "S.course.start", "weekfocus"
   check(!html.includes(legacy), "仍残留旧版逐日结构：" + legacy);
 }
 check(html.includes("没有「今日课程」，没有解锁，没有上限"), "首页未说明已取消每日配额");
+check(html.includes("mozhu-tcm-v2"), "本机学习记录键变更，可能导致旧进度丢失");
+check(html.includes("当前备份版本") || html.includes("TCMState.CURRENT_BACKUP_VERSION"), "页面未集成备份版本控制");
 
 // ---------- 4. v2.1 前端能力标记 ----------
 for (const marker of ["class=\"qlink", "data-out=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1", "原书未入书库"]) {
@@ -112,7 +135,16 @@ for (const marker of ["class=\"qlink", "data-out=", "rdSwitch", "RDMODE", "openB
 const lib = JSON.parse(fs.readFileSync(path.join(root, "library", "index.json"), "utf8"));
 check(Array.isArray(lib.items) && lib.items.length >= 32, "书库条目不足 32，实际 " + lib.items.length);
 const types = {};
+const workIds = new Set();
 for (const b of lib.items) {
+  check(typeof b.work_id === "string" && b.work_id, "《" + b.title + "》缺文献稳定 ID");
+  check(!workIds.has(b.work_id), "文献稳定 ID 重复：" + b.work_id);
+  workIds.add(b.work_id);
+  for (const key of ["edition", "publisher", "source_url", "transcriber", "text_status", "license_status", "verified_at", "verification_note"]) {
+    check(Object.prototype.hasOwnProperty.call(b, key), "《" + b.title + "》缺元数据字段：" + key);
+  }
+  check(b.license_status === "underlying_work_public_domain_transcription_rights_unverified", "《" + b.title + "》授权状态不得冒充已核实");
+}
   check(fs.existsSync(path.join(root, "library", b.file)), "书库缺文件：" + b.file);
   check(typeof b.tr === "string" && b.tr, "《" + b.title + "》缺白话译本路径");
   check(fs.existsSync(path.join(root, "library", b.tr)), "《" + b.title + "》译本文件不存在：" + b.tr);
@@ -124,6 +156,7 @@ for (const b of lib.items) {
 check((types["全本逐篇译解"] || 0) + (types["全本逐脉译解"] || 0) === 2, "全本译解不是 2 部");
 check(types["框架节译"] === 2, "框架节译不是 2 部");
 check(types["白话导读"] === 28, "白话导读不是 28 部");
+check(typeof lib.license_note === "string" && /电子文本/.test(lib.license_note), "缺电子文本授权边界说明");
 check(typeof lib.translation_note === "string" && /不冒充全译/.test(lib.translation_note),
   "书库索引未声明译本边界");
 
