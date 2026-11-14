@@ -103,47 +103,72 @@ def chapter_of(src):
 
 
 def link_for(src, raw):
-    """返回 (书名, 检索词, 是否精确命中)。尽量用能命中的最长前缀/片段。"""
+    """返回书籍、检索词、匹配状态、方法和实际匹配片段。"""
     title = book_of(src)
     if not title:
-        return "", "", False
+        return "", "", "unmatched", "no_book_mapping", ""
     txt = lib_text(title)
     clean = norm(raw)
     if not txt or not clean:
-        return title, "", False
+        return title, "", "unmatched", "empty_text", ""
+    # 只有整段规范化文本连续存在于底本中，才能记为 exact。
     if clean in txt:
-        return title, raw.strip()[:24], True
+        return title, raw.strip()[:40], "exact", "normalized_full_text", raw
+    # 前缀命中和内部片段命中一律只能记为 fragment。
     for n in (16, 12, 10, 8, 6, 5, 4):
         if len(clean) >= n and clean[:n] in txt:
-            return title, clean[:n], True
-    # 引文与底本有异文（如「五脏」库本作「五藏」）时，
-    # 在引文里找一段确实存在于库内文本的最长片段当锚点。
+            return title, clean[:n], "fragment", "prefix_fragment", clean[:n]
     for n in (12, 10, 8, 6, 4):
         if len(clean) < n:
             continue
         for i in range(0, len(clean) - n + 1, 2):
             frag = clean[i:i + n]
             if frag in txt:
-                return title, frag, False
+                return title, frag, "fragment", "internal_fragment", frag
     chap = chapter_of(src)
     if chap and norm(chap) in txt:
-        return title, chap, False
-    # 实在找不到锚点，也带一个短词进去，别留空检索框
-    return title, clean[:6], False
-
+        return title, chap, "chapter", "chapter_name", chap
+    return title, "", "unmatched", "no_reliable_anchor", ""
 
 # ---------- 1. 原文与要点扩写 ----------
 all_items = []
+ITEM_CONTEXT = {}
 for d in DOMAINS:
     for b in d["blocks"]:
         for it in b["items"]:
             all_items.append(it)
+            ITEM_CONTEXT[it["id"]] = " ".join([
+                d.get("name", ""), b.get("name", ""), it.get("title", ""),
+                it.get("goal", ""), " ".join(it.get("topic_tags", [])),
+                " ".join(it.get("knowledge_ids", [])),
+                " ".join(it.get("pts", [])),
+            ])
 
 extra_pool = {}
 for bk, arr in EXTRA.items():
     if bk.startswith("_"):
         continue
     extra_pool[bk] = [dict(x, _book=bk) for x in arr]
+ 
+GENERIC_TAGS = {"基础", "总纲", "校读", "理论", "经典", "学习", "辨析", "知识", "方法"}
+
+def topic_score(it, segment, primary_book):
+    """按知识标签和条目上下文计算相关性；仅主出处作为低权重兜底。"""
+    context = ITEM_CONTEXT.get(it["id"], "")
+    item_ids = set(it.get("knowledge_ids", []))
+    supporting = set(segment.get("supporting_knowledge_ids", []))
+    score = 12 if supporting and item_ids.intersection(supporting) else 0
+    matched = []
+    for tag in segment.get("tags", []):
+        if tag in GENERIC_TAGS or len(tag) < 2:
+            continue
+        if tag in context:
+            matched.append(tag)
+    score += min(len(matched), 4) * 2
+    if segment.get("_book") == primary_book:
+        score += 1
+    return score, matched
+
 
 usage = collections.Counter()
 expanded_q = 0
@@ -165,31 +190,32 @@ for it in all_items:
         books = [b for b in books if b]
         primary = collections.Counter(books).most_common(1)[0][0] if books else None
         existing = {norm(q.get("s", ""))[:12] for q in it.get("quote", [])}
-        # 优先主出处，其次任意有补编的书
-        order = ([primary] if primary in extra_pool else []) + [
-            b for b in extra_pool if b != primary
-        ]
-        # 幂等：已补过的 ext 段计入配额，重跑不会再往上叠。
+        # 依据知识主题而非书籍遍历顺序选择补编段落。
+        ranked = []
+        for bk, segments in extra_pool.items():
+            for seg in segments:
+                score, matched_tags = topic_score(it, seg, primary)
+                if score > 0:
+                    ranked.append((score, bk, seg, matched_tags))
+        ranked.sort(key=lambda row: (-row[0], row[1], row[2].get("s", "")))
+        # 幂等：已补过的 ext 段计入配额；同一段全课程最多复用 3 次。
         added = sum(1 for q in it.get("quote", []) if q.get("ext") and not q.get("sup"))
-        for bk in order:
+        for score, bk, seg, matched_tags in ranked:
             if added >= 2:
                 break
-            for seg in extra_pool[bk]:
-                key = norm(seg["s"])[:12]
-                if key in existing:
-                    continue
-                # 同一段原文最多复用 3 次，避免处处重复
-                if usage[key] >= 3:
-                    continue
-                it["quote"].append({
-                    "s": seg["s"], "src": seg["src"], "tr": seg["tr"],
-                    "tip": seg["tip"], "ext": True,
-                })
-                existing.add(key)
-                usage[key] += 1
-                added += 1
-                expanded_q += 1
-                break
+            key = norm(seg["s"])[:12]
+            if key in existing or usage[key] >= 3:
+                continue
+            it["quote"].append({
+                "s": seg["s"], "src": seg["src"], "tr": seg["tr"],
+                "tip": seg["tip"], "ext": True,
+                "topic_score": score, "matched_tags": matched_tags,
+                "supporting_knowledge_ids": seg.get("supporting_knowledge_ids", []),
+            })
+            existing.add(key)
+            usage[key] += 1
+            added += 1
+            expanded_q += 1
         # 要点：从旧课 note / read / 新补原文派生 3 条
         pts = list(it.get("pts", []))
         note = str(it.get("note", "")).strip()
@@ -223,27 +249,34 @@ for it in all_items:
 linked = 0
 exact = 0
 outside = 0
+match_counts = collections.Counter()
 for it in all_items:
     for q in it.get("quote", []):
-        bk, kw, hit = link_for(q.get("src", ""), q.get("s", ""))
+        bk, kw, status, method, matched_text = link_for(q.get("src", ""), q.get("s", ""))
         is_outside = False
-        if not bk:
+        if status == "unmatched":
             src = str(q.get("src", ""))
             for key, (rel, term) in OUTSIDE.items():
                 if key in src and rel in BY_TITLE:
-                    bk, kw, hit, is_outside = rel, term, False, True
+                    bk, kw, status, method, matched_text, is_outside = rel, term, "outside", "related_reference", term, True
                     break
         q.pop("outside", None)
-        if bk:
-            q["book"] = bk
-            q["file"] = BY_TITLE.get(bk, "")
-            q["q"] = kw
-            q["hit"] = hit and not is_outside
-            if is_outside:
-                q["outside"] = True
-                outside += 1
+        q["match_status"] = status
+        q["match_method"] = method
+        q["match_text"] = matched_text
+        q["hit"] = status == "exact"
+        q["book"] = bk or ""
+        q["file"] = BY_TITLE.get(bk, "") if status != "unmatched" else ""
+        q["q"] = kw if status != "unmatched" else ""
+        if is_outside:
+            q["outside"] = True
+        if q["file"]:
             linked += 1
-            exact += bool(hit)
+        if status == "exact":
+            exact += 1
+        if status == "outside":
+            outside += 1
+        match_counts[status] += 1
 
 # ---------- 3. 补齐 6+1 ----------
 def pick(rng_key, arr, n, exclude=()):
@@ -329,6 +362,18 @@ for it in all_items:
 
     it["quiz"] = quiz[:6]
 
+    # 记录题目来源与审核状态。机器生成题默认为草稿，人工编写题也不冒充已审核。
+    for qi, question in enumerate(it["quiz"], 1):
+        question.setdefault("id", "%s-Q%02d" % (iid, qi))
+        origin = "generated" if question.get("gen") else "manual"
+        question.setdefault("question_origin", origin)
+        question.setdefault("review_status", "draft" if origin == "generated" else "pending_review")
+        question.setdefault("knowledge_ids", it.get("knowledge_ids") or [iid])
+        question.setdefault("source_refs", [question["src"]] if question.get("src") else [])
+        question.setdefault("source_status", "needs_manual_source_review" if not question.get("source_refs") else "source_label_not_independently_verified")
+        question.setdefault("difficulty", "basic")
+        question.setdefault("cognitive_level", "unclassified")
+
     if not it.get("composite"):
         material = []
         for q in quotes[:2]:
@@ -368,11 +413,27 @@ for it in all_items:
             while len(s["o"]) < 2:
                 s["o"].append("以上表述皆不合本讲材料")
         it["composite"] = {
+            "id": iid + "-Q07",
             "title": "材料与课程要点综合辨析",
             "stimulus": {"title": "本讲经典材料", "text": stim},
             "items": subs[:4],
+            "question_origin": "generated",
+            "review_status": "draft",
         }
         filled_comp += 1
+
+    comp = it.get("composite") or {}
+    comp.setdefault("id", iid + "-Q07")
+    comp.setdefault("question_origin", "generated" if comp.get("review_status") == "draft" else "manual")
+    comp.setdefault("review_status", "pending_review")
+    for si, sub in enumerate(comp.get("items", []), 1):
+        sub.setdefault("id", "%s-Q07-%02d" % (iid, si))
+        sub.setdefault("question_origin", comp["question_origin"])
+        sub.setdefault("review_status", comp["review_status"])
+        sub.setdefault("knowledge_ids", it.get("knowledge_ids") or [iid])
+        sub.setdefault("source_refs", [])
+        sub.setdefault("source_status", "needs_manual_source_review")
+    it["composite"] = comp
 
 # ---------- 4. 断言 ----------
 bad_q = [it["id"] for it in all_items if len(it.get("quiz", [])) != 6]
@@ -384,14 +445,14 @@ assert not bad_c, "仍有条目缺综合题：" + str(bad_c[:8])
 assert not bad_tr, "仍有原文缺白话：" + str(bad_tr[:8])
 assert not bad_link, "仍有原文缺书库链接：" + str(bad_link[:8])
 
-DATA["version"] = "2.1.0"
+DATA["version"] = "2.2.0"
 with open(os.path.join(HERE, "domains.json"), "w", encoding="utf-8") as f:
     json.dump(DATA, f, ensure_ascii=False, separators=(",", ":"))
 
 print("条目 %d；补原文 %d 段，补要点 %d 条" % (
     len(all_items), expanded_q, expanded_p))
-print("原文总数 %d；带书库链接 %d 段，其中精确命中 %d 段；原书未入库改走参读 %d 段" % (
-    sum(len(it["quote"]) for it in all_items), linked, exact, outside))
+print("原文匹配状态：%s；含定位链接 %d 段；精确命中 %d 段；库外参读 %d 段" % (\n    dict(match_counts), linked, exact, outside))\nprint("旧口径原文总数 %d" % (
+    sum(len(it["quote"]) for it in all_items)))
 print("补单选 %d 题，补综合题 %d 组；全部条目 6+1，原文白话 100%%" % (filled_quiz, filled_comp))
 print("域/块/条目：%d / %d / %d" % (
     len(DOMAINS), sum(len(d["blocks"]) for d in DOMAINS), len(all_items)))
