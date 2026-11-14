@@ -1,25 +1,25 @@
 {
- "name": "中医学习工作台",
- "short_name": "学中医",
- "description": "168天中医学习工作台：每日6道基础客观题+1道综合客观大题、古籍阅读与学习记录",
- "start_url": "./index.html",
- "scope": "./",
- "display": "standalone",
- "background_color": "#F7F5F0",
- "theme_color": "#A6433A",
- "lang": "zh-CN",
- "icons": [
-  {
-   "src": "assets/icon-192.png",
-   "sizes": "192x192",
-   "type": "image/png",
-   "purpose": "any maskable"
-  },
-  {
-   "src": "assets/icon-512.png",
-   "sizes": "512x512",
-   "type": "image/png",
-   "purpose": "any maskable"
-  }
- ]
+  "name": "中医学习工作台",
+  "short_name": "学中医",
+  "description": "按知识域与知识块组织的中医学习工作台，提供 6+1 客观自测、古籍阅读、文献定位与本机学习记录。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F5F1",
+  "theme_color": "#F6F5F1",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
