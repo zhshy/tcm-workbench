@@ -651,6 +651,8 @@ function openItem(iid){
         }else{
           h += '<div class="qlink nohit" data-match="' + esc(matchStatus) + '">' + esc(label) + '</div>';
         }
+      }else if(q.match_status === "unmatched"){
+        h += '<div class="qlink nohit" data-match="unmatched">未找到可靠定位 · 原文与出处待人工核校</div>';
       }
       h += '</div>';
     });
