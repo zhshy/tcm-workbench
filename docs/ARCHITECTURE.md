@@ -41,7 +41,7 @@ tcm-workbench/
 ├── shots/                  visual-check 截图（历史截图）
 ├── docs/                   课程说明、本文件、v2 改版说明、archive/
 ├── data/ / resources/ / library-page/   v1 历史数据与资料，不是当前数据源
-└── .github/workflows/ci.yml  npm run build:all + npm run validate + npm test + Python unittest
+└── .github/workflows/ci.yml  npm run build:all + npm run check:generated + npm run validate + npm test + npm run test:python
 ```
 
 ## 二、数据流
@@ -52,8 +52,8 @@ build/d1_foundation_*.json + domain2*.json + new_extra.json + old_course.json
         ▼
 build/domains.json  { version, domains: [{ id, name, blocks: [{ items: [...] }] }] }
         │  enrich.py  ← classic_extra.json / thin_supplement.json / library/*.txt
-        │    · 每条补齐 6 道基础题 + 1 组综合辨析（md5 稳定伪随机）
-        │    · 复用旧课的条目补 2 段原文 + 3 条要点；偏薄条目按 id 定向补编
+        │    · 每条保留 6 道基础客观题 + 1 组综合辨析；生成题标记 draft
+        │    · 旧课原文按主题标签/条目上下文补充，逐条补足至少 5 段；补编保留关联标签
         │    · 每段原文算 match_status / match_method / match_text / work_id；exact 仅限整段规范化匹配
         │    · 断言 6+1、白话、定位状态与引用字段；设 version = 2.2.0
         ▼   （enrich.py 幂等：sup 标记 + ext 配额 + pts 去重，重跑不叠加）
@@ -102,7 +102,7 @@ quote = {
 
 ## 四、部署
 
-GitHub Pages 从 `main` 根目录发布，`.nojekyll` 避免 Jekyll 处理。推送 `main` 后自动生效；`service-worker.js` 会缓存静态资源，改版后若线上仍是旧页，强制刷新或带 cache-buster 参数即可。
+GitHub Pages 从 `main` 根目录发布，`.nojekyll` 避免 Jekyll 处理。主分支 CI 完整构建并测试后，会只提交生成的页面、课程 JSON、书目索引和白话译本；该 bot 提交触发 Pages 更新。Service Worker v3 对书库索引采用 Network First、古籍正文采用 Stale While Revalidate，并保留离线缓存。
 
 ## 五、校验
 
