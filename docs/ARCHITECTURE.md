@@ -29,7 +29,7 @@ tcm-workbench/
 │   └── zjsy_text.txt       《诊家枢要》整理本抓取文本（中间产物）
 ├── library/                32 部古籍正文 + 白话/（32 部译本）+ index.json + _external/
 ├── tools/
-│   ├── load-data.js        从 index.html 抽出 var DATA（校验与测试共用）
+│   ├── load-data.js        从 index.html 抽出 var DATA（校验与测试共用）\n│   ├── user-state.js       v3 备份序列化、旧版本导入与数据白名单校验\n│   ├── check-generated.js  检查 domains.json 与 index.html 内嵌数据一致
 │   ├── validate-workbench.js  v2.2 数据 / 6+1 / 文献匹配状态 / 译本覆盖校验
 │   ├── visual-check.mjs    Edge CDP 无头浏览器回归（47 项，真实点击与截图）
 │   ├── course-engine.js    v1 评分引擎（历史，v2 不再使用）
@@ -106,12 +106,15 @@ GitHub Pages 从 `main` 根目录发布，`.nojekyll` 避免 Jekyll 处理。推
 
 ## 五、校验
 
-CI 三条命令（均通过）：
+CI 在 Linux + Node.js 22 + Python 3.12 环境执行：
 
-- `npm run validate`：8 域 / 29 块 / 170 条、id 唯一、每讲 6+1、每条 ≥5 段原文 / ≥8 条要点、888 段原文白话与链接 100%、译本类型分布、四诊顺序与脉诊 8 讲、书库 32 部文件齐备、旧 `var COURSE` / `window.RD` / 开始日逻辑已清除、引文出处正确。
-- `npm test`：10 项 v2.1 结构测试。
-- `npm run test:python`：4 项发布脚本测试（glob 用双引号，避免 Windows 下静默跑 0 项）。
+1. `npm run build:all`：从课程源数据重建 domains、译本和单页 `index.html`。
+2. `npm run check:generated`：验证 `build/domains.json` 与页面内嵌 DATA 完全一致，并检查书目元数据与 PWA 缓存策略。
+3. `npm run validate`：校验 8 域 / 29 块 / 170 条、6+1、题目审核状态、引文匹配状态、32 部书目与译本。
+4. `npm test`：课程结构、文献元数据和本机备份兼容测试。
+5. `npm run test:python`：发布脚本安全测试。
 
-本机另有 `npm run check:visual`，通过 Edge 调试协议驱动无头浏览器做 47 项回归：原文四层与深链、多选题判分、6+1、库外标注、书库「译」、原文/白话切换、冷启动深链、500px 窄屏，并输出 `shots/v21-*.png`。
+当前构建的原文匹配统计为 862 段：`exact` 422、`fragment` 417、`chapter` 10、`outside` 12、`unmatched` 1。只有 `exact` 表示整段规范化文本连续匹配；它仍不替代版本校勘和语义核验。
 
+主分支全部测试通过后，CI 只提交 `index.html`、`build/domains.json`、`library/index.json` 和 `library/白话/` 等生成产物，随后由 GitHub Pages 部署。第三方资料目录 `library/_external/` 不在自动提交清单中。
 v1.4.2 的架构说明存档在 [`archive/ARCHITECTURE-v1.4.2.md`](archive/ARCHITECTURE-v1.4.2.md)。
