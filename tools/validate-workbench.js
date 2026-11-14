@@ -127,7 +127,7 @@ check(html.includes("mozhu-tcm-v2"), "本机学习记录键变更，可能导致
 check(html.includes("当前备份版本") || html.includes("TCMState.CURRENT_BACKUP_VERSION"), "页面未集成备份版本控制");
 
 // ---------- 4. v2.1 前端能力标记 ----------
-for (const marker of ["class=\"qlink", "data-out=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1", "原书未入书库"]) {
+for (const marker of ["class=\"qlink", "data-out=", "data-match=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1", "原书未入书库", "未找到可靠定位", "自动生成 · 未审核草稿", "TCMState.parseBackup"]) {
   check(html.includes(marker), "页面缺少 v2.1 前端能力：" + marker);
 }
 
