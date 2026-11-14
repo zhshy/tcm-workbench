@@ -9,7 +9,7 @@ const DATA = loadData();
 const rows = allItems(DATA);
 const html = readHtml();
 
-test("数据版本为 2.1.0，域 8 / 块 29 / 条目 170", () => {
+test("数据版本为 2.2.0，域 8 / 块 29 / 条目 170", () => {
   assert.equal(DATA.version, "2.2.0");
   assert.equal(DATA.domains.length, 8);
   assert.equal(DATA.domains.reduce((n, d) => n + d.blocks.length, 0), 29);
@@ -100,7 +100,7 @@ test("已彻底去掉「天」驱动：数据无 day/d 字段，页面无逐日�
   assert.ok(html.includes("var DOMAINS = DATA.domains"), "缺少域-块渲染入口");
 });
 
-test("v2.1 前端：原文链接、译按钮、原文/白话切换、深链路由齐备", () => {
+test("v2.2 前端：分级原文状态、题目审核标记、译按钮与深链路由齐备", () => {
   for (const marker of ["class=\"qlink", "data-out=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1"]) {
     assert.ok(html.includes(marker), "页面缺少：" + marker);
   }
