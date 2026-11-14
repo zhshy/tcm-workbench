@@ -144,7 +144,6 @@ for (const b of lib.items) {
     check(Object.prototype.hasOwnProperty.call(b, key), "《" + b.title + "》缺元数据字段：" + key);
   }
   check(b.license_status === "underlying_work_public_domain_transcription_rights_unverified", "《" + b.title + "》授权状态不得冒充已核实");
-}
   check(fs.existsSync(path.join(root, "library", b.file)), "书库缺文件：" + b.file);
   check(typeof b.tr === "string" && b.tr, "《" + b.title + "》缺白话译本路径");
   check(fs.existsSync(path.join(root, "library", b.tr)), "《" + b.title + "》译本文件不存在：" + b.tr);
@@ -169,6 +168,6 @@ check(/全本逐篇白话译解/.test(zjsyTr) && /译本说明/.test(zjsyTr), "�
 
 console.log(
   "校验通过：8 域 / 29 块 / 170 条；" +
-  "6+1 全覆盖，原文 " + quoteTotal + " 段（白话 100%、书库链接 100%、精确命中 " + exact +
+  "6+1 全覆盖，原文 " + quoteTotal + " 段（白话齐全、精确命中 " + exact +
   "、库外参读 " + outside + "）；书库 " + lib.items.length + " 部译本齐备。"
 );
