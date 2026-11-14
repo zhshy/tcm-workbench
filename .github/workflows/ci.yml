@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Rebuild all generated course and library artifacts
+        run: npm run build:all
       - name: Validate course data and embedded engine
         run: npm run validate
       - name: Run JavaScript tests
