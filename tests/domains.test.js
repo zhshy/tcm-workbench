@@ -9,8 +9,8 @@ const DATA = loadData();
 const rows = allItems(DATA);
 const html = readHtml();
 
-test("数据版本为 2.3.0，域 8 / 块 29 / 条目 170", () => {
-  assert.equal(DATA.version, "2.3.0");
+test("数据版本为 2.4.0，域 8 / 块 29 / 条目 170", () => {
+  assert.equal(DATA.version, "2.4.0");
   assert.equal(DATA.domains.length, 8);
   assert.equal(DATA.domains.reduce((n, d) => n + d.blocks.length, 0), 29);
   assert.equal(rows.length, 170);

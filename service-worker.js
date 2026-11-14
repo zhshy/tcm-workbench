@@ -1,4 +1,4 @@
-const CACHE_NAME = "tcm-workbench-static-v5";
+const CACHE_NAME = "tcm-workbench-static-v6";
 const PRECACHE_URLS = ["./", "./index.html", "./manifest.json", "./assets/icon-192.png", "./assets/icon-512.png", "./assets/apple-touch-icon.png"];
 
 async function cachePut(request, response) {

@@ -207,16 +207,33 @@ main{max-width:1040px;margin:0 auto;padding:26px 20px 40px}
 .figopen{margin-left:auto;white-space:nowrap}
 .figdisclaimer{font-size:12px;color:var(--ink3);margin:9px 0 0;line-height:1.65}
 
-.tplbox{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
-.tplbox summary{cursor:pointer;padding:11px 15px;font-size:13px;color:var(--ink2);list-style:none}
-.tplbox summary::-webkit-details-marker{display:none}
-.tplbox summary:before{content:"▸ ";color:var(--amber)}
-.tplbox[open] summary:before{content:"▾ "}
-.tplbox[open] summary{border-bottom:1px solid var(--line2)}
-.tplimg{display:block;background:#0A1633;line-height:0}
-.tplimg img{display:block;width:100%;height:auto;max-width:100%}
-.tplfoot{padding:9px 15px;font-size:12px;color:var(--ink3)}
-.tplfoot a{color:#3b6a94}
+/* ---------- 动手区：直接给答案（v2.4） ---------- */
+.ansbox{margin-top:12px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.anshd{display:flex;flex-wrap:wrap;align-items:baseline;gap:9px;padding:12px 16px;
+  border-bottom:1px solid var(--line2);background:#FAF7EF}
+.anshd b{font-family:var(--serif);font-size:15px;color:var(--ink);font-weight:600}
+.anshd small{font-size:12px;color:var(--ink3)}
+.ansbadge{margin-left:auto;font-size:11px;letter-spacing:.06em;color:#8a6a3a;
+  border:1px solid #D9C39A;border-radius:999px;padding:3px 9px;background:#fff}
+.ansfig{border-bottom:1px solid var(--line2)}
+.ansfig .figimg img{max-height:620px;object-fit:contain;object-position:center;background:#0A1633}
+.anstext{padding:15px 16px 16px}
+.anstext h5{font-family:var(--serif);font-size:14px;font-weight:600;margin:0 0 9px;color:var(--ink)}
+.anstext h5:not(:first-child){margin-top:20px}
+.anstable{width:100%;border-collapse:collapse;font-size:13px}
+.anstable th,.anstable td{border:1px solid var(--line);padding:8px 10px;text-align:center;line-height:1.5}
+.anstable th{background:#F3EFE3;color:var(--ink);font-family:var(--serif);font-weight:600;font-size:13.5px}
+.anstable td{color:var(--ink2)}
+.anstable th:first-child,.anstable td:first-child{background:#F7F4EA;font-weight:600;color:var(--ink);width:58px}
+.ansrules{margin:0;padding-left:22px;font-size:13.5px;line-height:2;color:var(--ink2)}
+.ansrules li{padding-left:2px}
+.ansmotto{font-family:var(--serif);font-size:14px;text-align:center;color:#8a6a3a;
+  margin:14px 0 0;letter-spacing:.08em}
+.anscope{font-size:12px;color:var(--ink3);line-height:1.75;margin:14px 0 0;
+  padding-top:11px;border-top:1px dashed var(--line)}
+.ansfoot{font-size:12px;color:var(--ink3);padding:10px 16px;border-top:1px solid var(--line2);line-height:1.7}
+.ansfoot a{color:#3b6a94}
 
 .galhero p{max-width:780px}
 .galsub{font-size:12.5px;color:var(--ink3);margin-top:10px;line-height:1.7}
@@ -373,8 +390,13 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   .figentry{padding:11px 13px}
   .fe-go{display:none}
   .galgrid{grid-template-columns:1fr}
+  .anshd,.anstext,.ansfoot{padding-left:12px;padding-right:12px}
+  .anstable th,.anstable td{padding:6px 4px;font-size:12px}
+  .ansbadge{margin-left:0}
+  .ansfig .figimg img{max-height:none}
 }
-@media print{header,.nav,.actions,.pager,.iconbtn,.figentry,.figopen,.galacts{display:none}}
+@media print{header,.nav,.actions,.pager,.iconbtn,.figentry,.figopen,.galacts,.ansfoot{display:none}
+  .ansbox{break-inside:avoid}}
  .qstatus{display:inline-block;margin-left:8px;padding:1px 6px;border:1px solid #e6dfd2;border-radius:999px;color:#8b6b32;font-size:10px;line-height:1.6;vertical-align:middle;font-weight:500}.qlink.nohit{color:#8a6d3b}.qlink[data-match="exact"]{color:var(--green)}
 </style>
 </head>
@@ -409,7 +431,7 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
     <div id="resumeSlot"></div>
     <a class="figentry" href="#/gallery" id="figEntry">
       <span class="fe-ic">◈</span>
-      <span class="fe-txt"><b>典藏图谱</b><small id="figEntrySub">13 张认知插图 · 2 张空白模板</small></span>
+      <span class="fe-txt"><b>典藏图谱</b><small id="figEntrySub">13 张认知插图 · 1 张参考答案 · 2 张可选练习纸</small></span>
       <span class="fe-go">打开图谱 →</span>
     </a>
     <div class="grid" id="domains"></div>
@@ -449,12 +471,14 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   <section class="view" id="v-gallery">
     <div class="hero galhero" style="margin-bottom:18px">
       <h1 style="font-size:23px">典藏图谱</h1>
-      <p><b id="galCount">13</b> 张 P0 认知型插图 + <b id="galTplCount">2</b> 张可打印空白模板，统一为藏蓝鎏金深底金字。母图按知识点复用，点图看原图，点条目名跳回课程。</p>
-      <p class="galsub">图是概念示意，不是知识点文字来源：AI 生成的小字标注可能笔画模糊或有个别错字，一律以正文与原书为准。脉象波形非真实脉搏波，舌象面色为标准化彩绘示意、非诊断依据。P1/P2 只给空白模板，请自己默画填写——工作台不提前给成品答案。</p>
+      <p><b id="galCount">13</b> 张 P0 认知型插图 + <b>1</b> 张动手区参考答案 + <b id="galTplCount">2</b> 张可选空白练习纸，统一为藏蓝鎏金深底金字。母图按知识点复用，点图看原图，点条目名跳回课程。</p>
+      <p class="galsub">图是概念示意，不是知识点文字来源：AI 生成的小字标注可能笔画模糊或有个别错字（例如把「脏腑」写成「脏脏」），一律以条目页的结构化文字答案、本讲正文与原书为准。脉象波形非真实脉搏波，舌象面色为标准化彩绘示意、非诊断依据。<b>v2.4 起动手区直接给参考答案</b>，不再要求自己默画；下面 2 张空白纸仅供自愿练习。</p>
     </div>
     <h2 class="galsectitle">P0 认知型插图</h2>
     <div class="galgrid" id="galMothers"></div>
-    <h2 class="galsectitle">可打印空白模板</h2>
+    <h2 class="galsectitle">动手区参考答案</h2>
+    <div class="galgrid" id="galAnswer"></div>
+    <h2 class="galsectitle">可选空白练习纸（自愿）</h2>
     <div class="galgrid" id="galTpl"></div>
   </section>
 
@@ -478,7 +502,7 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   </section>
 </main>
 
-<footer>墨 · 中医学习工作台 v2.3　|　数据存于本机 localStorage，换设备请先导出备份</footer>
+<footer>墨 · 中医学习工作台 v2.4　|　数据存于本机 localStorage，换设备请先导出备份</footer>
 
 <!-- 阅读器 -->
 <div class="reader" id="reader">
@@ -537,10 +561,11 @@ function toast(msg){
 
 /* ---------- 索引 ---------- */
 var DOMAINS = DATA.domains;
-/* 配图总表：13 张母图 + 2 张空白模板；条目只存 id，文件与 alt 从这里查 */
-var FIGS = DATA.figures || { base:"./assets/illustrations/", style_note:"", mothers:[], templates:[] };
+/* 配图总表：13 张母图 + 2 张可选练习纸 + 1 张参考答案；条目只存 id，文件与 alt 从这里查 */
+var FIGS = DATA.figures || { base:"./assets/illustrations/", style_note:"", mothers:[], templates:[], answer:null };
 var FIG_MAP = {};
 FIGS.mothers.concat(FIGS.templates).forEach(function(f){ FIG_MAP[f.id] = f; });
+if(FIGS.answer) FIG_MAP[FIGS.answer.id] = FIGS.answer;
 function figUrl(f){
   return (FIGS.base || "./assets/illustrations/") + encodeURIComponent(f.file || f);
 }
@@ -663,7 +688,7 @@ function renderGallery(){
   document.getElementById("galCount").textContent = FIGS.mothers.length;
   document.getElementById("galTplCount").textContent = FIGS.templates.length;
   document.getElementById("figEntrySub").textContent =
-    FIGS.mothers.length + " 张认知插图 · " + FIGS.templates.length + " 张空白模板";
+    FIGS.mothers.length + " 张认知插图 · " + (FIGS.answer ? "1 张参考答案 · " : "") + FIGS.templates.length + " 张可选练习纸";
   document.getElementById("galMothers").innerHTML = FIGS.mothers.map(function(m){
     var links = m.items.slice(0, 6).map(function(id){
       var r = ITEM_INDEX[id];
@@ -681,14 +706,24 @@ function renderGallery(){
       }).join("、") + '</div>' : '') +
       '</div></article>';
   }).join("");
+  var A = FIGS.answer;
+  document.getElementById("galAnswer").innerHTML = A ? '<article class="galcard" data-ans="' + esc(A.id) + '">' +
+      '<a class="galimg" href="' + esc(figUrl(A)) + '" target="_blank" rel="noopener" aria-label="查看原图：' + esc(A.title) + '">' +
+      '<img src="' + esc(figUrl(A)) + '" alt="' + esc(A.alt) + '" loading="lazy" decoding="async"></a>' +
+      '<div class="galbody"><div class="galno">' + esc(A.id) + ' · 动手区参考答案 · ' + esc(A.model) + ' / ' + esc(A.aspect) + '</div>' +
+      '<h3>' + esc(A.title) + '</h3><p class="galnote">' + esc(A.note) + '</p>' +
+      '<div class="galitems"><span>' + esc(A.scope_note) + '</span></div>' +
+      '<div class="galacts"><a class="btn" href="' + esc(figUrl(A)) + '" target="_blank" rel="noopener">打开原图 / 打印</a>' +
+      '<a class="btn" href="' + esc(figUrl(A)) + '" download>下载成品答案</a></div>' +
+      '</div></article>' : '';
   document.getElementById("galTpl").innerHTML = FIGS.templates.map(function(t){
     return '<article class="galcard tplcard" data-tpl="' + esc(t.id) + '">' +
       '<a class="galimg" href="' + esc(figUrl(t)) + '" target="_blank" rel="noopener">' +
       '<img src="' + esc(figUrl(t)) + '" alt="' + esc(t.alt) + '" loading="lazy" decoding="async"></a>' +
-      '<div class="galbody"><div class="galno">' + esc(t.id) + ' · 空白模板</div>' +
+      '<div class="galbody"><div class="galno">' + esc(t.id) + ' · 可选练习纸（自愿）</div>' +
       '<h3>' + esc(t.title) + '</h3><p class="galnote">' + esc(t.note) + '</p>' +
       '<div class="galacts"><a class="btn" href="' + esc(figUrl(t)) + '" target="_blank" rel="noopener">打开原图 / 打印</a>' +
-      '<a class="btn" href="' + esc(figUrl(t)) + '" download>下载空白模板</a></div>' +
+      '<a class="btn" href="' + esc(figUrl(t)) + '" download>下载空白纸</a></div>' +
       '</div></article>';
   }).join("");
   if(!/^#\/gallery/.test(location.hash)) setHash("#/gallery");
@@ -806,16 +841,37 @@ function openItem(iid){
     h += '</div><p class="figdisclaimer">图为概念示意，标注小字可能不清；知识点一律以本讲正文与原书为准。</p></div>';
   }
 
+  /* 动手区：v2.4 起直接给参考答案，不再要求学员自己默画。
+     文字答案是人工校订的权威来源；AI 图只作视觉锚点。 */
   if(it.task){
-    h += '<div class="sec"><h4>动手</h4><div class="task"><b>任务</b>' + esc(it.task) + '</div>';
-    var tpl = it.tpl ? FIG_MAP[it.tpl] : null;
-    if(tpl){
-      h += '<details class="tplbox" data-tpl="' + esc(it.tpl) + '"><summary>展开空白模板（自己填，不提前给答案）</summary>' +
-        '<a class="tplimg" href="' + esc(figUrl(tpl)) + '" target="_blank" rel="noopener">' +
-        '<img src="' + esc(figUrl(tpl)) + '" alt="' + esc(tpl.alt) + '" loading="lazy" decoding="async"></a>' +
-        '<div class="tplfoot">' + esc(tpl.note) +
-        '　<a href="' + esc(figUrl(tpl)) + '" target="_blank" rel="noopener">打开原图 / 打印</a>' +
-        '　<a href="' + esc(figUrl(tpl)) + '" download>下载</a></div></details>';
+    h += '<div class="sec"><h4>动手 · 参考答案</h4><div class="task"><b>任务</b>' + esc(it.task) + '</div>';
+    var ans = it.ans ? FIG_MAP[it.ans] : null;
+    if(ans){
+      h += '<div class="ansbox" data-ans="' + esc(ans.id) + '">' +
+        '<div class="anshd"><b>' + esc(ans.title) + '</b><small>' + esc(ans.subtitle) + '</small>' +
+        '<span class="ansbadge">直接给答案 · 无需默写</span></div>' +
+        '<div class="ansfig"><a class="figimg" href="' + esc(figUrl(ans)) + '" target="_blank" rel="noopener" aria-label="查看原图：' + esc(ans.title) + '">' +
+        '<img src="' + esc(figUrl(ans)) + '" alt="' + esc(ans.alt) + '" loading="lazy" decoding="async"></a></div>' +
+        '<div class="anstext">' +
+          '<h5>' + esc(ans.table_caption) + '（文字校订版）</h5>' +
+          '<table class="anstable"><thead><tr><th></th>' +
+          ans.table_head.map(function(t){ return '<th>' + esc(t) + '</th>'; }).join("") +
+          '</tr></thead><tbody>' +
+          ans.table_rows.map(function(r){
+            return '<tr><td>' + esc(r.k) + '</td>' + r.v.map(function(c){ return '<td>' + esc(c) + '</td>'; }).join("") + '</tr>';
+          }).join("") + '</tbody></table>' +
+          '<h5>' + esc(ans.rules_caption) + '</h5>' +
+          '<ol class="ansrules">' + ans.rules.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join("") + '</ol>' +
+          '<p class="ansmotto">' + esc(ans.motto) + '</p>' +
+          '<p class="anscope">' + esc(ans.scope_note) + '</p>' +
+        '</div>' +
+        '<div class="ansfoot">' + esc(ans.note) +
+        '　<a href="' + esc(figUrl(ans)) + '" target="_blank" rel="noopener">查看成品答案原图</a>' +
+        '　·　还有 <a href="#/gallery">2 张可选空白练习纸</a>（自愿，不影响答案）。</div>' +
+      '</div>';
+    } else {
+      /* 非作图类任务没有答案图，仅保留任务本身 */
+      h += '<p class="figdisclaimer">本任务为文字/思辨类，答案要点见上方「要点」与本讲正文。</p>';
     }
     h += '</div>';
   }

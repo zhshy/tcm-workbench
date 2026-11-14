@@ -1,6 +1,6 @@
 {
   "name": "tcm-workbench",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "private": true,
   "description": "中医学习工作台：知识块课程、6+1 客观自测、古籍溯源、白话阅读与离线学习",
   "scripts": {

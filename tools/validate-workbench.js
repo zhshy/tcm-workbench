@@ -13,7 +13,7 @@ const html = readHtml();
 const DATA = loadData();
 const rows = allItems(DATA);
 
-check(DATA.version === "2.3.0", "数据版本不是 2.3.0，实际 " + DATA.version);
+check(DATA.version === "2.4.0", "数据版本不是 2.4.0，实际 " + DATA.version);
 check(Array.isArray(DATA.domains), "domains 必须是数组");
 check(DATA.domains.length === 8, "域数不是 8，实际 " + DATA.domains.length);
 
@@ -127,7 +127,7 @@ check(html.includes("mozhu-tcm-v2"), "本机学习记录键变更，可能导致
 check(html.includes("当前备份版本") || html.includes("TCMState.CURRENT_BACKUP_VERSION"), "页面未集成备份版本控制");
 
 // ---------- 4. v2.1 / v2.3 前端能力标记 ----------
-for (const marker of ["class=\"qlink", "data-out=", "data-match=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1", "原书未入书库", "未找到可靠定位", "自动生成 · 未审核草稿", "TCMState.parseBackup", "figUrl(", "renderGallery", "v-gallery", "figdisclaimer", "tplbox"]) {
+for (const marker of ["class=\"qlink", "data-out=", "data-match=", "rdSwitch", "RDMODE", "openBookHash", "trbtn", "trType", "tr=1", "原书未入书库", "未找到可靠定位", "自动生成 · 未审核草稿", "TCMState.parseBackup", "figUrl(", "renderGallery", "v-gallery", "figdisclaimer", "ansbox", "anstable", "ansrules", "galAnswer", "动手 · 参考答案", "直接给答案 · 无需默写"]) {
   check(html.includes(marker), "页面缺少前端能力：" + marker);
 }
 
@@ -136,7 +136,7 @@ const figures = DATA.figures || {};
 check(Array.isArray(figures.mothers) && figures.mothers.length === 13,
   "P0 母图不是 13 张");
 check(Array.isArray(figures.templates) && figures.templates.length === 2,
-  "空白模板底纹不是 2 张");
+  "可选空白练习纸不是 2 张");
 const figDir = path.join(root, "assets", "illustrations");
 check(fs.existsSync(figDir), "缺配图目录 assets/illustrations/");
 const referenced = new Set();
@@ -159,12 +159,23 @@ for (const m of figures.mothers) {
   for (const iid of m.items) check(ids.has(iid), m.id + " 挂靠了不存在的条目：" + iid);
 }
 for (const t of figures.templates) checkFig(t, t.id);
+// v2.4 动手区参考答案：图片 + 人工校订的结构化文字答案
+const A = figures.answer || {};
+checkFig(A, A.id || "answer");
+check(Array.isArray(A.table_head) && A.table_head.length === 4, "答案表头不是 4 列");
+check(Array.isArray(A.table_rows) && A.table_rows.length === 4 &&
+  A.table_rows.every((r) => Array.isArray(r.v) && r.v.length === 4), "答案表格不是 4×4");
+check(Array.isArray(A.rules) && A.rules.length >= 3, "八纲结论不足 3 行");
+const ansText = JSON.stringify(A);
+check(ansText.includes("脏腑"), "答案文字缺「脏腑」或用字有误");
+check(!ansText.includes("脏脏"), "答案文字出现 AI 错字「脏脏」");
+check(figures.answer_mode === "direct", "动手区未启用直接给答案模式");
 const onDisk = fs.readdirSync(figDir).filter((f) => f.toLowerCase().endsWith(".webp")).sort();
-check(onDisk.length === 16, "配图文件不是 16 张，实际 " + onDisk.length);
+check(onDisk.length === 17, "配图文件不是 17 张，实际 " + onDisk.length);
 const unused = onDisk.filter((f) => !referenced.has(f));
 check(unused.length === 0, "有图片未被任何视图引用：" + unused.join("、"));
 
-let figItems = 0, tplItems = 0;
+let figItems = 0, ansItems = 0;
 const motherIds = new Set(figures.mothers.map((m) => m.id));
 for (const { item } of rows) {
   if (item.figs) {
@@ -172,14 +183,15 @@ for (const { item } of rows) {
       item.id + " figs 引用了未知母图");
     figItems++;
   }
-  if (item.tpl) {
-    check(["L1", "L2"].includes(item.tpl), item.id + " tpl 引用未知：" + item.tpl);
-    check(!item.figs, item.id + " 已有 P0 成品图，不应再挂空白模板");
-    tplItems++;
+  if (item.ans) {
+    check(item.ans === "A1", item.id + " ans 引用未知：" + item.ans);
+    check(!item.figs, item.id + " 已有 P0 成品图，不应重复挂答案图");
+    ansItems++;
   }
+  check(!item.tpl, item.id + " 仍挂旧 tpl 空白模板（v2.4 已移除）");
 }
 check(figItems >= 50, "挂载 P0 插图的条目过少：" + figItems);
-check(tplItems >= 50, "挂载空白模板的条目过少：" + tplItems);
+check(ansItems >= 60, "直接给答案的条目过少：" + ansItems);
 
 // ---------- 5. 书库与白话译本 ----------
 const lib = JSON.parse(fs.readFileSync(path.join(root, "library", "index.json"), "utf8"));
@@ -220,5 +232,5 @@ console.log(
   "校验通过：8 域 / 29 块 / 170 条；" +
   "6+1 全覆盖，原文 " + quoteTotal + " 段（白话齐全、精确命中 " + exact +
   "、库外参读 " + outside + "）；书库 " + lib.items.length + " 部译本齐备；" +
-  "配图 16 张全部引用（母图挂 " + figItems + " 条 / 空白模板 " + tplItems + " 条）。"
+  "配图 17 张全部引用（母图挂 " + figItems + " 条 / 动手区直接给答案 " + ansItems + " 条）。"
 );

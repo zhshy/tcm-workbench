@@ -452,11 +452,13 @@ assert not bad_link, "仍有需定位的原文缺书库文件：" + str(bad_link
 assert not bad_match, "原文匹配状态无效：" + str(bad_match[:8])
 assert not bad_hit, "hit 字段与匹配状态不一致：" + str(bad_hit[:8])
 
-# ---------- 5. 配图挂载（P0 母图 + P1/P2 空白模板） ----------
+# ---------- 5. 配图挂载（P0 母图 + 动手参考答案） ----------
 # 映射来源：build/image_prompts.json 的 mothers[].items（13 张母图的挂靠条目）。
 # 文件名一律从 assets/illustrations/ 实际扫描；缺图直接报错，绝不写出悬空引用。
-# 设计红线：P0 认知型插图才在正文直接呈现；P1/P2 只给空白模板，
-# 让学员自己默画/列表，不把成品答案提前摆进正文（课程用主动回忆做训练）。
+# v2.4 起按需求改为「动手区直接给答案」：作图类任务不再只给空白模板让学员默画，
+# 而是直接呈现成品参考答案图 + 结构化文字答案。文字答案是权威来源——
+# AI 生图的中文小字可能有笔画模糊或错字（如「脏腑」误作「脏脏」），一律以文字为准。
+# L1/L2 空白纸降级为「可选自愿练习」附件，保留在图谱页，不再作为任务要求。
 FIG_DIR = os.path.join(ROOT, "assets", "illustrations")
 FIG_ALT = {
     "M1": "寸口六部脏腑定位示意图：左右手寸关尺六部与浮中沉三候对应，藏蓝底鎏金标注",
@@ -472,15 +474,17 @@ FIG_ALT = {
     "M11": "整体观念同心圈：天人一体与人体各层整体联系的同心圈",
     "M12": "人体分区横线图：上下、表里、三焦分区的横线示意",
     "M13": "《伤寒论》版本谱系树：从古本到通行本的版本流传分支树",
-    "L1": "空白对照表模板：藏蓝底鎏金空框，无任何文字，供自行填写",
-    "L2": "空白原文卡片底纹：藏蓝鎏金边框，无具体文字，供自行抄写",
+    "L1": "空白对照表模板：藏蓝底鎏金空框，无任何文字，供自愿练习",
+    "L2": "空白原文卡片底纹：藏蓝鎏金边框，无具体文字，供自愿练习",
+    "A1": "四诊八纲动手整理参考答案：望闻问切四列与寒热虚实四行互证表，下接阴阳表里治则三行结论与阴阳鱼纹，藏蓝底鎏金字，1:1 方形",
 }
 FIG_NOTE = {
     "M1": "概念示意 · 寸口分部以本讲正文与《诊家枢要》为准",
     "M2": "脉象波形为概念示意，非真实脉搏波；文字以正文为准",
     "M9": "标准化彩绘示意，非诊断依据；文字以正文为准",
-    "L1": "空白模板 · 请自己填写，工作台不提前提供成品答案",
-    "L2": "空白底纹 · 请自己抄写原文与按语",
+    "L1": "可选练习纸 · 空白处自愿填写，动手区已直接给出参考答案",
+    "L2": "可选练习纸 · 空白处自愿抄写，动手区已直接给出参考答案",
+    "A1": "成品参考答案 · 图中 AI 小字如有笔画模糊或出入，一律以本页结构化文字答案与本讲正文为准",
 }
 FIG_DEFAULT_NOTE = "概念示意 · 文字以正文为准"
 
@@ -497,8 +501,38 @@ FIG_CARD = re.compile(r"卡片|方卡|药卡|术语卡|义项卡|卡：|对照�
 FIG_TABLE = re.compile(r"对照|表[:：]|表格|表头|小表|清单|分布表|归类表|列.{0,6}表")
 
 
+# ---------- 动手区参考答案（结构化文字 = 权威来源） ----------
+# 与 A1 图内容严格对应，但文字由人工校订，杜绝 AI 生图错字（如「脏腑」误作「脏脏」）。
+# 覆盖课程里最高频的「四诊互证表 / 八纲辨证卡 / 复合证卡」类动手任务。
+ANSWER = {
+    "id": "A1",
+    "title": "四诊八纲 · 动手整理参考答案",
+    "model": "Seedream 5.0 Lite",
+    "aspect": "1:1",
+    "size": "2048×2048",
+    "subtitle": "望闻问切 · 寒热虚实 · 脏腑病位",
+    "table_caption": "四诊互证参考答案（寒 · 热 · 虚 · 实 × 望 · 闻 · 问 · 切）",
+    "table_head": ["望", "闻", "问", "切"],
+    "table_rows": [
+        {"k": "寒", "v": ["面色白", "语声低微", "畏寒喜暖", "脉沉迟"]},
+        {"k": "热", "v": ["面色赤", "语声洪亮", "口渴冷饮", "脉洪数"]},
+        {"k": "虚", "v": ["神疲", "气短", "自汗乏力", "脉细无力"]},
+        {"k": "实", "v": ["形实", "声高", "胀痛拒按", "脉沉实有力"]},
+    ],
+    "rules_caption": "八纲辨证填空答案",
+    "rules": [
+        "表、热、实属阳；里、寒、虚属阴",
+        "表证在皮毛肌腠，里证在脏腑气血",
+        "寒者热之，热者寒之，虚则补之，实则泻之",
+    ],
+    "motto": "知八纲者，半部医理在握",
+    "scope_note": "本页为通用参考答案范式：示范一张填好的对照表该有哪些维度与层级。"
+                  "各条目任务涉及的五味、方剂、条文等具体内容，以本讲要点与原书为准，工作台不冒充逐条标准答案。",
+}
+
+
 def attach_figures():
-    """生成 DATA.figures 总表，并把母图 id / 模板 id 挂到条目上。幂等。"""
+    """生成 DATA.figures 总表，并把母图 id / 答案 id 挂到条目上。幂等。"""
     prompts = load("image_prompts.json")
     if not os.path.isdir(FIG_DIR):
         raise SystemExit("配图目录不存在：" + FIG_DIR)
@@ -506,7 +540,7 @@ def attach_figures():
     for name in sorted(os.listdir(FIG_DIR)):
         if not name.lower().endswith(".webp"):
             continue
-        m = re.match(r"^(M\d+|L\d+)-", name)
+        m = re.match(r"^(M\d+|L\d+|A\d+)-", name)
         if m:
             by_id.setdefault(m.group(1), []).append(name)
 
@@ -542,10 +576,16 @@ def attach_figures():
             "note": FIG_NOTE.get(fid, FIG_DEFAULT_NOTE),
         })
 
+    answer = dict(ANSWER)
+    answer["file"] = primary("A1")
+    answer["alt"] = FIG_ALT["A1"]
+    answer["note"] = FIG_NOTE["A1"]
+
     idx = {it["id"]: it for it in all_items}
     for it in all_items:
         it.pop("figs", None)
         it.pop("tpl", None)
+        it.pop("ans", None)
 
     n_link = 0
     for m in mothers:
@@ -555,34 +595,32 @@ def attach_figures():
             idx[iid].setdefault("figs", []).append(m["id"])
             n_link += 1
 
-    n_tpl = 0
+    n_ans = 0
     for it in all_items:
         if it.get("figs"):
-            continue  # 已有 P0 成品图，不再塞空白模板
+            continue  # 已有 P0 成品图，不重复塞答案图
         task = str(it.get("task", ""))
         if not FIG_MAKE.search(task):
             continue
-        if FIG_CARD.search(task):
-            it["tpl"] = "L2"
-        elif FIG_TABLE.search(task):
-            it["tpl"] = "L1"
-        if it.get("tpl"):
-            n_tpl += 1
+        it["ans"] = "A1"
+        n_ans += 1
 
     DATA["figures"] = {
         "base": "./assets/illustrations/",
         "style_note": "藏蓝鎏金深底金字 · 典藏级图谱",
         "mothers": mothers,
-        "templates": templates,
+        "templates": templates,   # 降级为「可选自愿练习纸」，仅在图谱页提供
+        "answer": answer,
+        "answer_mode": "direct",  # 动手区直接给答案；不再要求默画
     }
-    print("配图：母图 %d 张（挂靠 %d 条）/ 空白模板 %d 条 / 底纹 %d 张" % (
-        len(mothers), n_link, n_tpl, len(templates)))
-    return len(mothers), n_link, n_tpl
+    print("配图：母图 %d 张（挂靠 %d 条）/ 动手区参考答案挂 %d 条 / 可选练习纸 %d 张" % (
+        len(mothers), n_link, n_ans, len(templates)))
+    return len(mothers), n_link, n_ans
 
 
 attach_figures()
 
-DATA["version"] = "2.3.0"
+DATA["version"] = "2.4.0"
 with open(os.path.join(HERE, "domains.json"), "w", encoding="utf-8") as f:
     json.dump(DATA, f, ensure_ascii=False, separators=(",", ":"))
 

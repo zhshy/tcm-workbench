@@ -206,21 +206,48 @@ try {
   await new Promise((r) => setTimeout(r, 250));
   await shot("v23-01-item-figure.png");
 
-  console.log("\n[2e] 动手区空白模板默认折叠");
-  const tplId = await js(`(() => {
-    const it = DATA.domains.flatMap(d=>d.blocks).flatMap(b=>b.items).find(x=>x.tpl);
+  console.log("\n[2e] 动手区直接给参考答案（v2.4，不再要求默画）");
+  const ansId = await js(`(() => {
+    const it = DATA.domains.flatMap(d=>d.blocks).flatMap(b=>b.items).find(x=>x.ans);
     return it ? it.id : '';
   })()`);
-  await go("#/i/" + tplId);
-  await waitFor(`!!document.querySelector("#itemBody .tplbox")`, 8000);
-  const tplState = await js(`(() => {
-    const d=document.querySelector('#itemBody .tplbox');
-    const img=d.querySelector('img');
-    return { id:d.dataset.tpl, open:d.open, hasImg:!!img,
-      alt:img?img.alt:'', lazy:img?img.loading:'' };
+  await go("#/i/" + ansId);
+  await waitFor(`!!document.querySelector("#itemBody .ansbox")`, 8000);
+  const ansLazy = await js(`(() => { const i=document.querySelector('#itemBody .ansbox img'); return i ? i.loading : ''; })()`);
+  await js(`document.querySelectorAll('#itemBody .ansbox img').forEach(x => x.loading = 'eager'); true`);
+  await waitFor(`[...document.querySelectorAll('#itemBody .ansbox img')].every(x => x.complete && x.naturalWidth > 0)`, 12000);
+  const ansState = await js(`(() => {
+    const b=document.querySelector('#itemBody .ansbox');
+    const img=b.querySelector('img');
+    const tb=b.querySelector('.anstable');
+    return {
+      id:b.dataset.ans, visible:b.getBoundingClientRect().height>100,
+      noDetails:!b.querySelector('details'),
+      imgW:img?img.naturalWidth:0, alt:img?img.alt:'', lazy:img?img.loading:'',
+      rows:tb?tb.querySelectorAll('tbody tr').length:0,
+      cols:tb?tb.querySelectorAll('thead th').length:0,
+      cells:tb?tb.querySelectorAll('tbody td').length:0,
+      rules:b.querySelectorAll('.ansrules li').length,
+      badge:(b.querySelector('.ansbadge')||{}).textContent||'',
+      text:b.innerText
+    };
   })()`);
-  ok("制表类条目挂空白模板且默认折叠", !tplState.open && tplState.hasImg && /^L[12]$/.test(tplState.id), JSON.stringify(tplState));
-  ok("模板图带 alt / 懒加载，不提前渲染答案", tplState.alt.length > 8 && tplState.lazy === "lazy", tplState.alt.slice(0, 24));
+  ok("作图类条目直接挂 A1 参考答案且默认可见", ansState.id === "A1" && ansState.visible && ansState.noDetails, JSON.stringify({id:ansState.id,visible:ansState.visible,noDetails:ansState.noDetails}));
+  ok("答案图真实解码 2048px 且带 alt / 懒加载", ansState.imgW === 2048 && ansState.alt.length > 8 && ansLazy === "lazy", ansState.imgW + " / " + ansLazy + " / " + ansState.alt.slice(0, 20));
+  ok("结构化文字答案为 4 行×4 列互证表 + 3 条八纲结论", ansState.rows === 4 && ansState.cols === 5 && ansState.cells === 20 && ansState.rules === 3, JSON.stringify({rows:ansState.rows,cols:ansState.cols,cells:ansState.cells,rules:ansState.rules}));
+  ok("文字答案用字正确：含「脏腑」且无 AI 错字「脏脏」", ansState.text.includes("脏腑") && !ansState.text.includes("脏脏"), "");
+  ok("标注「直接给答案 · 无需默写」", /无需默写/.test(ansState.badge), ansState.badge);
+  await js(`(() => {
+    const t=document.getElementById('toast'); if(t) t.classList.remove('on');
+    const b=document.querySelector('#itemBody .ansbox');
+    if(b) b.scrollIntoView({block:'start'});
+    return true;
+  })()`);
+  await new Promise((r) => setTimeout(r, 350));
+  await shot("v24-01-item-answer.png");
+  await js(`(() => { const e=document.querySelector('#itemBody .anstext'); if(e) e.scrollIntoView({block:'start'}); return true; })()`);
+  await new Promise((r) => setTimeout(r, 300));
+  await shot("v24-02-answer-text.png");
 
   console.log("\n[3] 点击原文链接 → 打开原书并高亮");
   await go("#/i/1-1");
@@ -276,16 +303,19 @@ try {
     view:document.getElementById("v-gallery").classList.contains("on"),
     mothers:document.querySelectorAll("#galMothers .galcard").length,
     tpl:document.querySelectorAll("#galTpl .galcard").length,
+    answer:document.querySelectorAll("#galAnswer .galcard").length,
+    answerId:(document.querySelector("#galAnswer .galcard")||{}).dataset?.ans||'',
     links:document.querySelectorAll("#galMothers .galitem").length,
     alts:document.querySelectorAll("#galMothers .galalts a").length,
     alt:[...document.querySelectorAll("#v-gallery img")].every(x=>x.alt && x.alt.length>8),
     imgs:document.querySelectorAll("#v-gallery img").length,
     hash:location.hash
   }))()`);
-  ok("图谱视图显示 13 张母图 + 2 张模板", gal.view && gal.mothers === 13 && gal.tpl === 2, JSON.stringify(gal));
+  ok("图谱视图显示 13 张母图 + 1 张答案 + 2 张练习纸", gal.view && gal.mothers === 13 && gal.answer === 1 && gal.tpl === 2, JSON.stringify(gal));
+  ok("动手区参考答案卡片为 A1", gal.answerId === "A1", gal.answerId);
   ok("母图列出可跳回课程的条目链接", gal.links >= 13, gal.links);
   ok("M1 另版构图有入口", gal.alts >= 1, gal.alts);
-  ok("图谱页 15 张图全部带 alt", gal.alt && gal.imgs === 15, gal.imgs);
+  ok("图谱页 16 张图全部带 alt", gal.alt && gal.imgs === 16, gal.imgs);
   const res = await js(`(async () => {
     const urls=[...document.querySelectorAll('#v-gallery img')].map(x=>x.src)
       .concat([...document.querySelectorAll('#v-gallery a[target="_blank"]')].map(x=>x.href));
@@ -293,7 +323,7 @@ try {
     const st=await Promise.all(uniq.map(u=>fetch(u,{method:'HEAD'}).then(r=>r.status).catch(()=>0)));
     return { n:uniq.length, bad:st.filter(s=>s!==200).length, codes:[...new Set(st)] };
   })()`);
-  ok("图谱引用的图片资源全部 HTTP 200", res.bad === 0 && res.n >= 16, JSON.stringify(res));
+  ok("图谱引用的图片资源全部 HTTP 200", res.bad === 0 && res.n >= 17, JSON.stringify(res));
   await shot("v23-02-gallery.png");
 
   console.log("\n[6] 点「译」进入白话译本 / 切回原文");
