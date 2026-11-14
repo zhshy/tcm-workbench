@@ -9,7 +9,8 @@
     "build:engine": "node tools/embed-course-engine.js",
     "build:all": "python build/build_domains.py && python build/enrich.py && python build/build_translations.py && python build/build_site.py",
     "test:python": "python3 -m unittest discover -s tests -p \"test_*.py\"",
-    "check:visual": "node tools/visual-check.mjs"
+    "check:visual": "node tools/visual-check.mjs",
+    "check:generated": "node tools/check-generated.js"
   },
   "engines": {
     "node": ">=20"
