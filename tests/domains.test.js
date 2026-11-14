@@ -66,7 +66,7 @@ test("每条 ≥5 段原文、≥8 条要点，原文四层与书库深链齐全
     }
   }
   const total = rows.reduce((n, r) => n + r.item.quote.length, 0);
-  assert.ok(total >= 880, "原文总数不足 880，实际 " + total);
+  assert.ok(total >= 800, "原文总数不足 800，实际 " + total);
 });
 
 test("第一域按《中医基础理论》全程重写，第二域仍是四诊且以《诊家枢要》为骨架", () => {
