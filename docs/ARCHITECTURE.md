@@ -29,13 +29,16 @@ tcm-workbench/
 │   └── zjsy_text.txt       《诊家枢要》整理本抓取文本（中间产物）
 ├── library/                32 部古籍正文 + 白话/（32 部译本）+ index.json + _external/
 ├── tools/
-│   ├── load-data.js        从 index.html 抽出 var DATA（校验与测试共用）\n│   ├── user-state.js       v3 备份序列化、旧版本导入与数据白名单校验\n│   ├── check-generated.js  检查 domains.json 与 index.html 内嵌数据一致
+│   ├── load-data.js        从 index.html 抽出 var DATA（校验与测试共用）
+│   ├── user-state.js       v3 备份序列化、旧版本导入与数据白名单校验
+│   ├── check-generated.js  检查 domains.json 与 index.html 内嵌数据一致
 │   ├── validate-workbench.js  v2.2 数据 / 6+1 / 文献匹配状态 / 译本覆盖校验
 │   ├── visual-check.mjs    Edge CDP 无头浏览器回归（47 项，真实点击与截图）
 │   ├── course-engine.js    v1 评分引擎（历史，v2 不再使用）
 │   ├── embed-course-engine.js / push_to_github.py  历史工具
 ├── tests/
-│   ├── domains.test.js     v2.2 结构、溯源和学习备份测试
+│   ├── domains.test.js     v2.2 课程、溯源与审核元数据测试
+│   ├── user-state.test.js  v1/v2/v3 学习备份兼容测试
 │   ├── test_push_to_github.py  4 项发布脚本测试
 │   └── legacy/             v1 的 course-engine.test.js（归档）
 ├── shots/                  visual-check 截图（历史截图）
@@ -82,13 +85,14 @@ item = {
   composite: { title, stimulus: { text }, items: [4 个子判断] }
 }
 quote = {
-  s, src, tr, tip,       // 原文 / 出处 / 白话 / 校读
-  book, file, q, hit,    // 书库跳转：书名 / 文件名 / 检索词 / 是否精确命中
-  ext?, sup?, outside?   // 补编标记；库外原书标注
+  s, src, tr, tip,        // 原文 / 出处 / 白话 / 校读
+  book, file, q, work_id, // 文献标识和阅读器定位参数
+  match_status, match_method, match_text, hit, // 分级匹配；hit 仅在 exact 时为 true
+  ext?, sup?, outside?, topic_score?, matched_tags? // 补编与主题关联
 }
 ```
 
-`link_for(src, raw)` 的匹配顺序：全文命中 → 最长前缀（16…4 字）→ 引文中确实存在于库内文本的最长片段（处理「五脏/五藏」异文）→ 篇名 → 前 6 字兜底。找不到书名时查 `OUTSIDE` 映射，跳主题相关典籍并置 `outside: true`，前端标「原书未入书库」，不冒充可跳转。
+`link_for(src, raw)` 只把整段规范化文本的连续命中标为 `exact`；前缀/内部片段标为 `fragment`，篇名标为 `chapter`。库外原书使用 `outside`，找不到可靠锚点则标为 `unmatched`，不提供伪精确跳转。
 
 ### 阅读器状态
 
