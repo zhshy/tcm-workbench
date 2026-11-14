@@ -36,7 +36,7 @@ for (const book of library.items) {
   assert.ok(book.work_id && book.license_status, book.title + " 缺少文献/授权元数据");
 }
 const sw = fs.readFileSync(swPath, "utf8");
-assert.ok(sw.includes('tcm-workbench-static-v4'), "Service Worker 缓存版本未升级");
+assert.ok(sw.includes('tcm-workbench-static-v5'), "Service Worker 缓存版本未升级");
 assert.ok(sw.includes("networkFirst(request)"), "书库索引缺少 Network First 策略");
 assert.ok(sw.includes("staleWhileRevalidate(request, event)"), "书库正文缺少后台更新策略");
 
