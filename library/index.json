@@ -1,6 +1,6 @@
 {
  "updated": "2026-11-14",
- "license": "public-domain",
+ "license": "underlying_work_public_domain; transcription_rights_not_verified",
  "items": [
   {
    "file": "黄帝内经素问.txt",
@@ -13,7 +13,16 @@
    "tr": "白话/黄帝内经素问.txt",
    "trType": "白话导读",
    "trSections": 3,
-   "trQuotes": 184
+   "trQuotes": 184,
+   "work_id": "tcm-work-001",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "黄帝内经灵枢.txt",
@@ -26,7 +35,16 @@
    "tr": "白话/黄帝内经灵枢.txt",
    "trType": "白话导读",
    "trSections": 2,
-   "trQuotes": 30
+   "trQuotes": 30,
+   "work_id": "tcm-work-002",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "伤寒论.txt",
@@ -39,7 +57,16 @@
    "tr": "白话/伤寒论.txt",
    "trType": "框架节译",
    "trSections": 5,
-   "trQuotes": 159
+   "trQuotes": 159,
+   "work_id": "tcm-work-003",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "金匮要略.txt",
@@ -52,7 +79,16 @@
    "tr": "白话/金匮要略.txt",
    "trType": "白话导读",
    "trSections": 2,
-   "trQuotes": 31
+   "trQuotes": 31,
+   "work_id": "tcm-work-004",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "难经.txt",
@@ -65,7 +101,16 @@
    "tr": "白话/难经.txt",
    "trType": "白话导读",
    "trSections": 2,
-   "trQuotes": 14
+   "trQuotes": 14,
+   "work_id": "tcm-work-005",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "本草纲目.txt",
@@ -78,7 +123,16 @@
    "tr": "白话/本草纲目.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-006",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "本草纲目拾遗.txt",
@@ -91,7 +145,16 @@
    "tr": "白话/本草纲目拾遗.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-007",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "本草正义.txt",
@@ -104,7 +167,16 @@
    "tr": "白话/本草正义.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 1
+   "trQuotes": 1,
+   "work_id": "tcm-work-008",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "本草备要.txt",
@@ -117,7 +189,16 @@
    "tr": "白话/本草备要.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-009",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "神农本草经.txt",
@@ -130,7 +211,16 @@
    "tr": "白话/神农本草经.txt",
    "trType": "白话导读",
    "trSections": 2,
-   "trQuotes": 13
+   "trQuotes": 13,
+   "work_id": "tcm-work-010",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "医方集解.txt",
@@ -143,7 +233,16 @@
    "tr": "白话/医方集解.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 2
+   "trQuotes": 2,
+   "work_id": "tcm-work-011",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "成方切用.txt",
@@ -156,7 +255,16 @@
    "tr": "白话/成方切用.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-012",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "汤头歌诀.txt",
@@ -169,7 +277,16 @@
    "tr": "白话/汤头歌诀.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 1
+   "trQuotes": 1,
+   "work_id": "tcm-work-013",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "脉经.txt",
@@ -182,7 +299,16 @@
    "tr": "白话/脉经.txt",
    "trType": "框架节译",
    "trSections": 5,
-   "trQuotes": 7
+   "trQuotes": 7,
+   "work_id": "tcm-work-014",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "濒湖脉学.txt",
@@ -195,7 +321,16 @@
    "tr": "白话/濒湖脉学.txt",
    "trType": "全本逐脉译解",
    "trSections": 29,
-   "trQuotes": 4
+   "trQuotes": 4,
+   "work_id": "tcm-work-015",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "诊家枢要.txt",
@@ -208,7 +343,16 @@
    "tr": "白话/诊家枢要.txt",
    "trType": "全本逐篇译解",
    "trSections": 22,
-   "trQuotes": 36
+   "trQuotes": 36,
+   "work_id": "tcm-work-016",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "针灸大成.txt",
@@ -221,7 +365,16 @@
    "tr": "白话/针灸大成.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-017",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "针灸甲乙经.txt",
@@ -234,7 +387,16 @@
    "tr": "白话/针灸甲乙经.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-018",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "温热经纬.txt",
@@ -247,7 +409,16 @@
    "tr": "白话/温热经纬.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-019",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "温病条辨.txt",
@@ -260,7 +431,16 @@
    "tr": "白话/温病条辨.txt",
    "trType": "白话导读",
    "trSections": 2,
-   "trQuotes": 12
+   "trQuotes": 12,
+   "work_id": "tcm-work-020",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "温疫论.txt",
@@ -273,7 +453,16 @@
    "tr": "白话/温疫论.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-021",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "湿热病篇.txt",
@@ -286,7 +475,16 @@
    "tr": "白话/湿热病篇.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-022",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "温热论.txt",
@@ -299,7 +497,16 @@
    "tr": "白话/温热论.txt",
    "trType": "白话导读",
    "trSections": 2,
-   "trQuotes": 8
+   "trQuotes": 8,
+   "work_id": "tcm-work-023",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "医宗金鉴.txt",
@@ -312,7 +519,16 @@
    "tr": "白话/医宗金鉴.txt",
    "trType": "白话导读",
    "trSections": 2,
-   "trQuotes": 8
+   "trQuotes": 8,
+   "work_id": "tcm-work-024",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "医学衷中参西录.txt",
@@ -325,7 +541,16 @@
    "tr": "白话/医学衷中参西录.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-025",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "医学心悟.txt",
@@ -338,7 +563,16 @@
    "tr": "白话/医学心悟.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 2
+   "trQuotes": 2,
+   "work_id": "tcm-work-026",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "丹溪心法.txt",
@@ -351,7 +585,16 @@
    "tr": "白话/丹溪心法.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 2
+   "trQuotes": 2,
+   "work_id": "tcm-work-027",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "脾胃论.txt",
@@ -364,7 +607,16 @@
    "tr": "白话/脾胃论.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 1
+   "trQuotes": 1,
+   "work_id": "tcm-work-028",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "医林改错.txt",
@@ -377,7 +629,16 @@
    "tr": "白话/医林改错.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 1
+   "trQuotes": 1,
+   "work_id": "tcm-work-029",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "诸病源候论.txt",
@@ -390,7 +651,16 @@
    "tr": "白话/诸病源候论.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-030",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "外科正宗.txt",
@@ -403,7 +673,16 @@
    "tr": "白话/外科正宗.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-031",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   },
   {
    "file": "傅青主女科.txt",
@@ -416,8 +695,18 @@
    "tr": "白话/傅青主女科.txt",
    "trType": "白话导读",
    "trSections": 1,
-   "trQuotes": 0
+   "trQuotes": 0,
+   "work_id": "tcm-work-032",
+   "edition": null,
+   "publisher": null,
+   "source_url": null,
+   "transcriber": null,
+   "text_status": "digital_text_unverified",
+   "license_status": "underlying_work_public_domain_transcription_rights_unverified",
+   "verified_at": null,
+   "verification_note": "仓库尚未记录可核验的具体底本、点校者和电子转录授权；重要引用请回到明确版本核对。"
   }
  ],
- "translation_note": "白话译本按书标注类型：全本逐篇／逐脉译解（覆盖全书篇目，篇旨串讲，非逐字对译）、框架节译（卷目框架＋工作台引用段落对照）、白话导读（成书体例与核心概念白话＋引用段落对照）。核心四部为《诊家枢要》《濒湖脉学》《脉经》《伤寒论》，本轮已交付前两部全本译解与后两部框架节译，逐字全译待后续补齐。译本不冒充全译。"
+ "translation_note": "白话译本按书标注类型：全本逐篇／逐脉译解（覆盖全书篇目，篇旨串讲，非逐字对译）、框架节译（卷目框架＋工作台引用段落对照）、白话导读（成书体例与核心概念白话＋引用段落对照）。核心四部为《诊家枢要》《濒湖脉学》《脉经》《伤寒论》，本轮已交付前两部全本译解与后两部框架节译，逐字全译待后续补齐。译本不冒充全译。",
+ "license_note": "古籍作品的公版属性不自动代表当前电子文本、点校本或转录成果可自由再分发；各书的底本和转录权利仍需逐项核验。"
 }
