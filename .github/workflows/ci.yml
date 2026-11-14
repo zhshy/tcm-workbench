@@ -19,6 +19,8 @@ jobs:
           python-version: "3.12"
       - name: Rebuild all generated course and library artifacts
         run: npm run build:all
+      - name: Verify generated HTML matches course source data
+        run: npm run check:generated
       - name: Validate course data and embedded engine
         run: npm run validate
       - name: Run JavaScript tests
