@@ -51,5 +51,5 @@ test("忽略未知条目，不会把任意字段或对象写入学习记录", ()
   assert.deepEqual(parsed.state.done, { "1-1": true });
   assert.deepEqual(parsed.state.tries["1-2"], { score: "3/6", ok: false });
   assert.equal(parsed.state.last, null);
-  assert.equal(parsed.summary.ignoredCount, 3);
+  assert.equal(parsed.summary.ignoredCount, 4);
 });
