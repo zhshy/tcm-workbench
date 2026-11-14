@@ -32,6 +32,7 @@ EXTRA = load("classic_extra.json")
 SUP = load("thin_supplement.json")
 LIB = load("../library/index.json")["items"]
 BY_TITLE = {x["title"]: x["file"] for x in LIB}
+WORK_ID_BY_TITLE = {x["title"]: x.get("work_id", "") for x in LIB}
 
 # 引文原书不在 32 部书库里时，不能假装有「这一段」的深链。
 # 改跳到主题相关的库内典籍 + 可命中的检索词，并在前端标注「原书未入书库」。
@@ -267,6 +268,7 @@ for it in all_items:
         q["hit"] = status == "exact"
         q["book"] = bk or ""
         q["file"] = BY_TITLE.get(bk, "") if status != "unmatched" else ""
+        q["work_id"] = WORK_ID_BY_TITLE.get(bk, "") if status != "unmatched" else ""
         q["q"] = kw if status != "unmatched" else ""
         if is_outside:
             q["outside"] = True
@@ -439,11 +441,15 @@ for it in all_items:
 bad_q = [it["id"] for it in all_items if len(it.get("quiz", [])) != 6]
 bad_c = [it["id"] for it in all_items if not (it.get("composite") or {}).get("items")]
 bad_tr = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if not q.get("tr")]
-bad_link = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if not q.get("file")]
+bad_link = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if q.get("match_status") != "unmatched" and not q.get("file")]
+bad_match = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if q.get("match_status") not in {"exact", "fragment", "chapter", "outside", "unmatched"}]
+bad_hit = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if bool(q.get("hit")) != (q.get("match_status") == "exact")]
 assert not bad_q, "仍有条目不是 6 道单选：" + str(bad_q[:8])
 assert not bad_c, "仍有条目缺综合题：" + str(bad_c[:8])
 assert not bad_tr, "仍有原文缺白话：" + str(bad_tr[:8])
-assert not bad_link, "仍有原文缺书库链接：" + str(bad_link[:8])
+assert not bad_link, "仍有需定位的原文缺书库文件：" + str(bad_link[:8])
+assert not bad_match, "原文匹配状态无效：" + str(bad_match[:8])
+assert not bad_hit, "hit 字段与匹配状态不一致：" + str(bad_hit[:8])
 
 DATA["version"] = "2.2.0"
 with open(os.path.join(HERE, "domains.json"), "w", encoding="utf-8") as f:
@@ -451,8 +457,9 @@ with open(os.path.join(HERE, "domains.json"), "w", encoding="utf-8") as f:
 
 print("条目 %d；补原文 %d 段，补要点 %d 条" % (
     len(all_items), expanded_q, expanded_p))
-print("原文匹配状态：%s；含定位链接 %d 段；精确命中 %d 段；库外参读 %d 段" % (\n    dict(match_counts), linked, exact, outside))\nprint("旧口径原文总数 %d" % (
-    sum(len(it["quote"]) for it in all_items)))
+print("原文匹配状态：%s；含定位链接 %d 段；精确命中 %d 段；库外参读 %d 段" % (
+    dict(match_counts), linked, exact, outside))
+print("原文总数 %d" % sum(len(it["quote"]) for it in all_items))
 print("补单选 %d 题，补综合题 %d 组；全部条目 6+1，原文白话 100%%" % (filled_quiz, filled_comp))
 print("域/块/条目：%d / %d / %d" % (
     len(DOMAINS), sum(len(d["blocks"]) for d in DOMAINS), len(all_items)))
