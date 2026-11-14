@@ -1,10 +1,10 @@
-# 项目结构与数据流（v2.1）
+# 项目结构与数据流（v2.2）
 
 ## 一、当前结构
 
 ```text
 tcm-workbench/
-├── index.html              当前工作台；CSS / JS / 数据全内嵌，单文件可直接托管（~1.8 MB）
+├── index.html              当前工作台；CSS / JS / 数据全内嵌，单文件可直接托管（本次构建约 2.2 MB）
 ├── v1.4.2-168天版.html     上一版存档
 ├── v1-96天版.html          更早版本存档
 ├── VERSION / CHANGELOG.md / README.md / package.json
@@ -21,7 +21,7 @@ tcm-workbench/
 │   ├── old_course.json     从 v1.4.2 index.html 提取的 168 课（中间产物）
 │   ├── old_rd.json         提取的原文数据（中间产物）
 │   ├── build_domains.py    归并旧 168 课 + 新内容 → domains.json
-│   ├── enrich.py           补 6+1 / 补原文要点 / 算书库深链（幂等）
+│   ├── enrich.py           补 6+1 / 主题相关补编 / 引文匹配状态 / 题目审核元数据（幂等）
 │   ├── build_translations.py 生成 library/白话/*.txt 并登记 index.json
 │   ├── app_template.html   页面模板，含 /*__DATA__*/ null 占位符
 │   ├── build_site.py       把 domains.json 注入模板 → 根目录 index.html
@@ -30,18 +30,18 @@ tcm-workbench/
 ├── library/                32 部古籍正文 + 白话/（32 部译本）+ index.json + _external/
 ├── tools/
 │   ├── load-data.js        从 index.html 抽出 var DATA（校验与测试共用）
-│   ├── validate-workbench.js  v2.1 数据 / 6+1 / 白话 / 深链 / 译本覆盖校验
+│   ├── validate-workbench.js  v2.2 数据 / 6+1 / 文献匹配状态 / 译本覆盖校验
 │   ├── visual-check.mjs    Edge CDP 无头浏览器回归（47 项，真实点击与截图）
 │   ├── course-engine.js    v1 评分引擎（历史，v2 不再使用）
 │   ├── embed-course-engine.js / push_to_github.py  历史工具
 ├── tests/
-│   ├── domains.test.js     v2.1 结构测试（10 项）
+│   ├── domains.test.js     v2.2 结构、溯源和学习备份测试
 │   ├── test_push_to_github.py  4 项发布脚本测试
 │   └── legacy/             v1 的 course-engine.test.js（归档）
-├── shots/                  visual-check 截图（v21-*.png）
+├── shots/                  visual-check 截图（历史截图）
 ├── docs/                   课程说明、本文件、v2 改版说明、archive/
 ├── data/ / resources/ / library-page/   v1 历史数据与资料，不是当前数据源
-└── .github/workflows/ci.yml  npm run validate + npm test + Python unittest
+└── .github/workflows/ci.yml  npm run build:all + npm run validate + npm test + Python unittest
 ```
 
 ## 二、数据流
@@ -54,8 +54,8 @@ build/domains.json  { version, domains: [{ id, name, blocks: [{ items: [...] }] 
         │  enrich.py  ← classic_extra.json / thin_supplement.json / library/*.txt
         │    · 每条补齐 6 道基础题 + 1 组综合辨析（md5 稳定伪随机）
         │    · 复用旧课的条目补 2 段原文 + 3 条要点；偏薄条目按 id 定向补编
-        │    · 每段原文算 book / file / q / hit / outside（库外引文改走参读）
-        │    · 断言 6+1、白话 100%、链接 100%；设 version = 2.1.0
+        │    · 每段原文算 match_status / match_method / match_text / work_id；exact 仅限整段规范化匹配
+        │    · 断言 6+1、白话、定位状态与引用字段；设 version = 2.2.0
         ▼   （enrich.py 幂等：sup 标记 + ext 配额 + pts 去重，重跑不叠加）
         ├──────────────► build_translations.py ← trans_core/trans_guides.json
         │                  · 生成 library/白话/<书名>.txt（32 部）
@@ -96,7 +96,7 @@ quote = {
 
 ## 三、状态
 
-- `localStorage` 键 `mozhu-tcm-v2`；字段含 `done`（条目 id → 布尔）、`last`（最近条目）、笔记与自测作答。v2.0 → v2.1 沿用同键。
+- `localStorage` 键保持 `mozhu-tcm-v2`；备份格式 v3，可导入旧版 v1/v2；字段含 `done`（条目 id → 布尔）、`last`（最近条目）、笔记与自测作答。v2.0 → v2.1 沿用同键。
 - 进度按「已完成条目 / 170」统计，无日历、无配额、无解锁。自测判分只用于自查，不卡进度。
 - 深链：`#/`、`#/d/<域>`、`#/i/<条目>`、`#/shelf`、`#/me`、`#/b/<file>?q=<词>&tr=1`。
 
