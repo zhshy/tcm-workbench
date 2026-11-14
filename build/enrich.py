@@ -199,10 +199,10 @@ for it in all_items:
                 if score > 0:
                     ranked.append((score, bk, seg, matched_tags))
         ranked.sort(key=lambda row: (-row[0], row[1], row[2].get("s", "")))
-        # 幂等：已补过的 ext 段计入配额；同一段全课程最多复用 3 次。
-        added = sum(1 for q in it.get("quote", []) if q.get("ext") and not q.get("sup"))
+        # 幂等：按条目原文缺口补足到 5 段；同一段全课程最多复用 3 次。
+        # 只从主题标签/知识 ID 有关联，或同一主要出处的语料中选取。
         for score, bk, seg, matched_tags in ranked:
-            if added >= 2:
+            if len(it.get("quote", [])) >= 5:
                 break
             key = norm(seg["s"])[:12]
             if key in existing or usage[key] >= 3:
@@ -215,7 +215,6 @@ for it in all_items:
             })
             existing.add(key)
             usage[key] += 1
-            added += 1
             expanded_q += 1
         # 要点：从旧课 note / read / 新补原文派生 3 条
         pts = list(it.get("pts", []))
@@ -441,12 +440,14 @@ for it in all_items:
 bad_q = [it["id"] for it in all_items if len(it.get("quiz", [])) != 6]
 bad_c = [it["id"] for it in all_items if not (it.get("composite") or {}).get("items")]
 bad_tr = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if not q.get("tr")]
+bad_quote_count = [(it["id"], len(it.get("quote", []))) for it in all_items if len(it.get("quote", [])) < 5]
 bad_link = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if q.get("match_status") != "unmatched" and not q.get("file")]
 bad_match = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if q.get("match_status") not in {"exact", "fragment", "chapter", "outside", "unmatched"}]
 bad_hit = [(it["id"], i) for it in all_items for i, q in enumerate(it.get("quote", [])) if bool(q.get("hit")) != (q.get("match_status") == "exact")]
 assert not bad_q, "仍有条目不是 6 道单选：" + str(bad_q[:8])
 assert not bad_c, "仍有条目缺综合题：" + str(bad_c[:8])
 assert not bad_tr, "仍有原文缺白话：" + str(bad_tr[:8])
+assert not bad_quote_count, "仍有条目原文不足 5 段：" + str(bad_quote_count[:8])
 assert not bad_link, "仍有需定位的原文缺书库文件：" + str(bad_link[:8])
 assert not bad_match, "原文匹配状态无效：" + str(bad_match[:8])
 assert not bad_hit, "hit 字段与匹配状态不一致：" + str(bad_hit[:8])
