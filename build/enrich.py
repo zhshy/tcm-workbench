@@ -199,13 +199,13 @@ for it in all_items:
                 if score > 0:
                     ranked.append((score, bk, seg, matched_tags))
         ranked.sort(key=lambda row: (-row[0], row[1], row[2].get("s", "")))
-        # 幂等：按条目原文缺口补足到 5 段；同一段全课程最多复用 3 次。
+        # 幂等：按条目原文缺口补足到 5 段；同一段全课程最多复用 8 次，避免少数主要出处的条目因补编池过窄而不足量。
         # 只从主题标签/知识 ID 有关联，或同一主要出处的语料中选取。
         for score, bk, seg, matched_tags in ranked:
             if len(it.get("quote", [])) >= 5:
                 break
             key = norm(seg["s"])[:12]
-            if key in existing or usage[key] >= 3:
+            if key in existing or usage[key] >= 8:
                 continue
             it["quote"].append({
                 "s": seg["s"], "src": seg["src"], "tr": seg["tr"],
