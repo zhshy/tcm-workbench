@@ -315,6 +315,7 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   .rbar input{width:120px}
 }
 @media print{header,.nav,.actions,.pager,.iconbtn{display:none}}
+ .qstatus{display:inline-block;margin-left:8px;padding:1px 6px;border:1px solid #e6dfd2;border-radius:999px;color:#8b6b32;font-size:10px;line-height:1.6;vertical-align:middle;font-weight:500}.qlink.nohit{color:#8a6d3b}.qlink[data-match="exact"]{color:var(--green)}
 </style>
 </head>
 <body>
@@ -399,7 +400,7 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   </section>
 </main>
 
-<footer>墨 · 中医自学工作台 v2.0　|　数据存于本机 localStorage，换设备请先导出备份</footer>
+<footer>墨 · 中医学习工作台 v2.2　|　数据存于本机 localStorage，换设备请先导出备份</footer>
 
 <!-- 阅读器 -->
 <div class="reader" id="reader">
@@ -428,25 +429,23 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
 
 <script>
 var DATA = /*__DATA__*/ null;
+/*__STATE_HELPERS__*/
 
 (function(){
 "use strict";
 
-var KEY = "mozhu-tcm-v2";
+var KEY = "mozhu-tcm-v2"; // 保持旧键，确保升级不丢失本机进度
 var S = { done:{}, last:null, tries:{} };
+var TCMState = window.TCMState;
 
 function load(){
   try{
     var raw = localStorage.getItem(KEY);
     if(raw){
       var o = JSON.parse(raw);
-      if(o && typeof o === "object"){
-        S.done = o.done || {};
-        S.tries = o.tries || {};
-        S.last = o.last || null;
-      }
+      S = TCMState.normalizeState(o, Object.keys(ITEM_INDEX)).state;
     }
-  }catch(e){ /* 隐私模式下降级为内存态 */ }
+  }catch(e){ /* 存储损坏或受限时保留原值，降级为内存态 */ }
 }
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
@@ -638,12 +637,20 @@ function openItem(iid){
       if(q.tr) h += '<div class="tr"><b>白话</b>' + esc(q.tr) + '</div>';
       if(q.tip) h += '<div class="tip"><b>看这里</b>' + esc(q.tip) + '</div>';
       if(q.file){
-        var label = q.outside ? '原书未入书库 · 到《' + q.book + '》参读 →'
-          : q.hit ? '在《' + q.book + '》中查看此段 →' : '打开《' + q.book + '》并检索 →';
-        h += '<a class="qlink' + (q.hit ? '' : ' nohit') + '" href="#/b/' + encodeURIComponent(q.file) +
-             '?q=' + encodeURIComponent(q.q || '') + '" data-f="' + esc(q.file) +
-             '" data-b="' + esc(q.book) + '" data-q="' + esc(q.q || '') + '" data-hit="' + (q.hit ? '1' : '0') +
-             '" data-out="' + (q.outside ? '1' : '0') + '">' + esc(label) + '</a>';
+        var matchStatus = q.match_status || "needs_review";
+        var label = matchStatus === "exact" ? "在《" + q.book + "》中精确找到此段 →"
+          : matchStatus === "fragment" ? "在《" + q.book + "》中找到原文片段，需核对上下文 →"
+          : matchStatus === "chapter" ? "打开《" + q.book + "》定位篇章（未确认原句） →"
+          : matchStatus === "outside" ? "原书未入书库 · 到《" + q.book + "》参读 →"
+          : "旧版定位信息待复核 · 暂不标记为精确命中";
+        if(q.file && matchStatus !== "unmatched"){
+          h += '<a class="qlink' + (matchStatus === "exact" ? "" : " nohit") + '" href="#/b/' + encodeURIComponent(q.file) +
+               '?q=' + encodeURIComponent(q.q || "") + '" data-f="' + esc(q.file) +
+               '" data-b="' + esc(q.book) + '" data-q="' + esc(q.q || "") + '" data-hit="' + (matchStatus === "exact" ? "1" : "0") +
+               '" data-out="' + (matchStatus === "outside" ? "1" : "0") + '" data-match="' + esc(matchStatus) + '">' + esc(label) + '</a>';
+        }else{
+          h += '<div class="qlink nohit" data-match="' + esc(matchStatus) + '">' + esc(label) + '</div>';
+        }
       }
       h += '</div>';
     });
@@ -669,8 +676,10 @@ function openItem(iid){
       '<div class="qhead"><span>共 ' + it.quiz.length + ' 题' +
       (hasMulti ? '（含多选，多选须选全）' : '') + '，选完点「提交」判分</span><span class="score" id="qScore"></span></div>' +
       it.quiz.map(function(q, qi){
+        var qStatus = q.review_status === "approved" ? "已审核"
+          : q.question_origin === "generated" ? "自动生成 · 未审核草稿" : "人工编写 · 待审核";
         return '<div class="q" data-q="' + qi + '"' + (Array.isArray(q.a) ? ' data-multi="1"' : '') + '>' +
-          '<div class="qt"><i>' + (qi + 1) + '.</i>' + esc(q.q) + '</div>' +
+          '<div class="qt"><i>' + (qi + 1) + '.</i>' + esc(q.q) + '<span class="qstatus">' + esc(qStatus) + '</span></div>' +
           q.opts.map(function(o, oi){
             return '<button class="opt" data-q="' + qi + '" data-o="' + oi + '">' +
               '<span class="ab">' + "ABCDEFGH"[oi] + '</span><span>' + esc(o) + '</span></button>';
@@ -681,11 +690,12 @@ function openItem(iid){
     if(it.composite && it.composite.items){
       var c = it.composite;
       h += '<div class="qz" style="margin-top:10px"><div class="qhead"><span>综合辨析 · ' +
-        (c.items.length) + ' 个子判断</span><span class="score" id="cScore"></span></div>' +
+        (c.items.length) + ' 个子判断 <span class="qstatus">' + (c.review_status === "approved" ? "已审核" : "综合题 · 未审核") + '</span></span><span class="score" id="cScore"></span></div>' +
         '<div class="composite"><div class="stim">' + esc((c.stimulus && c.stimulus.text) || "") + '</div>' +
         c.items.map(function(sub, si){
           var labels = sub.o || sub.opts || [];
-          return '<div class="q" data-c="' + si + '"><div class="qt"><i>' + (si + 1) + '.</i>' + esc(sub.q) + '</div>' +
+          var subStatus = sub.review_status === "approved" ? "已审核" : "子题待审核";
+          return '<div class="q" data-c="' + si + '"><div class="qt"><i>' + (si + 1) + '.</i>' + esc(sub.q) + '<span class="qstatus">' + subStatus + '</span></div>' +
             labels.map(function(o, oi){
               return '<button class="opt" data-c="' + si + '" data-o="' + oi + '">' +
                 '<span class="ab">' + "ABCDEFGH"[oi] + '</span><span>' + esc(o) + '</span></button>';
@@ -1035,13 +1045,14 @@ function renderMe(){
   }).join("");
 }
 document.getElementById("btnExport").onclick = function(){
-  var blob = new Blob([JSON.stringify({ v: 2, exported: new Date().toISOString(), data: S }, null, 1)], { type: "application/json" });
+  var backup = TCMState.makeBackup(S, new Date().toISOString());
+  var blob = new Blob([JSON.stringify(backup, null, 1)], { type: "application/json" });
   var a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "中医工作台备份-" + new Date().toISOString().slice(0, 10) + ".json";
   a.click();
   setTimeout(function(){ URL.revokeObjectURL(a.href); }, 3000);
-  toast("已导出");
+  toast("已导出 v" + TCMState.CURRENT_BACKUP_VERSION + " 备份");
 };
 document.getElementById("btnImport").onclick = function(){ document.getElementById("fileIn").click(); };
 document.getElementById("fileIn").addEventListener("change", function(e){
@@ -1049,15 +1060,22 @@ document.getElementById("fileIn").addEventListener("change", function(e){
   var fr = new FileReader();
   fr.onload = function(){
     try{
-      var o = JSON.parse(fr.result);
-      var d = o.data || o;
-      if(!d || typeof d !== "object") throw new Error("bad");
-      S.done = d.done || {}; S.tries = d.tries || {}; S.last = d.last || null;
-      save(); renderHome(); toast("已导入");
-    }catch(err){ toast("文件格式不对，未导入"); }
+      var parsed = TCMState.parseBackup(JSON.parse(fr.result), Object.keys(ITEM_INDEX));
+      var summary = parsed.summary;
+      var message = "备份版本：v" + parsed.version + "\\n将导入完成记录 " + summary.doneCount +
+        " 条、练习记录 " + summary.tryCount + " 条；忽略无效或本版不存在的数据 " + summary.ignoredCount +
+        " 项。\\n导入会替换当前本机学习记录，是否继续？";
+      if(!confirm(message)) return;
+      S = parsed.state;
+      save(); renderHome();
+      toast("已导入，完成记录 " + summary.doneCount + " 条");
+    }catch(err){
+      toast("备份校验失败，原有记录未改变");
+    }finally{
+      e.target.value = "";
+    }
   };
   fr.readAsText(f);
-  e.target.value = "";
 });
 document.getElementById("btnReset").onclick = function(){
   if(!confirm("清空本机全部学习记录？此操作不可撤销，建议先导出备份。")) return;
