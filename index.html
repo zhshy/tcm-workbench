@@ -517,7 +517,129 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   .tabbar svg{width:19px;height:19px}
   footer{padding-bottom:18px}
 }
-@media print{header,.nav,.subnav,.tabbar,.modal,.lightbox,.actions,.pager,.iconbtn,.figentry,.figopen,.galacts,.ansfoot,.ansfigwrap{display:none}
+/* M4 入口按钮（浅色页面） */
+.wxopen{display:inline-flex;align-items:center;gap:8px;margin:10px 0 2px;padding:8px 12px;
+  border:1px solid rgba(176,138,79,.55);border-radius:7px;background:rgba(200,161,90,.1);
+  color:#6b4f1d;font:12.5px/1 var(--sans);cursor:pointer}
+.wxopen span{font-size:10px;color:#8a7a5a;letter-spacing:.05em}
+.wxopen:hover{background:rgba(200,161,90,.2)}
+.figwx{margin:0 0 0 10px;padding:5px 9px;font-size:12px}
+
+/* M4 五行 3D 演示层 */
+.wx{position:fixed;inset:0;z-index:175;display:none;grid-template-columns:minmax(0,1fr) 356px;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  grid-template-areas:"bar bar" "stage panel" "foot panel";background:#07101f;color:#EDE6D6}
+.wx.on{display:grid}
+.wxbar{grid-area:bar;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:11px 18px;border-bottom:1px solid rgba(200,161,90,.22);background:rgba(7,16,31,.92)}
+.wxbrand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.wxkicker{font-size:10px;letter-spacing:.18em;color:#C8A15A;white-space:nowrap}
+.wxbar h2{font-family:var(--serif);margin:0;font-size:17px;font-weight:600;letter-spacing:.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wxacts{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.wxbtn{appearance:none;border:1px solid rgba(200,161,90,.36);background:rgba(200,161,90,.08);
+  color:#E9DFC7;font:12px/1 var(--sans);padding:8px 11px;border-radius:7px;cursor:pointer;min-height:34px}
+.wxbtn:hover{background:rgba(200,161,90,.18)}
+.wxbtn[aria-pressed="true"]{border-color:#D9B878;background:rgba(217,184,120,.2);color:#FFE9BE}
+.wxbtn:disabled{opacity:.38;cursor:not-allowed}
+.wxclose{width:38px;height:38px;border-radius:50%;border:1px solid rgba(200,161,90,.42);
+  background:rgba(255,255,255,.04);color:#F0E6CF;font-size:22px;line-height:1;cursor:pointer}
+.wxclose:hover{background:rgba(200,161,90,.18)}
+.wxstage{grid-area:stage;position:relative;overflow:hidden;
+  background:radial-gradient(62% 62% at 50% 44%,#142444 0%,#0a1633 56%,#060d1a 100%)}
+.wxstage::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 45%,transparent 52%,rgba(3,7,14,.55) 100%)}
+.wxcanvas{position:absolute;inset:0}
+.wxcanvas canvas{display:block;width:100%;height:100%}
+.wxlabels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.wxstate{position:absolute;left:14px;top:12px;z-index:2;appearance:none;
+  border:1px solid rgba(200,161,90,.4);background:rgba(7,16,31,.68);color:#D9B878;
+  font:12px/1 var(--serif);letter-spacing:.12em;padding:7px 11px;border-radius:999px;cursor:pointer}
+.wxstate:hover{background:rgba(200,161,90,.16)}
+.wxstate.active{color:#FFE1A6;border-color:#D9B878}
+.wx-node{position:absolute;left:0;top:0;pointer-events:auto;background:transparent;border:0;
+  color:#F0E6CF;padding:4px 8px;display:flex;flex-direction:column;align-items:center;gap:1px;
+  cursor:pointer;border-radius:8px;transition:opacity .18s}
+.wx-node b{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1;
+  text-shadow:0 2px 14px rgba(0,0,0,.65)}
+.wx-node span{font:10px/1.3 var(--sans);letter-spacing:.12em;color:rgba(237,230,214,.6);white-space:nowrap}
+.wx-node[aria-pressed="true"] b{color:#FFE1A6}
+.wx-node.dim{opacity:.42}
+.wx-node:focus-visible{outline:2px solid #E8C98A;outline-offset:4px}
+.wx-elabel{position:absolute;left:0;top:0;font:11px/1 var(--sans);letter-spacing:.08em;
+  padding:4px 8px;border-radius:999px;pointer-events:none;white-space:nowrap}
+.wx-elabel.cheng{color:#FFD9CE;background:rgba(180,67,47,.3);border:1px solid rgba(180,67,47,.6)}
+.wx-elabel.wu{color:#D8E7F4;background:rgba(92,126,155,.22);border:1px dashed rgba(127,163,196,.62)}
+.wxhint{position:absolute;left:16px;bottom:13px;margin:0;font-size:11px;letter-spacing:.05em;
+  color:rgba(237,230,214,.42);pointer-events:none}
+.wxpanel{grid-area:panel;border-left:1px solid rgba(200,161,90,.2);background:rgba(10,22,51,.55);
+  padding:18px 18px 22px;overflow:auto}
+.wx-eyebrow{font-size:10.5px;letter-spacing:.18em;color:#C8A15A}
+.wxpanel h2{font-family:var(--serif);font-size:20px;margin:6px 0 9px;font-weight:600}
+.wx-lead{font-size:13px;line-height:1.8;color:rgba(237,230,214,.72);margin:0 0 14px}
+.wx-guide{list-style:none;padding:0;margin:0 0 14px;font-size:12.5px;color:rgba(237,230,214,.7)}
+.wx-guide li{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.lg{display:inline-block;width:22px;height:0;border-top:2px solid #D9B878;flex:0 0 auto}
+.lg.ke{border-top-width:1px;border-color:#B08A4F}
+.lg.cheng{border-top:3px solid #B4432F}
+.lg.wu{border-top:2px dashed #7FA3C4}
+.wx-elhead{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.wx-elhead>b{font-family:var(--serif);font-size:44px;line-height:1;color:#F0D9A8}
+.wx-elhead strong{display:block;font-family:var(--serif);font-size:15px;font-weight:600;color:#F2EAD8}
+.wx-elhead span{font-size:11.5px;color:rgba(237,230,214,.55)}
+.wx-facts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 14px;
+  padding:10px 0;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+.wx-facts div{text-align:center}
+.wx-facts dt{font-size:10px;letter-spacing:.1em;color:rgba(237,230,214,.55)}
+.wx-facts dd{margin:4px 0 0;font-family:var(--serif);font-size:15px;color:#EDE6D6}
+.wx-seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 14px}
+.wx-seg button{appearance:none;border:1px solid rgba(200,161,90,.32);background:transparent;
+  color:rgba(237,230,214,.7);font:12.5px/1 var(--sans);padding:9px 4px;border-radius:7px;cursor:pointer;min-height:36px}
+.wx-seg button:hover{background:rgba(200,161,90,.12)}
+.wx-seg button[aria-pressed="true"]{border-color:#D9B878;background:rgba(217,184,120,.18);color:#FFE9BE}
+.wx-rel{margin:0 0 6px}
+.wx-relrow{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:7px 0;
+  border-bottom:1px solid rgba(255,255,255,.07)}
+.wx-relrow span{color:rgba(237,230,214,.55)}
+.wx-relrow b{font-weight:500;color:#E9DFC7;text-align:right}
+.wx-table{margin:12px 0 0;font-size:11.5px;color:rgba(237,230,214,.62);
+  border-top:1px solid rgba(255,255,255,.08)}
+.wx-table summary{cursor:pointer;padding:9px 0;list-style:none}
+.wx-table summary::-webkit-details-marker{display:none}
+.wx-table summary::before{content:"▸ ";color:#C8A15A}
+.wx-table[open] summary::before{content:"▾ "}
+.wx-table table{width:100%;border-collapse:collapse;margin:2px 0 8px}
+.wx-table caption{text-align:left;color:rgba(237,230,214,.55);padding:2px 0 5px}
+.wx-table th,.wx-table td{padding:5px 4px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+.wx-table th{font-weight:400;color:rgba(237,230,214,.55);width:38%}
+.wx-links{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 0}
+.wx-links a{color:#9FC3E0;font-size:12px;text-decoration:none}
+.wx-links a:hover{text-decoration:underline}
+.wx-note{font-size:11px;line-height:1.7;color:rgba(237,230,214,.55);margin:10px 0 0}
+.wxfoot{grid-area:foot;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:9px 16px;border-top:1px solid rgba(200,161,90,.2);background:rgba(7,16,31,.9);flex-wrap:wrap}
+.wxlegend{display:flex;gap:14px;font-size:11px;color:rgba(237,230,214,.6)}
+.wxlegend span{display:flex;align-items:center;gap:5px;white-space:nowrap}
+.wxtools{display:flex;gap:6px;flex-wrap:wrap}
+.wx-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wx button:focus-visible{outline:2px solid #E8C98A;outline-offset:2px}
+@media(max-width:880px){
+  .wx{grid-template-columns:1fr;grid-template-rows:auto minmax(300px,1fr) auto auto;
+    grid-template-areas:"bar" "stage" "panel" "foot"}
+  .wxpanel{border-left:0;border-top:1px solid rgba(200,161,90,.22);max-height:42vh}
+}
+@media(max-width:520px){
+  .wxbar{padding:9px 12px}
+  .wxbar h2{font-size:15px}
+  .wxstage{min-height:290px}
+  .wxhint{display:none}
+  .wxpanel{padding:14px 14px 18px;max-height:36vh}
+  .wx-node b{font-size:22px}
+  .wx-node span{font-size:9px;letter-spacing:.06em}
+  .wxfoot{padding:8px 12px}
+  .wxlegend{display:none}
+}
+@media print{header,.nav,.subnav,.tabbar,.modal,.lightbox,.wx,.actions,.pager,.iconbtn,.figentry,.figopen,.galacts,.ansfoot,.ansfigwrap{display:none}
   .ansbox{break-inside:avoid}}
  .qlink.nohit{color:#8a6d3b}.qlink[data-match="exact"]{color:var(--green)}
 </style>
@@ -701,6 +823,40 @@ footer{max-width:1040px;margin:0 auto;padding:0 20px 30px;font-size:12px;color:v
   <img id="lbImg" alt="">
   <button class="lnav lnext" id="lbNext" aria-label="下一张">›</button>
   <div class="lcap" id="lbCap"></div>
+</div>
+
+<!-- M4 五行 3D 交互（静态 webp 始终保留为降级） -->
+<div class="wx" id="wx" role="dialog" aria-modal="true" aria-labelledby="wxTitle">
+  <div class="wxbar">
+    <div class="wxbrand"><span class="wxkicker">M4 · 图谱</span><h2 id="wxTitle">五行生克制化乘侮环</h2></div>
+    <div class="wxacts">
+      <button class="wxbtn" id="wxStatic" type="button">看静态图</button>
+      <button class="wxclose" id="wxClose" type="button" aria-label="关闭 3D 演示">×</button>
+    </div>
+  </div>
+  <div class="wxstage" id="wxStage">
+    <button class="wxstate" id="wxState" type="button" aria-label="当前状态：常，点击复位">常</button>
+    <div class="wxcanvas" id="wxCanvas"></div>
+    <div class="wxlabels" id="wxLabels"></div>
+    <p class="wxhint">拖拽旋转 · 滚轮缩放 · 点铜章选择</p>
+  </div>
+  <aside class="wxpanel" id="wxPanel"></aside>
+  <div class="wxfoot">
+    <div class="wxlegend">
+      <span><i class="lg sheng"></i>相生</span>
+      <span><i class="lg ke"></i>相克</span>
+      <span><i class="lg cheng"></i>相乘</span>
+      <span><i class="lg wu"></i>相侮</span>
+    </div>
+    <div class="wxtools">
+      <button class="wxbtn" id="wxTour" type="button" aria-pressed="false">沿生序</button>
+      <button class="wxbtn" id="wxPlan" type="button" aria-pressed="false">平面视图</button>
+      <button class="wxbtn" id="wxSheng" type="button" aria-pressed="true">生</button>
+      <button class="wxbtn" id="wxKe" type="button" aria-pressed="true">克</button>
+      <button class="wxbtn" id="wxReset" type="button">复位</button>
+    </div>
+  </div>
+  <div class="wx-sr" id="wxLive" role="status" aria-live="polite"></div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -1001,6 +1157,7 @@ function renderGallery(){
       '<img src="' + esc(figUrl(m)) + '" alt="' + esc(m.alt) + '" loading="lazy" decoding="async"></a>' +
       '<div class="galbody"><div class="galno">图 ' + String(mi + 1).padStart(2, "0") + '</div>' +
       '<h3>' + esc(m.title) + '</h3><p class="galnote">' + esc(m.note) + '</p>' +
+      (m.id === "M4" ? '<button class="wxopen" data-fig="M4" type="button">3D 交互演示 <span>可旋转 · 可推演</span></button>' : '') +
       '<div class="galitems"><span>挂靠 ' + m.items.length + ' 条：</span>' + links +
       (m.items.length > 6 ? '<span class="galmore">等 ' + m.items.length + ' 条</span>' : '') + '</div>' +
       (m.alts && m.alts.length ? '<div class="galalts">另版构图：' + m.alts.map(function(a){
@@ -1148,6 +1305,7 @@ function openItem(iid){
           return '<a href="' + esc(figUrl(a)) + '" target="_blank" rel="noopener">查看</a>';
         }).join("、") + '</span>' : '') +
         '<a class="figopen" href="' + esc(figUrl(f)) + '" target="_blank" rel="noopener">查看原图 →</a>' +
+        (fid === "M4" ? '<button class="figwx wxopen" data-fig="M4" type="button">3D 交互演示 →</button>' : '') +
         '</figcaption></figure>';
     });
     h += '</div><p class="figdisclaimer">图为概念示意，标注小字可能不清；知识点一律以本讲正文与原书为准。</p></div>';
@@ -2002,6 +2160,49 @@ function closeLightbox(){
   document.body.style.overflow = "";
   if(LB_FOCUS && LB_FOCUS.focus){ try{ LB_FOCUS.focus({ preventScroll: true }); }catch(e){} }
 }
+
+/* ---------- M4 五行 3D（按需加载，静态图降级） ---------- */
+var WX3D = null, WX_LOADING = false;
+function wxSupported(){
+  try{
+    var c = document.createElement("canvas");
+    return !!(window.WebGLRenderingContext && (c.getContext("webgl2") || c.getContext("webgl")));
+  }catch(e){ return false; }
+}
+function openM4Static(){
+  var a = document.querySelector('#galMothers .galcard[data-fig="M4"] .galimg');
+  if(a){ openLightbox(a); return; }
+  renderGallery(); show("v-gallery"); setHash("#/gallery");
+  setTimeout(function(){
+    var b = document.querySelector('#galMothers .galcard[data-fig="M4"] .galimg');
+    if(b) openLightbox(b);
+  }, 60);
+}
+function closeWuxing3D(){ if(WX3D && WX3D.isOpen()) WX3D.close(); }
+function openWuxing3D(){
+  if(!wxSupported()){
+    toast("当前浏览器不支持 WebGL，已打开静态图");
+    openM4Static();
+    return;
+  }
+  if(WX3D){ WX3D.open({ onStatic: openM4Static }); return; }
+  if(WX_LOADING) return;
+  WX_LOADING = true;
+  import("./assets/js/wuxing3d.js").then(function(m){
+    WX_LOADING = false; WX3D = m;
+    m.open({ onStatic: openM4Static });
+  }).catch(function(){
+    WX_LOADING = false;
+    toast("3D 组件加载失败，已打开静态图");
+    openM4Static();
+  });
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest(".wxopen");
+  if(!b) return;
+  e.preventDefault();
+  openWuxing3D();
+});
 document.addEventListener("click", function(e){
   var a = e.target.closest("#v-gallery .galimg");
   if(!a) return;
@@ -2025,12 +2226,14 @@ document.addEventListener("keydown", function(e){
   if(e.key === "Escape"){
     var m = document.getElementById("modal");
     if(m.classList.contains("on")){ if(m._onClose) m._onClose(); return; }
+    if(document.getElementById("wx").classList.contains("on")){ closeWuxing3D(); return; }
     if(document.getElementById("lightbox").classList.contains("on")){ closeLightbox(); return; }
     if(document.getElementById("reader").classList.contains("on")){ closeReader(true); return; }
     if(SEARCH_OPEN){ closeSearch(); return; }
   }
   if(e.key === "/" && !SEARCH_OPEN && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) &&
-     !document.getElementById("reader").classList.contains("on")){
+     !document.getElementById("reader").classList.contains("on") &&
+     !document.getElementById("wx").classList.contains("on")){
     e.preventDefault(); openSearch();
   }
 });
@@ -2053,6 +2256,7 @@ window.addEventListener("hashchange", function(){
   var h = location.hash || "";
   if(!/^#\/b\//.test(h) && document.getElementById("reader").classList.contains("on")) closeReader(false);
   if(document.getElementById("lightbox").classList.contains("on")) closeLightbox();
+  if(document.getElementById("wx").classList.contains("on")) closeWuxing3D();
   if(SEARCH_OPEN) closeSearch();
   if(/^#\/i\//.test(h)){ openItem(h.slice(4)); }
   else if(/^#\/d\//.test(h)){ openDomain(h.slice(4)); }

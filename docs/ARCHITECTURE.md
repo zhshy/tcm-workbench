@@ -8,8 +8,11 @@ tcm-workbench/
 ├── v1.4.2-168天版.html     上一版存档
 ├── v1-96天版.html          更早版本存档
 ├── VERSION / CHANGELOG.md / README.md / package.json
-├── manifest.json / service-worker.js / assets/   PWA 与图标
+├── manifest.json / service-worker.js  PWA 与离线缓存
+├── assets/                 图标、插图、3D 脚本与本地依赖
 ├── assets/illustrations/   17 张藏蓝鎏金配图（13 母图 + 1 另版 + 1 动手区答案 + 2 可选练习纸）
+├── assets/js/wuxing3d.js   M4 五行 3D 交互（点击入口后动态加载）
+├── assets/vendor/three.module.min.js  Three.js r160 本地副本（离线可用）
 ├── build/
 │   ├── d1_foundation_a/b/c.json  《中医基础理论》筑基域 25 条（新写，紧凑格式）
 │   ├── domain2a/b/c.json   四诊与脉诊 8 讲（新写，含三书校读）
@@ -44,7 +47,7 @@ tcm-workbench/
 │   ├── test_push_to_github.py  4 项发布脚本测试
 │   └── legacy/             v1 的 course-engine.test.js（归档）
 ├── shots/                  visual-check 截图（历史截图）
-├── docs/                   课程说明、本文件、v2 改版说明、archive/
+├── docs/                   课程说明、本文件、v2 改版说明、M4-3D-无障碍说明、archive/
 ├── data/ / resources/ / library-page/   v1 历史数据与资料，不是当前数据源
 └── .github/workflows/ci.yml  npm run build:all + npm run check:generated + npm run validate + npm test + npm run test:python
 ```
@@ -125,3 +128,5 @@ CI 在 Linux + Node.js 22 + Python 3.12 环境执行：
 
 主分支全部测试通过后，CI 只提交 `index.html`、`build/domains.json`、`library/index.json` 和 `library/白话/` 等生成产物，随后由 GitHub Pages 部署。第三方资料目录 `library/_external/` 不在自动提交清单中。
 v1.4.2 的架构说明存档在 [`archive/ARCHITECTURE-v1.4.2.md`](archive/ARCHITECTURE-v1.4.2.md)。
+
+M4 五行 3D 交互的无障碍设计、键盘操作、对比度实测与已知限制，见 [`M4-3D-无障碍说明.md`](M4-3D-无障碍说明.md)。

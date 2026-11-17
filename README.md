@@ -10,7 +10,7 @@
 
 **在线使用**：https://zhshy.github.io/tcm-workbench/
 
-给使用者的改版说明见 [`docs/v2-知识块版说明.md`](docs/v2-知识块版说明.md)，课程结构见 [`docs/课程说明.md`](docs/课程说明.md)，构建链见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。
+给使用者的改版说明见 [`docs/v2-知识块版说明.md`](docs/v2-知识块版说明.md)，课程结构见 [`docs/课程说明.md`](docs/课程说明.md)，构建链见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)，M4 五行 3D 交互的无障碍说明见 [`docs/M4-3D-无障碍说明.md`](docs/M4-3D-无障碍说明.md)。
 
 ## v2.4 动手区直接给答案
 
@@ -78,8 +78,9 @@ tcm-workbench/
 │   └── add_book.py          生成《诊家枢要》书库文件与索引条目
 ├── tools/                  数据校验、无头浏览器回归、发布脚本、v1 评分引擎（历史）
 ├── tests/                  v2 结构测试；v1 测试在 tests/legacy/
-├── docs/                   课程说明、架构、v2 改版说明、archive/
-├── assets/ / data/ / resources/ / library-page/   图标与历史资料
+├── docs/                   课程说明、架构、v2 改版说明、M4 3D 无障碍说明、archive/
+├── assets/                 图标、插图、M4 3D 脚本与本地 Three.js
+├── data/ / resources/ / library-page/   历史资料
 └── .github/workflows/ci.yml  校验 + JS 测试 + Python 测试
 ```
 
